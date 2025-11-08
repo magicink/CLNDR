@@ -46,9 +46,25 @@ async function main() {
   })
   try {
     const page = await browser.newPage()
+    // Demo with Moment default
     await checkPage(page, path.join('demo', 'index.html'))
+    // Toggle to Luxon and validate
+    await page.select('#date-lib', 'luxon')
+    await page.waitForSelector('.clndr-controls', { timeout: 60_000 })
+    // Allow destroy/re-init cycle to complete
+    await new Promise(res => setTimeout(res, 250))
+    const okLuxon = await page.evaluate(() => {
+      return (
+        document.querySelectorAll('.clndr-controls').length > 0 &&
+        document.querySelectorAll('.header-day').length >= 7
+      )
+    })
+    if (!okLuxon)
+      throw new Error('Luxon toggle failed to render expected elements')
+
+    // Legacy tests page (Moment)
     await checkPage(page, path.join('tests', 'test.html'))
-    console.log('Smoke tests passed: demo and test pages render.')
+    console.log('Smoke tests passed: demo (moment+luxon) and tests render.')
   } finally {
     await browser.close()
   }

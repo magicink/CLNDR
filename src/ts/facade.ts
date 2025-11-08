@@ -34,6 +34,8 @@ export function clndr(
   return api
 }
 
+let warnedDefaultSwitch = false
+
 function selectAdapter(options: ClndrOptions): DateAdapter<any> {
   if (options.dateAdapter) return options.dateAdapter
 
@@ -42,6 +44,17 @@ function selectAdapter(options: ClndrOptions): DateAdapter<any> {
       ? process.env.DATE_LIB
       : null
   const preferred = options.dateLibrary || envPref || 'moment'
+
+  if (!options.dateLibrary && !envPref && !warnedDefaultSwitch) {
+    warnedDefaultSwitch = true
+    if (typeof console !== 'undefined' && typeof console.warn === 'function') {
+      console.warn(
+        'CLNDR: The default dateLibrary will change from "moment" to "luxon" in Phase 9. ' +
+          'Set options.dateLibrary to "moment" or "luxon" to silence this message. ' +
+          'See MIGRATION.md for details.'
+      )
+    }
+  }
 
   if (preferred === 'luxon') {
     return createLuxonAdapter(options.locale, options.zone)
