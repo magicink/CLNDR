@@ -11,6 +11,10 @@ export {
   createMomentAdapter,
   MomentDateAdapter
 } from './date-adapter/moment-adapter'
+export {
+  createLuxonAdapter,
+  LuxonDateAdapter
+} from './date-adapter/luxon-adapter'
 export { normalizeOptions } from './config'
 export { initState } from './state'
 export * from './templates'

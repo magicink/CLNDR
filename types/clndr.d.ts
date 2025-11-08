@@ -104,6 +104,14 @@ interface ClndrOptions {
   constraints?: ClndrConstraints | null
   // Allow consumers to pass a configured moment instance
   moment?: ClndrMoment | null
+  // Phase 6: adapter selection & i18n surface
+  dateLibrary?: 'moment' | 'luxon'
+  /** Advanced injection: custom adapter implementing the DateAdapter surface */
+  dateAdapter?: any
+  /** Optional locale forwarded to adapter (and moment for legacy rendering) */
+  locale?: string
+  /** Optional IANA time zone forwarded to adapter (Luxon) */
+  zone?: string
 }
 
 interface ClndrTemplateMonthBlock {

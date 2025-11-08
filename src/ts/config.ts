@@ -53,7 +53,8 @@ export function computeWeekdayLabels(
   }
 
   // Use adapter-provided labels, rotated by weekOffset.
-  const labels = adapter.weekdayLabels('short')
+  // Choose 'narrow' to preserve legacy default single-letter headers.
+  const labels = adapter.weekdayLabels('narrow')
   let rotated = rotate(labels, weekOffset)
 
   if (typeof options.formatWeekdayHeader === 'function') {

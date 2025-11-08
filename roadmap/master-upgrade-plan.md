@@ -77,14 +77,14 @@ Status: TS modules and Moment adapter are implemented under `src/ts`. Legacy `sr
 
 ## Phase 6 – Luxon Adapter (1 week)
 
-- [ ] Implement `luxon-adapter.ts` using Luxon `DateTime`.
-- [ ] Add config: `dateLibrary: 'moment' | 'luxon'` (default `'moment'`) and advanced `dateAdapter` injection.
-- [ ] Ensure locale/zone: integrate Luxon `Settings.defaultLocale`/`defaultZone` with user config.
-- [ ] Map/normalize formatting tokens inside adapter to preserve existing templates.
-- [ ] Parity tests for `YYYY-MM-DD`, day labels, month boundaries, and calendar grid.
-- [ ] Weekday labels via `Info.weekdays('short'|'narrow', { locale })`; month names via `toFormat('MMMM')`.
-- [ ] Week start parity: compute headers using `firstDayOfWeek()` + `weekOffset` rotation to mirror Moment semantics.
-- [ ] Expose `locale` opt-in on CLNDR options that pipes into adapter; re-render on change.
+- [x] Implement `luxon-adapter.ts` using Luxon `DateTime`.
+- [x] Add config: `dateLibrary: 'moment' | 'luxon'` (default `'moment'`) and advanced `dateAdapter` injection.
+- [x] Ensure locale/zone: integrate Luxon locale/zone via adapter factory and plugin hand-off.
+- [x] Map/normalize formatting tokens inside adapter to preserve existing templates.
+- [x] Parity tests for `YYYY-MM-DD`, day labels, month boundaries, and calendar grid.
+- [x] Weekday labels via `Info.weekdays('short'|'narrow', { locale })`; month names via `toFormat('MMMM')`.
+- [x] Week start parity: `startOf('week')` honors locale using `firstDayOfWeek()` and `weekOffset` rotation in config.
+- [x] Expose `locale` opt-in on CLNDR options that pipes into adapter.
 - Deliverable: Opt-in Luxon support with green tests.
 
 ## Phase 7 – Dual Runtime & Validation (1–2 weeks)

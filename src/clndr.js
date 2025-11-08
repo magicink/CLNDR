@@ -170,14 +170,30 @@
       (typeof global !== 'undefined' && global.clndr) ||
       null
 
-    if (
-      tsClndr &&
-      tsClndr.createMomentAdapter &&
-      tsClndr.initState &&
-      tsClndr.normalizeOptions
-    ) {
+    if (tsClndr && tsClndr.initState && tsClndr.normalizeOptions) {
       try {
-        var adapter = tsClndr.createMomentAdapter(moment.locale())
+        // Optional: allow explicit locale override
+        if (this.options && this.options.locale) {
+          moment.locale(this.options.locale)
+        }
+
+        // Phase 6: select adapter
+        var adapter = null
+        if (this.options && this.options.dateAdapter) {
+          adapter = this.options.dateAdapter
+        } else {
+          var pref = (this.options && this.options.dateLibrary) || 'moment'
+          if (pref === 'luxon' && tsClndr.createLuxonAdapter) {
+            adapter = tsClndr.createLuxonAdapter(
+              this.options.locale || moment.locale(),
+              this.options.zone || undefined
+            )
+          } else if (tsClndr.createMomentAdapter) {
+            adapter = tsClndr.createMomentAdapter(moment.locale())
+          }
+        }
+
+        if (!adapter) throw new Error('No date adapter available')
         var normalized = tsClndr.normalizeOptions(adapter, this.options)
         // Use adapter-computed weekday labels and prevent double-rotation later
         this.options.daysOfTheWeek = normalized.daysOfTheWeek
@@ -185,9 +201,20 @@
 
         var init = tsClndr.initState(adapter, normalized.options)
         // Bridge adapter dates back to moment instances for legacy internals
-        this.month = init.month.value()
-        this.intervalStart = init.intervalStart.value()
-        this.intervalEnd = init.intervalEnd.value()
+        // Always convert via ISO to ensure a moment instance regardless of adapter
+        this.month = moment(
+          init.month.toISO ? init.month.toISO() : init.month.value()
+        )
+        this.intervalStart = moment(
+          init.intervalStart.toISO
+            ? init.intervalStart.toISO()
+            : init.intervalStart.value()
+        )
+        this.intervalEnd = moment(
+          init.intervalEnd.toISO
+            ? init.intervalEnd.toISO()
+            : init.intervalEnd.value()
+        )
       } catch (e) {
         // Fallback to legacy path if adapter init fails
         tsClndr = null
