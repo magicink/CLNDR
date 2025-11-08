@@ -88,13 +88,14 @@ describe('CLNDR config and state', () => {
 
   test('weekly interval snapshot similar to demo header', () => {
     const $ = (global as any).jQuery
+    const moment = (global as any).moment || require('moment')
+    const originalNow = moment.now
+    moment.now = () => new Date('2025-11-07T12:00:00Z').valueOf()
     const api = $('#cal3').clndr({
       lengthOfTime: {
         days: 14,
         interval: 7,
-        startDate: (global as any).moment
-          ? (global as any).moment().weekday(0)
-          : undefined
+        startDate: moment().weekday(0)
       },
       render: (data: any) => {
         const headers = data.daysOfTheWeek
@@ -126,6 +127,7 @@ describe('CLNDR config and state', () => {
     })
     expect(api).toBeTruthy()
     expect(document.getElementById('cal3')!.innerHTML).toMatchSnapshot()
+    moment.now = originalNow
   })
 
   test('trackSelectedDate toggles selected class on click', () => {

@@ -107,6 +107,11 @@ Extract focused TS modules and introduce the `DateAdapter` boundary.
   - `startOf(unit)`, `endOf(unit)`, `plus(delta)`, `minus(delta)`
   - `weekday()` (1–7), `day()` (1–31), `daysInMonth()`
   - comparisons: `isBefore()`, `isAfter()`, `hasSame(unit)`
+- [ ] Adapter locale surface (i18n):
+  - `withLocale(locale)`, `getLocale()`
+  - `firstDayOfWeek()` (locale-based) and `setWeekday(date, index)`
+  - `weekdayLabels(style: 'narrow' | 'short' | 'long')` for header generation
+  - Centralize token mapping used by CLNDR: `YYYY-MM-DD` → `yyyy-LL-dd`, `dd` (weekday short), `MMMM`, `M/DD` → `L/dd`
 - [ ] `moment-adapter.ts`: adapter implemented against current behavior.
 - [ ] Refactor core to consume only the adapter; remove direct Moment calls from core modules.
 - Deliverable: `src/clndr.js` delegates to TS modules; Moment works via adapter.
@@ -118,6 +123,9 @@ Extract focused TS modules and introduce the `DateAdapter` boundary.
 - [ ] Ensure locale/zone: integrate Luxon `Settings.defaultLocale`/`defaultZone` with user config.
 - [ ] Map/normalize formatting tokens inside adapter to preserve existing templates.
 - [ ] Parity tests for `YYYY-MM-DD`, day labels, month boundaries, and calendar grid.
+- [ ] Weekday labels via `Info.weekdays('short'|'narrow', { locale })`; month names via `toFormat('MMMM')`.
+- [ ] Week start parity: compute headers using `firstDayOfWeek()` + `weekOffset` rotation to mirror Moment semantics.
+- [ ] Expose `locale` opt-in on CLNDR options that pipes into adapter; re-render on change.
 - Deliverable: Opt-in Luxon support with green tests.
 
 ## Phase 8 – Dual Runtime & Validation (1–2 weeks)
@@ -126,6 +134,8 @@ Extract focused TS modules and introduce the `DateAdapter` boundary.
 - [ ] Demo toggle to switch libraries at runtime for manual testing.
 - [ ] Document migration notes and subtle differences (invalid dates, DST boundaries).
 - [ ] Publish minor release with Luxon opt-in and solicit feedback.
+- [ ] Ensure ICU data for Luxon locales on CI (set `NODE_ICU_DATA` to full-icu or use Node image with full-icu).
+- [ ] Add i18n tests across locales (e.g., `en`, `fr`, `de`): weekday labels, month names, week start alignment, and `weekOffset` overlay.
 - Deliverable: Stable opt-in Luxon release.
 
 ## Phase 9 – Full TypeScript Source of Record (2 weeks)
@@ -153,6 +163,8 @@ Extract focused TS modules and introduce the `DateAdapter` boundary.
 
 - `dateLibrary`: `'moment' | 'luxon'` (default `'moment'` until Phase 10).
 - `dateAdapter`: custom adapter injection for power users/testing.
+- `locale`: optional locale string, applied via adapter; defaults to environment.
+- `zone`: optional IANA timezone identifier, forwarded to adapter.
 - Respect `locale`, `weekOffset`, and timezone settings via adapter hooks.
 
 ## Acceptance Checklist
@@ -163,6 +175,9 @@ Extract focused TS modules and introduce the `DateAdapter` boundary.
 - [ ] Tests pass under both adapters with matching DOM snapshots.
 - [ ] Jest coverage thresholds met; smoke and snapshot tests stable.
 - [ ] Demo parity verified across locales and week offsets.
+- [ ] i18n parity: weekday headers reflect locale; month names localized; week start parity + `weekOffset` overlay validated in `en`/`fr`/`de`.
+- [ ] Adapter token mapping validated (`YYYY-MM-DD`, `MMMM`, `dd`, `M/DD` → Luxon equivalents) with no visible regressions.
+- [ ] CI configured with full ICU so Luxon locales render correctly.
 - [ ] README updated with migration notes and examples.
 - [ ] `package.json`: add `luxon`; remove `moment` at Phase 11.
 
