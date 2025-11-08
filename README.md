@@ -822,3 +822,34 @@ GitHub issues and support tickets are to be submitted only for bugs. We sadly
 don't have the time or manpower to answer implementation questions, debug your
 application code, or anything that isn't directly related to a CLNDR bug :D
 There are many wonderful places to seek help, like Stack Overflow.
+
+## For Contributors
+
+### Scripts
+
+Use your preferred package manager to run the scripts below (examples shown with npm; replace with `yarn`, `pnpm`, or `bun` as you like):
+
+```sh
+npm run <script>
+```
+
+- `build`: Clean `dist` and build development bundles with Rollup.
+- `build:prod`: Build production bundles (minified) with Rollup.
+- `build:ts`: Transpile TypeScript to `dist` via `tsc`.
+- `build:watch`: Watch sources and rebuild on change.
+- `type-check`: Run TypeScript type checking only (no emit).
+- `test`: Run the Jest test suite.
+- `test:cov`: Run tests and collect coverage.
+- `test:watch`: Run tests in watch mode.
+- `format`: Format the repo with Prettier.
+- `format:check`: Check formatting without writing changes.
+- `prepare`: Install-time hook to set up Husky git hooks (safe no-op outside Git).
+- `size`: Print built artifact sizes in `dist/`.
+- `smoke`: Run Puppeteer-based smoke tests against `demo/index.html` and `tests/test.html` (TypeScript runner via Bun).
+- `smoke:node`: Node.js ESM variant of the smoke tests.
+- `baseline:snapshots`: Capture baseline HTML and PNG snapshots of the demo and tests pages to `roadmap/baseline/` (uses Puppeteer).
+- `ci:check`: End-to-end CI validation: type-check, TS compile, build, unit tests with coverage, and smoke tests.
+
+Notes:
+
+- Some scripts (smoke/baseline) use Puppeteer to launch a headless browser; ensure your environment can run Chromium. Bun is used by a few developer scripts, but Node-based variants are also provided.

@@ -10,16 +10,16 @@
     "widget",
     "jquery-plugin"
   ],
-  "homepage": "https://github.com/kylestetz/CLNDR",
+  "homepage": "https://github.com/magicink/CLNDR",
   "bugs": {
-    "url": "https://github.com/kylestetz/CLNDR/issues"
+    "url": "https://github.com/magicink/CLNDR/issues"
   },
   "repository": {
     "type": "git",
-    "url": "https://github.com/kylestetz/CLNDR"
+    "url": "https://github.com/magicink/CLNDR"
   },
   "license": "MIT",
-  "author": "Kyle Stetz",
+  "author": "Brandon Tom <magicink@gmail.com>",
   "contributors": [
     "Mike Gioia <mike@teachboost.com>"
   ],
