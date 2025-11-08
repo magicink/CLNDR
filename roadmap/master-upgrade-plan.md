@@ -31,10 +31,13 @@
 - Deliverable: Architecture diagram + usage matrix for date ops.
 
 ## Phase 1 – Tooling Bootstrap (1 week)
-- [ ] Add TypeScript, ESLint/Prettier rules, `tsconfig.json` (ES2018 target, incremental).
+- [ ] Add TypeScript, ESLint + Prettier, and `tsconfig.json` (ES2018 target, incremental).
+- [ ] Set up Husky git hooks and lint-staged:
+  - `pre-commit`: run `lint-staged` to apply Prettier and ESLint on staged files.
+  - `commit-msg`: run Conventional Commits lint (`@commitlint/config-conventional`).
 - [ ] Introduce `src/ts/` and wire build: `tsc` → `dist/` alongside existing Grunt tasks.
 - [ ] Add minimal smoke tests and CI wiring; full Jest harness in Phase 3.
-- Deliverable: Passing CI with compiling TS scaffold.
+- Deliverable: Passing CI with compiling TS scaffold; Husky + lint-staged active and commit messages validated against Conventional Commits.
 
 ## Phase 2 – Type Definitions & Facade (1–2 weeks)
 - [ ] Author `.d.ts` for public CLNDR API based on README and tests.
