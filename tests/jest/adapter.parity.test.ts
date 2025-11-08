@@ -88,7 +88,9 @@ describe('DateAdapter(moment): locale surface and labels', () => {
 describe('Config helpers: weekday header rotation', () => {
   test('computeWeekdayLabels rotates by weekOffset', () => {
     const en = createMomentAdapter('en')
-    const base = en.weekdayLabels('narrow')
+    const base = Array.from({ length: 7 }, (_, i) =>
+      moment().weekday(i).format('dd').charAt(0)
+    )
     const rotated = computeWeekdayLabels(en, { weekOffset: 2 } as any)
     const expected = [...base.slice(2), ...base.slice(0, 2)]
     expect(rotated).toEqual(expected)

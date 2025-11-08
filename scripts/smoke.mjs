@@ -9,8 +9,8 @@ async function checkPage(page, relHtmlPath, waitSelector = '.clndr-controls') {
   const filePath = path.join(repoRoot, relHtmlPath)
   const fileUrl = `file://${filePath}`
 
-  await page.goto(fileUrl, { waitUntil: 'networkidle2', timeout: 60000 })
-  await page.waitForSelector(waitSelector, { timeout: 60000 })
+  await page.goto(fileUrl, { waitUntil: 'networkidle2', timeout: 60_000 })
+  await page.waitForSelector(waitSelector, { timeout: 60_000 })
 
   const counts = await page.evaluate(() => {
     const controls = document.querySelectorAll('.clndr-controls').length
@@ -18,7 +18,11 @@ async function checkPage(page, relHtmlPath, waitSelector = '.clndr-controls') {
     const dayContainers = document.querySelectorAll(
       '.clndr-table, .days'
     ).length
-    return { controls, headers, dayContainers }
+    // Ensure no obvious template code leaked into visible containers
+    const leakedTemplateTags = Array.from(
+      document.querySelectorAll('.clndr, .clndr-grid, .clndr-table')
+    ).some(el => el.textContent && /<%=?|%>/.test(el.textContent))
+    return { controls, headers, dayContainers, leakedTemplateTags }
   })
 
   if (counts.controls <= 0) {
@@ -30,14 +34,16 @@ async function checkPage(page, relHtmlPath, waitSelector = '.clndr-controls') {
   if (counts.dayContainers <= 0) {
     throw new Error('Expected a day container (.clndr-table or .days)')
   }
+  if (counts.leakedTemplateTags) {
+    throw new Error('Found raw template tags in rendered DOM')
+  }
 }
 
 async function main() {
   const browser = await puppeteer.launch({
-    headless: 'new',
+    headless: true,
     defaultViewport: { width: 1024, height: 800 }
   })
-
   try {
     const page = await browser.newPage()
     await checkPage(page, path.join('demo', 'index.html'))

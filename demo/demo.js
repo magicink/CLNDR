@@ -12,6 +12,7 @@ function destroyAll() {
 function initCalendars(opts) {
     var dateLibrary = (opts && opts.dateLibrary) || 'moment';
     var locale = (opts && opts.locale) || 'en';
+    var directClndr = window.clndr && (window.clndr.clndr || window.clndr);
 
     // Keep moment locale in sync for demo templates that call moment().
     if (window.moment) { window.moment.locale(locale); }
@@ -34,7 +35,8 @@ function initCalendars(opts) {
         }
     ];
 
-    calendars.clndr1 = clndr.clndr('.cal1', {
+    // Calendar 1 uses the jQuery plugin API for backward compatibility
+    calendars.clndr1 = $('.cal1').clndr({
         dateLibrary: dateLibrary,
         locale: locale,
         events: eventArray,
@@ -83,7 +85,11 @@ function initCalendars(opts) {
     });
 
     // Calendar 2 uses a custom length of time: 2 weeks paging 7 days
-    calendars.clndr2 = clndr.clndr('.cal2', {
+    var calendarTwoFactory = directClndr || function (selector, options) {
+        return $(selector).clndr(options);
+    };
+
+    calendars.clndr2 = calendarTwoFactory('.cal2', {
         dateLibrary: dateLibrary,
         locale: locale,
         lengthOfTime: {
@@ -114,7 +120,7 @@ function initCalendars(opts) {
     });
 
     // Calendar 3 renders two months at a time, paging 1 month
-    calendars.clndr3 = clndr.clndr('.cal3', {
+    calendars.clndr3 = calendarTwoFactory('.cal3', {
         dateLibrary: dateLibrary,
         locale: locale,
         lengthOfTime: {

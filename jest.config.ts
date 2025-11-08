@@ -14,7 +14,6 @@ const config: Config = {
   coverageReporters: ['text', 'lcov', 'html'],
   coveragePathIgnorePatterns: [
     '/node_modules/',
-    '<rootDir>/src/clndr.js',
     '<rootDir>/dist/',
     '<rootDir>/tests/',
     '<rootDir>/demo/'

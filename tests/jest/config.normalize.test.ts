@@ -41,7 +41,9 @@ describe('normalizeOptions defaults and merges', () => {
     expect(options.classes?.today).toBe('today')
 
     // Rotation respected
-    const base = adapter.weekdayLabels('narrow')
+    const base = Array.from({ length: 7 }, (_, i) =>
+      moment().weekday(i).format('dd').charAt(0)
+    )
     const expected = [...base.slice(2), ...base.slice(0, 2)]
     expect(daysOfTheWeek).toEqual(expected)
   })

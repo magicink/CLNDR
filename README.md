@@ -29,8 +29,9 @@ See a demo: [kylestetz.github.io/CLNDR/](http://kylestetz.github.io/CLNDR/)
 
 ## Download
 
-- Development: [clndr.js](https://raw.github.com/kylestetz/CLNDR/master/src/clndr.js)
-- Production: [clndr.min.js](https://raw.github.com/kylestetz/CLNDR/master/clndr.min.js)
+- UMD bundle: [clndr.umd.js](https://raw.github.com/kylestetz/CLNDR/master/dist/clndr.umd.js)
+- Legacy alias (for `@brandontom/luxon-clndr/legacy`): [clndr.js](https://raw.github.com/kylestetz/CLNDR/master/dist/clndr.js)
+- Minified legacy build: [clndr.min.js](https://raw.github.com/kylestetz/CLNDR/master/clndr.min.js)
 
 Returning to grab a new version? Have a look at the `CHANGELOG.md` file.
 
@@ -63,7 +64,7 @@ Lodash, just install it as a dependency of your project:
 
 CLNDR's source of record is now TypeScript. The package publishes modern ESM and UMD bundles.
 
-- Legacy jQuery plugin usage remains available: include `@brandontom/luxon-clndr/legacy` (or `src/clndr.js`) and use `$('.el').clndr()`.
+- Legacy jQuery plugin usage remains available: include `@brandontom/luxon-clndr/legacy` (which maps to `dist/clndr.js`) and use `$('.el').clndr()`.
 - ESM/TypeScript usage with bundlers:
 
 Option A (script tags): load jQuery and the UMD bundle, then call the TS entry.
@@ -91,7 +92,7 @@ const api = clndr('#calendar', {
 
 Notes:
 
-- The TS entry delegates to jQuery's plugin at runtime for now while we finalize full TS parity.
+- The TS entry renders calendars directly while auto-registering the jQuery plugin when jQuery is detected.
 - Type definitions ship with the package; no extra typings needed.
 
 ## Introduction: You Write The Markup

@@ -30,8 +30,8 @@
       "require": "./dist/clndr.umd.js"
     },
     "./legacy": {
-      "import": "./src/clndr.js",
-      "require": "./src/clndr.js"
+      "import": "./dist/clndr.umd.js",
+      "require": "./dist/clndr.umd.js"
     }
   },
   "main": "dist/clndr.umd.js",
@@ -40,7 +40,6 @@
   "files": [
     "dist",
     "types",
-    "src/clndr.js",
     "clndr.min.js",
     "README.md",
     "LICENSE.md"
@@ -57,6 +56,7 @@
     "prepare": "husky || true",
     "size": "node scripts/size.mjs",
     "smoke": "bun scripts/smoke.ts",
+    "smoke:node": "node scripts/smoke.mjs",
     "test": "jest",
     "test:cov": "jest --coverage",
     "test:watch": "jest --watch",

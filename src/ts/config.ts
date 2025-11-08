@@ -37,8 +37,8 @@ const DEFAULT_CLASSES: Required<NonNullable<ClndrOptions['classes']>> = {
  * Priority:
  * 1) If `options.daysOfTheWeek` is provided (length 7), rotate by
  *    `weekOffset` and return.
- * 2) Otherwise, derive labels from the adapter via `weekdayLabels('short')`
- *    and rotate by `weekOffset`.
+ * 2) Otherwise, derive labels by formatting adapter weekdays and rotate by
+ *    `weekOffset`.
  * 3) If `formatWeekdayHeader` callback is provided, call it for each header
  *    passing the adapter-native date (e.g., moment) representing the i-th
  *    weekday relative to the locale-first day within the current week.
@@ -52,21 +52,23 @@ export function computeWeekdayLabels(
     return rotate(options.daysOfTheWeek, weekOffset)
   }
 
-  // Use adapter-provided labels, rotated by weekOffset.
-  // Choose 'narrow' to preserve legacy default single-letter headers.
-  const labels = adapter.weekdayLabels('narrow')
-  let rotated = rotate(labels, weekOffset)
-
   if (typeof options.formatWeekdayHeader === 'function') {
-    // If provided, allow per-day formatting callback using adapter dates.
     const start = adapter.now().startOf('week')
-    rotated = rotated.map((_, idx) => {
-      const d = adapter.setWeekday(start, idx)
-      // The legacy callback expects moment-like object; pass native value.
+    return Array.from({ length: 7 }, (_, idx) => {
+      const offset = (idx + weekOffset) % 7
+      const d = adapter.setWeekday(start, offset)
       return options.formatWeekdayHeader!(d.value() as any)
     })
   }
-  return rotated
+
+  const start = adapter.now().startOf('week')
+  const labels = Array.from({ length: 7 }, (_, idx) => {
+    const d = adapter.setWeekday(start, idx)
+    const formatted = d.format('dd') || ''
+    return formatted.charAt(0)
+  })
+
+  return rotate(labels, weekOffset)
 }
 
 /**
@@ -82,14 +84,14 @@ export function normalizeOptions(
 ): NormalizedConfig {
   const o: ClndrOptions = {
     weekOffset: inOptions.weekOffset ?? 0,
-    showAdjacentMonths: true,
-    trackSelectedDate: false,
+    showAdjacentMonths: inOptions.showAdjacentMonths ?? true,
+    trackSelectedDate: inOptions.trackSelectedDate ?? false,
     dateParameter: 'date',
-    template: undefined,
-    render: undefined,
-    startWithMonth: undefined,
-    daysOfTheWeek: undefined,
-    formatWeekdayHeader: undefined,
+    template: inOptions.template,
+    render: inOptions.render,
+    startWithMonth: inOptions.startWithMonth,
+    daysOfTheWeek: inOptions.daysOfTheWeek,
+    formatWeekdayHeader: inOptions.formatWeekdayHeader,
     targets: { ...DEFAULT_TARGETS, ...(inOptions.targets || {}) },
     classes: { ...DEFAULT_CLASSES, ...(inOptions.classes || {}) },
     clickEvents: inOptions.clickEvents,
@@ -98,7 +100,7 @@ export function normalizeOptions(
     doneRendering: inOptions.doneRendering,
     events: inOptions.events || [],
     multiDayEvents: inOptions.multiDayEvents,
-    adjacentDaysChangeMonth: inOptions.adjacentDaysChangeMonth || false,
+    adjacentDaysChangeMonth: inOptions.adjacentDaysChangeMonth ?? false,
     forceSixRows: inOptions.forceSixRows ?? null,
     selectedDate: inOptions.selectedDate ?? null,
     ignoreInactiveDaysInSelection:
