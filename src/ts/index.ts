@@ -8,10 +8,6 @@ export { ClndrDOM } from './dom'
 
 export * from './date-adapter/adapter'
 export {
-  createMomentAdapter,
-  MomentDateAdapter
-} from './date-adapter/moment-adapter'
-export {
   createLuxonAdapter,
   LuxonDateAdapter
 } from './date-adapter/luxon-adapter'

@@ -41,10 +41,10 @@ submitting a pull request or issue!
 
 ## Dependencies
 
-[jQuery](http://jquery.com/download/) and [Moment.js](http://momentjs.com/) are
-depended upon. By default CLNDR can use [Lodash](http://lodash.com/)'s
-`_.template()` function; however, if you specify a custom rendering function
-(see documentation below) Lodash is not required.
+[jQuery](http://jquery.com/download/) is required. By default CLNDR can use
+[Lodash](http://lodash.com/)'s `_.template()` function; however, if you specify
+a custom rendering function (see documentation below) Lodash is not required.
+Luxon is bundled via the adapter; no Moment.js is required.
 
 ### Using Bun
 

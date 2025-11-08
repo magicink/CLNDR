@@ -1,46 +1,43 @@
 /**
- * Localization-focused tests for CLNDR.
+ * Localization-focused tests for CLNDR (Luxon-only).
  * Validates weekday headers, weekOffset interaction, and month names
- * across different moment locales.
+ * across different locales.
  */
 
-import moment from 'moment'
-import 'moment/locale/fr'
-import 'moment/locale/de'
+import { createLuxonAdapter } from '../../src/ts/index'
+import { Info } from 'luxon'
 
-// Cross-adapter weekday formatter used in tests: accepts either a Moment
-// instance or a Luxon DateTime (from the TS adapter path) and returns
-// a two-letter weekday label consistent with Moment's `dd` token.
-function fmtWeekdayHeader(d: any): string {
-  if (d && typeof d.format === 'function') return d.format('dd')
-  if (d && typeof d.toISO === 'function') {
-    const m = require('moment')
-    return m(d.toISO()).format('dd')
+function ddFromLuxon(dt: any, locale: string): string {
+  try {
+    const idx = dt && typeof dt.weekday === 'number' ? dt.weekday - 1 : 0 // 1..7 -> 0..6
+    const labels = Info.weekdays('short', { locale })
+    const label = labels[idx] || ''
+    return String(label).slice(0, 2)
+  } catch {
+    return ''
   }
-  return ''
 }
 
 describe('CLNDR localization: weekday headers', () => {
   beforeEach(() => {
     document.body.innerHTML = '<div id="cal-loc"></div>'
-    moment.locale('en')
   })
 
-  afterEach(() => {
-    moment.locale('en')
-  })
+  afterEach(() => {})
 
-  test('uses moment locale for weekday headers (en)', () => {
+  test('uses locale for weekday headers (en)', () => {
     const $ = (global as any).jQuery
 
-    // Expected labels from moment for current locale
+    const adapter = createLuxonAdapter('en')
+    const start = adapter.now().startOf('week')
     const expected = Array.from({ length: 7 }, (_, i) =>
-      moment().weekday(i).format('dd')
+      adapter.setWeekday(start, i).format('dd')
     )
 
     $('#cal-loc').clndr({
-      // Ensure CLNDR uses moment-format based labels (not single char)
-      formatWeekdayHeader: (d: any) => fmtWeekdayHeader(d),
+      locale: 'en',
+      // Ensure CLNDR uses adapter-format based labels (not single char)
+      formatWeekdayHeader: (d: any) => ddFromLuxon(d, 'en'),
       render: (data: any) => {
         const headers = data.daysOfTheWeek
           .map((d: string) => `<td class="header-day">${d}</td>`) // assertion selector
@@ -60,16 +57,18 @@ describe('CLNDR localization: weekday headers', () => {
     expect(labels).toEqual(expected)
   })
 
-  test('uses moment locale for weekday headers (fr)', () => {
-    moment.locale('fr')
+  test('uses locale for weekday headers (fr)', () => {
     const $ = (global as any).jQuery
 
+    const adapter = createLuxonAdapter('fr')
+    const start = adapter.now().startOf('week')
     const expected = Array.from({ length: 7 }, (_, i) =>
-      moment().weekday(i).format('dd')
+      adapter.setWeekday(start, i).format('dd')
     )
 
     $('#cal-loc').clndr({
-      formatWeekdayHeader: (d: any) => fmtWeekdayHeader(d),
+      locale: 'fr',
+      formatWeekdayHeader: (d: any) => ddFromLuxon(d, 'fr'),
       render: (data: any) => {
         const headers = data.daysOfTheWeek
           .map((d: string) => `<td class="header-day">${d}</td>`) // assertion selector
@@ -89,23 +88,26 @@ describe('CLNDR localization: weekday headers', () => {
     expect(labels).toEqual(expected)
 
     // Sanity: ensure locale actually changed something vs EN for this run
-    moment.locale('en')
+    const enAdapter = createLuxonAdapter('en')
+    const enStart = enAdapter.now().startOf('week')
     const enExpected = Array.from({ length: 7 }, (_, i) =>
-      moment().weekday(i).format('dd')
+      enAdapter.setWeekday(enStart, i).format('dd')
     )
     expect(labels).not.toEqual(enExpected)
   })
 
-  test('uses moment locale for weekday headers (de)', () => {
-    moment.locale('de')
+  test('uses locale for weekday headers (de)', () => {
     const $ = (global as any).jQuery
 
+    const adapter = createLuxonAdapter('de')
+    const start = adapter.now().startOf('week')
     const expected = Array.from({ length: 7 }, (_, i) =>
-      moment().weekday(i).format('dd')
+      adapter.setWeekday(start, i).format('dd')
     )
 
     $('#cal-loc').clndr({
-      formatWeekdayHeader: (d: any) => fmtWeekdayHeader(d),
+      locale: 'de',
+      formatWeekdayHeader: (d: any) => ddFromLuxon(d, 'de'),
       render: (data: any) => {
         const headers = data.daysOfTheWeek
           .map((d: string) => `<td class="header-day">${d}</td>`) // assertion selector
@@ -129,19 +131,21 @@ describe('CLNDR localization: weekday headers', () => {
 describe('CLNDR localization: weekOffset on localized labels', () => {
   beforeEach(() => {
     document.body.innerHTML = '<div id="cal-loc-wo"></div>'
-    moment.locale('fr')
   })
 
   test('applies weekOffset rotation with locale headers', () => {
     const $ = (global as any).jQuery
+    const adapter = createLuxonAdapter('fr')
+    const start = adapter.now().startOf('week')
     const base = Array.from({ length: 7 }, (_, i) =>
-      moment().weekday(i).format('dd')
+      adapter.setWeekday(start, i).format('dd')
     )
     const rotated = [...base.slice(1), ...base.slice(0, 1)]
 
     $('#cal-loc-wo').clndr({
+      locale: 'fr',
       weekOffset: 1,
-      formatWeekdayHeader: (d: any) => fmtWeekdayHeader(d),
+      formatWeekdayHeader: (d: any) => ddFromLuxon(d, 'fr'),
       render: (data: any) => {
         const headers = data.daysOfTheWeek
           .map((d: string) => `<span class="header-day">${d}</span>`) // assertion selector
@@ -161,17 +165,18 @@ describe('CLNDR localization: weekOffset on localized labels', () => {
 describe('CLNDR localization: month name by locale', () => {
   beforeEach(() => {
     document.body.innerHTML = '<div id="cal-loc-month"></div>'
-    moment.locale('fr')
   })
 
   test('renders localized month name (startWithMonth)', () => {
     const $ = (global as any).jQuery
-    const start = moment('2020-05-01') // May 2020
-    const expectedMonth = start.clone().locale('fr').format('MMMM')
-    const expectedYear = start.year()
+    const adapter = createLuxonAdapter('fr')
+    const startISO = '2020-05-01'
+    const expectedMonth = adapter.fromISO(startISO).format('MMMM')
+    const expectedYear = adapter.fromISO(startISO).format('YYYY')
 
     $('#cal-loc-month').clndr({
-      startWithMonth: start,
+      locale: 'fr',
+      startWithMonth: startISO,
       render: (data: any) =>
         `<div class="month-year">${data.month} ${data.year}</div>`
     })
@@ -186,7 +191,6 @@ describe('CLNDR localization: month name by locale', () => {
 describe('CLNDR localization: custom day labels override locale', () => {
   beforeEach(() => {
     document.body.innerHTML = '<div id="cal-loc-custom"></div>'
-    moment.locale('de') // pick a non-en locale to ensure override works
   })
 
   test('uses provided daysOfTheWeek array instead of locale', () => {
@@ -211,8 +215,10 @@ describe('CLNDR localization: custom day labels override locale', () => {
     expect(labels).toEqual(custom)
 
     // And they should differ from the locale-driven defaults
+    const adapter = createLuxonAdapter('de')
+    const start = adapter.now().startOf('week')
     const localeLabels = Array.from({ length: 7 }, (_, i) =>
-      moment().weekday(i).format('dd')
+      adapter.setWeekday(start, i).format('dd')
     )
     expect(labels).not.toEqual(localeLabels)
   })

@@ -1,8 +1,8 @@
 // Public type definitions for CLNDR jQuery plugin.
 // Phase 2: initial .d.ts based on README and tests.
 
-// Minimal moment-like alias to avoid external typings for now.
-type ClndrMoment = any
+// Minimal adapter-native date alias (e.g., Luxon DateTime).
+type ClndrDateLike = any
 
 interface ClndrEvent {
   // Common fields used by CLNDR when not using multiDayEvents
@@ -46,22 +46,22 @@ interface ClndrClasses {
 
 interface ClndrClickTarget {
   element: Element
-  date: ClndrMoment | null
+  date: ClndrDateLike | null
   events: ClndrEvent[]
 }
 
 interface ClndrClickEvents {
   click?: (target: ClndrClickTarget) => void
-  today?: (month: ClndrMoment) => void
-  nextYear?: (month: ClndrMoment) => void
-  nextMonth?: (month: ClndrMoment) => void
-  previousYear?: (month: ClndrMoment) => void
-  onYearChange?: (month: ClndrMoment) => void
-  previousMonth?: (month: ClndrMoment) => void
-  onMonthChange?: (month: ClndrMoment) => void
-  nextInterval?: (start: ClndrMoment, end: ClndrMoment) => void
-  previousInterval?: (start: ClndrMoment, end: ClndrMoment) => void
-  onIntervalChange?: (start: ClndrMoment, end: ClndrMoment) => void
+  today?: (month: ClndrDateLike) => void
+  nextYear?: (month: ClndrDateLike) => void
+  nextMonth?: (month: ClndrDateLike) => void
+  previousYear?: (month: ClndrDateLike) => void
+  onYearChange?: (month: ClndrDateLike) => void
+  previousMonth?: (month: ClndrDateLike) => void
+  onMonthChange?: (month: ClndrDateLike) => void
+  nextInterval?: (start: ClndrDateLike, end: ClndrDateLike) => void
+  previousInterval?: (start: ClndrDateLike, end: ClndrDateLike) => void
+  onIntervalChange?: (start: ClndrDateLike, end: ClndrDateLike) => void
 }
 
 interface ClndrLengthOfTime {
@@ -69,21 +69,21 @@ interface ClndrLengthOfTime {
   days?: number | null
   interval?: number
   // Optional starting point used by some views
-  startDate?: ClndrMoment
+  startDate?: ClndrDateLike
 }
 
 interface ClndrConstraints {
-  startDate?: string | ClndrMoment
-  endDate?: string | ClndrMoment
+  startDate?: string | ClndrDateLike
+  endDate?: string | ClndrDateLike
 }
 
 interface ClndrOptions {
   template?: string
   render?: (data: ClndrTemplateData) => string
-  startWithMonth?: string | ClndrMoment
+  startWithMonth?: string | ClndrDateLike
   weekOffset?: number
   daysOfTheWeek?: string[]
-  formatWeekdayHeader?: (day: ClndrMoment) => string
+  formatWeekdayHeader?: (day: ClndrDateLike) => string
   targets?: ClndrTargets
   classes?: ClndrClasses
   clickEvents?: ClndrClickEvents
@@ -102,10 +102,8 @@ interface ClndrOptions {
   lengthOfTime?: ClndrLengthOfTime
   extras?: any
   constraints?: ClndrConstraints | null
-  // Allow consumers to pass a configured moment instance
-  moment?: ClndrMoment | null
-  // Phase 6: adapter selection & i18n surface
-  dateLibrary?: 'moment' | 'luxon'
+  // Adapter selection & i18n surface
+  dateLibrary?: 'luxon'
   /** Advanced injection: custom adapter implementing the DateAdapter surface */
   dateAdapter?: any
   /** Optional locale forwarded to adapter (and moment for legacy rendering) */
@@ -116,7 +114,7 @@ interface ClndrOptions {
 
 interface ClndrTemplateMonthBlock {
   days: ClndrDay[]
-  month: ClndrMoment
+  month: ClndrDateLike
 }
 
 interface ClndrTemplateData {
@@ -137,8 +135,8 @@ interface ClndrTemplateData {
   numberOfRows: number
 
   // Interval views
-  intervalStart: ClndrMoment | null
-  intervalEnd: ClndrMoment | null
+  intervalStart: ClndrDateLike | null
+  intervalEnd: ClndrDateLike | null
   eventsThisInterval: any
 }
 

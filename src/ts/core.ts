@@ -280,8 +280,8 @@ export class ClndrCore<T = unknown> {
       data.days = days
       data.month = null
       data.year = null
-      data.intervalStart = this.state.intervalStart.value()
-      data.intervalEnd = this.state.intervalEnd.value()
+      data.intervalStart = this.state.intervalStart as any
+      data.intervalEnd = this.state.intervalEnd as any
       data.numberOfRows = Math.ceil(days.length / WEEK_LENGTH)
       data.eventsThisInterval = this.eventsThisInterval
       data.eventsLastMonth = []
@@ -297,7 +297,7 @@ export class ClndrCore<T = unknown> {
           .startOf('month')
         const end = start.endOf('month')
         const days = this.createDaysObject(start, end)
-        months.push({ days, month: start.value() as any })
+        months.push({ days, month: start as any })
         intervalEvents.push([...this.eventsThisInterval])
         rows += Math.ceil(days.length / WEEK_LENGTH)
       }
@@ -305,8 +305,8 @@ export class ClndrCore<T = unknown> {
       data.months = months
       data.numberOfRows = rows
       data.eventsThisInterval = intervalEvents
-      data.intervalStart = this.state.intervalStart.value()
-      data.intervalEnd = this.state.intervalEnd.value()
+      data.intervalStart = this.state.intervalStart as any
+      data.intervalEnd = this.state.intervalEnd as any
     } else {
       const monthStart = this.state.month.startOf('month')
       const monthEnd = monthStart.endOf('month')
@@ -341,6 +341,21 @@ export class ClndrCore<T = unknown> {
       return this.adapter.fromNative(new Date(value) as any)
     }
     if (typeof value === 'object') {
+      const isMomentLike =
+        value &&
+        (value._isAMomentObject === true ||
+          (typeof value.isSame === 'function' &&
+            typeof value.format === 'function' &&
+            typeof value.clone === 'function'))
+      if (
+        isMomentLike &&
+        typeof console !== 'undefined' &&
+        typeof console.warn === 'function'
+      ) {
+        console.warn(
+          'CLNDR: Passing Moment instances directly is deprecated. Use ISO strings, native Date, or provide dateLibrary/dateAdapter.'
+        )
+      }
       if (value.value && typeof value.value === 'function') {
         return this.adapter.fromNative(value.value())
       }
@@ -506,13 +521,13 @@ export class ClndrCore<T = unknown> {
       isAdjacentMonth: false
     }
 
-    const now = this.adapter.now()
+    const now = this.adapter.now().startOf('day')
     if (day.hasSame(now, 'day')) {
       classes.push(this.options.classes?.today || 'today')
       properties.isToday = true
     }
 
-    const nowStart = now.startOf('day')
+    const nowStart = now
     if (dayEnd.isBefore(nowStart)) {
       classes.push(this.options.classes?.past || 'past')
     }

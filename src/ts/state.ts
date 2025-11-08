@@ -1,5 +1,17 @@
 import { AdapterDate, DateAdapter } from './date-adapter/adapter'
 
+let warnedMomentInstance = false
+
+function isMomentLike(v: any): boolean {
+  return (
+    !!v &&
+    (v._isAMomentObject === true ||
+      (typeof v.isSame === 'function' &&
+        typeof v.format === 'function' &&
+        typeof v.clone === 'function'))
+  )
+}
+
 /**
  * Immutable snapshot of calendar timing state derived from configuration.
  *
@@ -31,6 +43,29 @@ function parseToAdapterDate<T>(
 ): AdapterDate<T> {
   if (v == null) return adapter.now()
   if (typeof v === 'string') return adapter.fromISO(v)
+  if (typeof v === 'number') {
+    return adapter.fromNative(new Date(v) as any)
+  }
+  if (typeof v === 'object') {
+    if (!warnedMomentInstance && isMomentLike(v)) {
+      warnedMomentInstance = true
+      if (
+        typeof console !== 'undefined' &&
+        typeof console.warn === 'function'
+      ) {
+        console.warn(
+          'CLNDR: Passing Moment instances directly in options is deprecated. ' +
+            'Use ISO strings, native Date, or set options.dateLibrary/dateAdapter. '
+        )
+      }
+    }
+    if (v.value && typeof v.value === 'function') {
+      return adapter.fromNative(v.value())
+    }
+    if (typeof v.toISOString === 'function') {
+      return adapter.fromISO(v.toISOString())
+    }
+  }
   return adapter.fromNative(v as any)
 }
 

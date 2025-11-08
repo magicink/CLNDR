@@ -73,16 +73,16 @@ Status: TS modules and Moment adapter are implemented under `src/ts`. Legacy `sr
 
 ## Phase 9 – Default Switch to Luxon (1 week)
 
-- [ ] Change default `dateLibrary` to `'luxon'`; keep Moment path temporarily.
-- [ ] Deprecate passing a Moment instance; prefer adapter or `dateLibrary`.
-- [ ] Add deprecation warnings and docs.
+- [x] Change default `dateLibrary` to `'luxon'`; keep Moment path temporarily.
+- [x] Deprecate passing a Moment instance; prefer adapter or `dateLibrary`.
+- [x] Add deprecation warnings and docs.
 - Deliverable: Minor release with Luxon default and clear deprecation messaging.
 
 ## Phase 10 – Remove Moment (major) (0.5 week)
 
-- [ ] Remove Moment adapter and dependency.
-- [ ] Keep `DateAdapter` interface stable for future libraries.
-- [ ] Update README/demos to reference Luxon only.
+- [x] Remove Moment adapter and dependency.
+- [x] Keep `DateAdapter` interface stable for future libraries.
+- [x] Update README/demos to reference Luxon only.
 - Deliverable: Moment-free major release.
 
 ## Phase 11 – Distribution (GitHub Actions) (0.5–1 week)

@@ -10,5 +10,5 @@ const $: any = require('jquery')
 // Register the TS runtime + jQuery plugin
 require('../../src/ts/index')
 
-// Default DATE_LIB to 'moment' if unset; infra for future adapter tests
-process.env.DATE_LIB = process.env.DATE_LIB || 'moment'
+// Default DATE_LIB to 'luxon' (Phase 9 default). Tests can override per-suite.
+process.env.DATE_LIB = process.env.DATE_LIB || 'luxon'

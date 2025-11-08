@@ -107,8 +107,7 @@ export function normalizeOptions(
       inOptions.ignoreInactiveDaysInSelection ?? null,
     lengthOfTime: inOptions.lengthOfTime,
     extras: inOptions.extras,
-    constraints: inOptions.constraints ?? null,
-    moment: inOptions.moment ?? null
+    constraints: inOptions.constraints ?? null
   }
 
   const daysOfTheWeek = computeWeekdayLabels(adapter, o)

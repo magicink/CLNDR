@@ -11,9 +11,12 @@ This guide helps migrate from legacy CLNDR v1.x (e.g., 1.5.1) to the modern Type
 
 ## Breaking/Behavioral Changes
 
-- Default date library remains `moment` for now, but will switch to `luxon` in Phase 9
-  - Deprecation warning is logged when no `dateLibrary` is specified
-  - Action: Specify `dateLibrary: 'moment'` or `'luxon'` explicitly
+- Default date library is now `luxon` (Phase 9)
+  - Action: Specify `dateLibrary: 'moment'` if you need legacy behavior, or `'luxon'` to be explicit
+  - When no `locale` is provided, CLNDR inherits the global Moment locale if available to ease transition
+- Deprecation: Passing Moment instances directly in options (e.g., `startWithMonth`, `selectedDate`, event dates)
+  - Continue to work temporarily, but a console warning is logged
+  - Action: Provide ISO strings (recommended), native `Date`, or set `dateLibrary`/`dateAdapter`
 - Templates
   - If Underscore/Lodash is present, CLNDR compiles templates with `_.template`
   - Otherwise, a minimal internal renderer supports only `<%= ... %>` (no loops/conditionals)
@@ -57,11 +60,16 @@ This guide helps migrate from legacy CLNDR v1.x (e.g., 1.5.1) to the modern Type
 - UMD: `dist/clndr.umd.js` (global `clndr`, minified in production builds)
   - Future enhancement: expand `dist/clndr.d.ts` to export the adapter/core surfaces directly
 
-## Deprecations and Phase 9 Default Switch
+## Phase 10: Moment Removal
 
-- The default `dateLibrary` will change to `'luxon'` in Phase 9
-  - You will see a console warning if you rely on the default
-  - Set `dateLibrary` explicitly to silence the warning
+- Moment support has been removed.
+  - `dateLibrary: 'moment'` is no longer accepted.
+  - The Moment adapter and dependency are no longer shipped.
+  - Options like `options.moment` are not recognized.
+- Migration steps:
+  - Use the default Luxon adapter: `$('.el').clndr({ dateLibrary: 'luxon' })` or omit `dateLibrary`.
+  - Replace any direct Moment instance usage in options with ISO strings or native `Date`.
+  - For weekday headers, rely on CLNDR’s `formatWeekdayHeader` callback with Luxon’s locale via `locale` option.
 
 ## Troubleshooting
 

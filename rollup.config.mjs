@@ -8,12 +8,11 @@ import dts from 'rollup-plugin-dts'
 const isProd = process.env.NODE_ENV === 'production'
 
 // External libraries we never bundle
-const external = ['jquery', 'moment', 'luxon']
+const external = ['jquery', 'luxon']
 
 // UMD global names for externals
 const globals = {
   jquery: 'jQuery',
-  moment: 'moment',
   luxon: 'luxon'
 }
 
@@ -41,9 +40,10 @@ export default [
     plugins: [
       resolve({ browser: true }),
       commonjs(),
-      // Explicitly set outputToFilesystem to silence plugin info warning
+      // Explicitly set outputToFilesystem to silence plugin info message
       typescript({
-        tsconfig: path.resolve('tsconfig.json')
+        tsconfig: path.resolve('tsconfig.json'),
+        outputToFilesystem: true
       }),
       ...(isProd ? [terser()] : [])
     ],

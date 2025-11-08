@@ -10,15 +10,14 @@ function destroyAll() {
 }
 
 function initCalendars(opts) {
-    var dateLibrary = (opts && opts.dateLibrary) || 'moment';
+    var dateLibrary = 'luxon';
     var locale = (opts && opts.locale) || 'en';
     var directClndr = window.clndr && (window.clndr.clndr || window.clndr);
 
-    // Keep moment locale in sync for demo templates that call moment().
-    if (window.moment) { window.moment.locale(locale); }
+    // Ensure Luxon locale is used implicitly by CLNDR via options.
 
     // Here's some magic to make sure the dates are happening this month.
-    var thisMonth = moment().format('YYYY-MM');
+    var thisMonth = (window.luxon && window.luxon.DateTime.now().toFormat('yyyy-MM')) || (new Date().toISOString().slice(0,7));
     // Events to load into calendar
     var eventArray = [
         {
@@ -163,21 +162,15 @@ $(document).ready( function() {
     TPL_CAL = $('#template-calendar').html();
     TPL_CAL_MONTHS = $('#template-calendar-months').html();
 
-    // Initialize calendars with defaults
-    initCalendars({ dateLibrary: 'moment', locale: 'en' });
+    // Initialize calendars with defaults (Phase 9: Luxon default)
+    initCalendars({ locale: 'en' });
 
     // Hook up UI toggles
-    $('#date-lib').on('change', function () {
-        var lib = $(this).val();
-        var loc = $('#locale').val();
-        destroyAll();
-        initCalendars({ dateLibrary: lib, locale: loc });
-    });
+    // Date library is fixed to Luxon in this build.
     $('#locale').on('change', function () {
-        var lib = $('#date-lib').val();
         var loc = $(this).val();
         destroyAll();
-        initCalendars({ dateLibrary: lib, locale: loc });
+        initCalendars({ locale: loc });
     });
 
     // The order of the click handlers is predictable. Direct click action

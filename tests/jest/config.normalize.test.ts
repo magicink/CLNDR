@@ -1,10 +1,8 @@
-import moment from 'moment'
-
-import { createMomentAdapter, normalizeOptions } from '../../src/ts/index'
+import { createLuxonAdapter, normalizeOptions } from '../../src/ts/index'
 
 describe('normalizeOptions defaults and merges', () => {
   test('applies sane defaults when options are empty', () => {
-    const adapter = createMomentAdapter('en')
+    const adapter = createLuxonAdapter('en')
     const { options, daysOfTheWeek } = normalizeOptions(adapter, {})
 
     expect(options.weekOffset).toBe(0)
@@ -16,7 +14,8 @@ describe('normalizeOptions defaults and merges', () => {
     expect(options.selectedDate).toBeNull()
     expect(options.ignoreInactiveDaysInSelection).toBeNull()
     expect(options.constraints).toBeNull()
-    expect(options.moment).toBeNull()
+    // no legacy moment field in options
+    expect((options as any).moment).toBeUndefined()
 
     // Targets/classes merged with defaults
     expect(options.targets?.nextButton).toBe('clndr-next-button')
@@ -27,7 +26,7 @@ describe('normalizeOptions defaults and merges', () => {
   })
 
   test('merges targets/classes and preserves provided values', () => {
-    const adapter = createMomentAdapter('en')
+    const adapter = createLuxonAdapter('en')
     const { options, daysOfTheWeek } = normalizeOptions(adapter, {
       targets: { day: 'd' },
       classes: { past: 'p' },
@@ -41,8 +40,10 @@ describe('normalizeOptions defaults and merges', () => {
     expect(options.classes?.today).toBe('today')
 
     // Rotation respected
+    // Compute expected headers using the adapter's dd token and first letters
+    const start = adapter.now().startOf('week')
     const base = Array.from({ length: 7 }, (_, i) =>
-      moment().weekday(i).format('dd').charAt(0)
+      adapter.setWeekday(start, i).format('dd').charAt(0)
     )
     const expected = [...base.slice(2), ...base.slice(0, 2)]
     expect(daysOfTheWeek).toEqual(expected)

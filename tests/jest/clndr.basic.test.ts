@@ -88,14 +88,12 @@ describe('CLNDR config and state', () => {
 
   test('weekly interval snapshot similar to demo header', () => {
     const $ = (global as any).jQuery
-    const moment = (global as any).moment || require('moment')
-    const originalNow = moment.now
-    moment.now = () => new Date('2025-11-07T12:00:00Z').valueOf()
+    jest.useFakeTimers().setSystemTime(new Date('2025-11-07T12:00:00Z'))
     const api = $('#cal3').clndr({
       lengthOfTime: {
         days: 14,
         interval: 7,
-        startDate: moment().weekday(0)
+        startDate: '2025-11-02'
       },
       render: (data: any) => {
         const headers = data.daysOfTheWeek
@@ -127,7 +125,7 @@ describe('CLNDR config and state', () => {
     })
     expect(api).toBeTruthy()
     expect(document.getElementById('cal3')!.innerHTML).toMatchSnapshot()
-    moment.now = originalNow
+    jest.useRealTimers()
   })
 
   test('trackSelectedDate toggles selected class on click', () => {
@@ -161,9 +159,15 @@ describe('CLNDR config and state', () => {
 
   test('constraints disable navigation buttons', () => {
     const $ = (global as any).jQuery
-    const moment = (global as any).moment || require('moment')
-    const start = moment().startOf('month').format('YYYY-MM-DD')
-    const end = moment().endOf('month').format('YYYY-MM-DD')
+    const now = new Date()
+    const start = new Date(Date.UTC(now.getUTCFullYear(), now.getUTCMonth(), 1))
+      .toISOString()
+      .slice(0, 10)
+    const end = new Date(
+      Date.UTC(now.getUTCFullYear(), now.getUTCMonth() + 1, 0)
+    )
+      .toISOString()
+      .slice(0, 10)
     $('#cal3').clndr({
       constraints: { startDate: start, endDate: end },
       render: (data: any) => `

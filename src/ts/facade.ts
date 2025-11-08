@@ -1,6 +1,5 @@
 import type { DateAdapter } from './date-adapter/adapter'
 import { createLuxonAdapter } from './date-adapter/luxon-adapter'
-import { createMomentAdapter } from './date-adapter/moment-adapter'
 import { ClndrCore, type StateChange } from './core'
 import { ClndrDOM } from './dom'
 import { normalizeOptions } from './config'
@@ -43,24 +42,42 @@ function selectAdapter(options: ClndrOptions): DateAdapter<any> {
     typeof process !== 'undefined' && process.env?.DATE_LIB
       ? process.env.DATE_LIB
       : null
-  const preferred = options.dateLibrary || envPref || 'moment'
+  const preferred = options.dateLibrary || envPref || 'luxon'
 
   if (!options.dateLibrary && !envPref && !warnedDefaultSwitch) {
     warnedDefaultSwitch = true
     if (typeof console !== 'undefined' && typeof console.warn === 'function') {
       console.warn(
-        'CLNDR: The default dateLibrary will change from "moment" to "luxon" in Phase 9. ' +
-          'Set options.dateLibrary to "moment" or "luxon" to silence this message. ' +
+        'CLNDR: The default dateLibrary is now "luxon" (Phase 9). ' +
+          'Set options.dateLibrary to "moment" or "luxon" explicitly to be explicit. ' +
           'See MIGRATION.md for details.'
       )
     }
   }
 
   if (preferred === 'luxon') {
-    return createLuxonAdapter(options.locale, options.zone)
+    let inferredLocale = options.locale
+    if (!inferredLocale) {
+      const g: any = globalThis as any
+      const gm = g?.moment
+      if (gm && typeof gm.locale === 'function') {
+        inferredLocale = gm.locale()
+      } else if (typeof require === 'function') {
+        try {
+          const m = require('moment')
+          if (m && typeof m.locale === 'function') {
+            inferredLocale = m.locale()
+          }
+        } catch {
+          // ignore
+        }
+      }
+    }
+    return createLuxonAdapter(inferredLocale, options.zone)
   }
-
-  return createMomentAdapter(options.locale)
+  throw new Error(
+    'CLNDR: Moment support has been removed. Use dateLibrary: "luxon" or provide a custom dateAdapter.'
+  )
 }
 
 function createPublicApi(core: ClndrCore<any>, dom: ClndrDOM<any>): Clndr {

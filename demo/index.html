@@ -9,9 +9,8 @@
     <div class="container">
         <div class="toolbar" style="margin-bottom: 12px;">
             <label for="date-lib">Date Library:</label>
-            <select id="date-lib">
-                <option value="moment" selected>Moment</option>
-                <option value="luxon">Luxon</option>
+            <select id="date-lib" disabled>
+                <option value="luxon" selected>Luxon</option>
             </select>
             <label for="locale" style="margin-left: 12px;">Locale:</label>
             <select id="locale">
@@ -28,8 +27,6 @@
 
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.7.1/jquery.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/underscore.js/1.13.6/underscore-min.js"></script>
-    <!-- Include Moment with all locales so demo locale switch (fr/de/ja) works -->
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.30.1/moment-with-locales.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/luxon/3.5.0/luxon.min.js"></script>
     <script src="../dist/clndr.umd.js"></script>
 
