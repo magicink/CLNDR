@@ -2,25 +2,6 @@
   "name": "@brandontom/luxon-clndr",
   "version": "0.0.1",
   "description": "A jQuery calendar plugin that uses HTML templates.",
-  "author": "Kyle Stetz",
-  "contributors": [
-    "Mike Gioia <mike@teachboost.com>"
-  ],
-  "license": "MIT",
-  "repository": {
-    "type": "git",
-    "url": "https://github.com/kylestetz/CLNDR"
-  },
-  "scripts": {
-    "lint": "eslint . --ext .js,.ts",
-    "lint:fix": "eslint . --ext .js,.ts --fix",
-    "format": "prettier --write .",
-    "format:check": "prettier --check .",
-    "type-check": "tsc --noEmit",
-    "build:ts": "tsc -p tsconfig.json",
-    "prepare": "husky",
-    "baseline:snapshots": "bun scripts/capture-baseline.mjs"
-  },
   "keywords": [
     "clndr",
     "calendar",
@@ -29,37 +10,53 @@
     "widget",
     "jquery-plugin"
   ],
+  "homepage": "https://github.com/kylestetz/CLNDR",
   "bugs": {
     "url": "https://github.com/kylestetz/CLNDR/issues"
   },
-  "homepage": "https://github.com/kylestetz/CLNDR",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/kylestetz/CLNDR"
+  },
+  "license": "MIT",
+  "author": "Kyle Stetz",
+  "contributors": [
+    "Mike Gioia <mike@teachboost.com>"
+  ],
   "main": "src/clndr.js",
+  "scripts": {
+    "baseline:snapshots": "bun scripts/capture-baseline.mjs",
+    "build:ts": "tsc -p tsconfig.json",
+    "ci:check": "npm run lint && npm run type-check && npm run build:ts && npm run smoke",
+    "format": "prettier --write .",
+    "format:check": "prettier --check .",
+    "lint": "eslint . --ext .js,.ts",
+    "lint:fix": "eslint . --ext .js,.ts --fix",
+    "prepare": "husky",
+    "smoke": "node scripts/smoke.mjs",
+    "type-check": "tsc --noEmit"
+  },
+  "prettier": "@brandontom/prettier",
   "dependencies": {
     "jquery": ">=3.7",
     "moment": ">=2.30.1"
   },
   "devDependencies": {
+    "@brandontom/prettier": "^2.0.2",
     "@commitlint/cli": "^20.1.0",
     "@commitlint/config-conventional": "^20.0.0",
     "@typescript-eslint/eslint-plugin": "^8.46.3",
     "@typescript-eslint/parser": "^8.46.3",
     "eslint": "^9.39.1",
-    "husky": "^9.1.7",
-    "lint-staged": "^16.2.6",
-    "prettier": "^3.6.2",
-    "typescript": "^5.9.3",
-    "puppeteer": "^24.29.1",
     "grunt": "*",
     "grunt-contrib-less": "^3.0.0",
     "grunt-contrib-uglify": "^5.2.2",
-    "grunt-contrib-watch": "^1.1.0"
-  },
-  "lint-staged": {
-    "*.{js,ts}": [
-      "eslint --cache --fix"
-    ],
-    "*.{js,ts,json,md,css,scss,html,yml,yaml}": [
-      "prettier --write"
-    ]
+    "grunt-contrib-watch": "^1.1.0",
+    "husky": "^9.1.7",
+    "lint-staged": "^16.2.6",
+    "prettier": "^3.6.2",
+    "puppeteer": "^24.29.1",
+    "sort-package-json": "^3.4.0",
+    "typescript": "^5.9.3"
   }
 }

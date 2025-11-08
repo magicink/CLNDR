@@ -43,7 +43,7 @@
   - `pre-commit`: run `lint-staged` to apply Prettier and ESLint on staged files.
   - `commit-msg`: run Conventional Commits lint (`@commitlint/config-conventional`).
 - [x] ~~Introduce `src/ts/` and wire build: `tsc` → `dist/` alongside existing Grunt tasks.~~
-- [ ] Add minimal smoke tests and CI wiring; full Jest harness in Phase 3.
+- [x] ~~Add minimal smoke tests and CI wiring; full Jest harness in Phase 3.~~
 - Deliverable: Passing CI with compiling TS scaffold; Husky + lint-staged active and commit messages validated against Conventional Commits.
 
 ## Phase 2 – Type Definitions & Facade (1–2 weeks)
