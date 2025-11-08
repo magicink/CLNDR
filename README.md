@@ -44,7 +44,7 @@ submitting a pull request or issue!
 [jQuery](http://jquery.com/download/) is required. By default CLNDR can use
 [Lodash](http://lodash.com/)'s `_.template()` function; however, if you specify
 a custom rendering function (see documentation below) Lodash is not required.
-Luxon is bundled via the adapter; no Moment.js is required.
+Luxon is used via the DateAdapter.
 
 ### Using Bun
 
@@ -63,25 +63,11 @@ Lodash, just install it as a dependency of your project:
 
 CLNDR's source of record is now TypeScript. The package publishes modern ESM and UMD bundles.
 
-- Legacy jQuery plugin usage remains available: include `@brandontom/luxon-clndr/legacy` (which maps to `dist/clndr.js`) and use `$('.el').clndr()`.
 - ESM/TypeScript usage with bundlers:
 
 Option A (script tags): load jQuery and the UMD bundle, then call the TS entry.
 
 ```ts
-import { clndr } from '@brandontom/luxon-clndr'
-
-const api = clndr('#calendar', {
-  /* ...ClndrOptions */
-})
-```
-
-Option B (bundler): import the legacy plugin to register `$.fn.clndr` if you rely on jQuery chaining, otherwise call the TS entry directly.
-
-```ts
-// Optional: registers the legacy jQuery plugin
-import '@brandontom/luxon-clndr/legacy'
-
 import { clndr } from '@brandontom/luxon-clndr'
 
 const api = clndr('#calendar', {
@@ -139,7 +125,7 @@ structure looks like this:
   day: 5,
   events: [],
   classes: "day",
-  date: moment("2015-12-31")
+  date: '2015-12-31'
 }
 ```
 
@@ -167,10 +153,9 @@ See the examples for a demonstration of how events populate the `days` array.
 
 ## Usage
 
-CLNDR leans on the awesome work done in Lodash and moment. These are
-requirements unless you are using a different rendering engine, in which case
-Lodash is not a requirement. Do be sure to include them in your `<head>`
-before clndr.js. It is a jQuery plugin, so naturally you'll need that as well.
+CLNDR can use Lodash for templating. Lodash is required only if you are using
+the built-in `template` option; if you provide your own `render()` function then
+Lodash is not needed. Include jQuery before CLNDR since it is a jQuery plugin.
 
 The bare minimum (CLNDR includes a default template):
 
@@ -189,8 +174,8 @@ $('.parent-element').clndr({
   template: clndrTemplate,
 
   // Determines which month to start with using either a date string or a
-  // moment object.
-  startWithMonth: "YYYY-MM-DD" or moment(),
+  // native Date.
+  startWithMonth: "YYYY-MM-DD" or new Date(),
 
   // Start the week off on Sunday (0), Monday (1), etc. Sunday is the default.
   // WARNING: if you are dealing with i18n and multiple languages, you
@@ -198,20 +183,19 @@ $('.parent-element').clndr({
   // for more.
   weekOffset: 0,
 
-  // An array of day abbreviation labels. If you have moment.js set to a
-  // different language, it will guess these for you! If for some reason that
-  // doesn't work, use this...
+  // An array of day abbreviation labels. If not provided, CLNDR derives these
+  // from the active locale and rotates them according to `weekOffset`.
   // WARNING: if you are dealing with i18n and multiple languages, you
   // probably don't want this! See the "Internationalization" section below
   // for more.
   daysOfTheWeek: ['Su', 'Mo', 'Tu', 'We', 'Th', 'Fr', 'Sa'],
 
   // Optional callback function that formats the day in the header. If none
-  // supplied, defaults to moment's `dd` and truncates to one character.
-  // The callback is passed a moment object representing the day, and a string
-  // is to be returned.
+  // supplied, defaults to the adapter's `dd` token and truncates to one character.
+  // The callback is passed an adapter-native date value (Luxon DateTime) and a
+  // string is to be returned.
   formatWeekdayHeader: function (day) {
-    return day.format('dd').charAt(0);
+    return (day.toFormat ? day.toFormat('dd') : '').charAt(0);
   },
 
   // The target classnames that CLNDR will look for to bind events.
@@ -243,49 +227,48 @@ $('.parent-element').clndr({
   // callbacks.
   clickEvents: {
     // Fired whenever a calendar box is clicked. Returns a 'target' object
-    // containing the DOM element, any events, and the date as a moment.js
-    // object.
+    // containing the DOM element, any events, and the date as a Luxon DateTime.
     click: function (target) {...},
 
-    // Fired when a user goes to the current month and year. Returns a
-    // moment.js object set to the correct month.
+    // Fired when a user goes to the current month and year. Returns a Luxon
+    // DateTime set to the correct month.
     today: function (month) {...},
 
-    // Fired when a user goes forward a month. Returns a moment.js object
-    // set to the correct month.
+    // Fired when a user goes forward a month. Returns a Luxon DateTime set
+    // to the correct month.
     nextMonth: function (month) {...},
 
-    // Fired when a user goes back a month. Returns a moment.js object set
+    // Fired when a user goes back a month. Returns a Luxon DateTime set
     // to the correct month.
     previousMonth: function (month) {...},
 
     // Fires any time the month changes as a result of a click action.
-    // Returns a moment.js object set to the correct month.
+    // Returns a Luxon DateTime set to the correct month.
     onMonthChange: function (month) {...},
 
-    // Fired when the next year button is clicked. Returns a moment.js
-    // object set to the correct month and year.
+    // Fired when the next year button is clicked. Returns a Luxon DateTime
+    // set to the correct month and year.
     nextYear: function (month) {...},
 
-    // Fired when the previous year button is clicked. Returns a moment.js
-    // object set to the correct month and year.
+    // Fired when the previous year button is clicked. Returns a Luxon DateTime
+    // set to the correct month and year.
     previousYear: function (month) {...},
 
     // Fires any time the year changes as a result of a click action. If
     // onMonthChange is also set, it is fired BEFORE onYearChange. Returns
-    // a moment.js object set to the correct month and year.
+    // a Luxon DateTime set to the correct month and year.
     onYearChange: function (month) {...},
 
-    // Fired when a user goes forward a period. Returns moment.js objects
+    // Fired when a user goes forward a period. Returns Luxon DateTime objects
     // for the updated start and end date.
     nextInterval: function (start, end) {...},
 
-    // Fired when a user goes back an interval. Returns moment.js objects for
-    // the updated start and end date.
+    // Fired when a user goes back an interval. Returns Luxon DateTime
+    // objects for the updated start and end date.
     previousInterval: function (start, end) {...},
 
     // Fired whenever the time period changes as configured in lengthOfTime.
-    // Returns moment.js objects for the updated start and end date.
+    // Returns Luxon DateTime objects for the updated start and end date.
     onIntervalChange: function (start, end) {...}
   },
 
@@ -401,10 +384,7 @@ $('.parent-element').clndr({
     endDate: '2018-01-09'
   },
 
-  // Optionally, you can pass a Moment instance to use instead of the CLNDR settings.
-  // If you use moment you shouldn't use weekOffset and daysOfTheWeek
-  // See https://github.com/kylestetz/CLNDR#internationalization for more information
-  moment: null
+  // You can provide `locale`/`zone` if needed.
 });
 ```
 
@@ -440,8 +420,8 @@ eventsLastMonth: []
 eventsNextMonth: []
 
 // If you specified a custom lengthOfTime, you will have these instead.
-intervalEnd: (moment object)
-intervalStart: (moment object)
+intervalEnd: (Luxon DateTime)
+intervalStart: (Luxon DateTime)
 eventsThisInterval: []
 
 // Anything you passed into the 'extras' property when creating the clndr
@@ -675,14 +655,11 @@ seen above.
 
 ## Configuration
 
-### Date Library (Moment vs Luxon)
+### Date Library (Luxon)
 
-CLNDR now supports running with either Moment (default) or Luxon via a DateAdapter boundary.
+CLNDR runs with Luxon via a DateAdapter boundary.
 
-- Use the `dateLibrary` option on init: `$('.el').clndr({ dateLibrary: 'luxon', locale: 'fr' })`.
-- You may also pass `locale` and `zone` when using Luxon; locale is respected by Moment as well.
-- In test/CI environments you can set `DATE_LIB=moment|luxon` to control the default when `dateLibrary` is not provided.
-- The demo includes a toggle to switch between libraries at runtime.
+- Configure `locale` and `zone` as needed.
 
 ### Template Rendering Engine
 
@@ -789,40 +766,14 @@ $('#calendar').clndr({
 
 ### Internationalization
 
-CLNDR has support for internationalization insofar as Moment.js supports it. By
-configuring your Moment.js instance to a different language, which you can read
-more about here: [i18n in Moment.js](http://momentjs.com/docs/#/i18n/), you are
-configuring CLNDR as well.
+CLNDR supports internationalization via Luxon.
 
-If you would prefer to pass in a pre-configured instance of moment, you can do
-this by passing it in as the `moment` config option when initializing CLNDR:
-
-```javascript
-// To change clndr to German use moment.local('de')
-moment.locale('de')
-
-// Make sure that your locale is Working correctly
-console.log(moment().calendar())
-// Returns "heute um 18:43 Uhr"
-
-$('#calendar').clndr({
-  // Pass the moment instance to use your language settings
-  moment: moment
-})
-```
-
-If you are using a moment.js language configuration in which weeks begin on a
-Monday (e.g. French), CLNDR will detect this automatically and there is no need
-to provide a `weekOffset` or a `daysOfTheWeek` array. If you want to reverse
-this behavior, there is a field in each moment.js language config file called
-`dow` which you can set to your liking.
-
-The day of the week abbreviations are created automatically using moment.js's
-current language setting, however if this does not suit your needs you should
-override them using the `daysOfTheWeek` option. Make sure the array you provide
-begins on the same day of the week as your current language setting.
-**Warning**: using `daysOfTheWeek` and `weekOffset` in conjunction with
-different language settings is _not_ recommended and may cause you headaches.
+- Set `locale` (e.g., `'fr'`) to localize month names and weekday headers.
+- Optionally set `zone` with an IANA timezone (e.g., `'Europe/Paris'`).
+- Week start is controlled with `weekOffset` (0 = Sunday). If you need custom
+  weekday headers, set `daysOfTheWeek` or provide `formatWeekdayHeader`.
+- Ensure your environment includes full ICU data so Luxon locales render
+  correctly (see CI example in this repo for `NODE_ICU_DATA`).
 
 ### Lodash Template Delimiters
 
@@ -848,12 +799,10 @@ _.templateSettings = {
 }
 ```
 
-### Internet Explorer Issues
+### Browser Compatibility
 
-If you're planning on supporting IE8 and below, you'll have to be careful about
-version dependencies. You'll need the jQuery 1.10.x branch for IE support, and
-if you're taking advantage of the `constraints` feature you'll need to use a
-version of moment.js `<=2.1.0` or `>=2.5.1`.
+Legacy browsers like IE8 are not officially supported. Verify features in your
+target environments and consider appropriate polyfills as needed.
 
 ## Submitting Issues
 

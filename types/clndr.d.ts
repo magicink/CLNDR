@@ -16,7 +16,8 @@ interface ClndrEvent {
 
 interface ClndrDay {
   day: number
-  date: ClndrMoment // moment-like instance
+  // Adapter-native date-like value (e.g., Luxon DateTime)
+  date: ClndrDateLike
   events: ClndrEvent[]
   classes: string
   // Optional bag for additional flags
@@ -103,10 +104,9 @@ interface ClndrOptions {
   extras?: any
   constraints?: ClndrConstraints | null
   // Adapter selection & i18n surface
-  dateLibrary?: 'luxon'
   /** Advanced injection: custom adapter implementing the DateAdapter surface */
   dateAdapter?: any
-  /** Optional locale forwarded to adapter (and moment for legacy rendering) */
+  /** Optional locale forwarded to adapter */
   locale?: string
   /** Optional IANA time zone forwarded to adapter (Luxon) */
   zone?: string

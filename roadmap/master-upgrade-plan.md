@@ -106,7 +106,7 @@ Automate build, test, and release workflows (final phase).
 
 ## Configuration
 
-- `dateLibrary`: `'moment' | 'luxon'` (default `'moment'` until Phase 9).
+- `dateLibrary`: `'luxon'` (default).
 - `dateAdapter`: custom adapter injection for power users/testing.
 - `locale`: optional locale string, applied via adapter; defaults to environment.
 - `zone`: optional IANA timezone identifier, forwarded to adapter.

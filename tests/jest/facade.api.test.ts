@@ -33,8 +33,8 @@ describe('facade.clndr API', () => {
     document.body.innerHTML = "<div id='facade2'></div>"
     expect(() =>
       clndr('#facade2', {
-        dateLibrary: 'moment' as any
-      })
+        dateLibrary: 'moment'
+      } as any)
     ).toThrow(/Moment support has been removed/)
   })
 
@@ -97,9 +97,9 @@ describe('facade.clndr API', () => {
     const adapter = createLuxonAdapter('en')
     const api = clndr('#facade4', {
       dateAdapter: adapter,
-      dateLibrary: 'moment' as any, // ignored due to provided dateAdapter
+      dateLibrary: 'moment', // ignored due to provided dateAdapter
       startWithMonth: '2020-01-01'
-    })
+    } as any)
     const el = document.getElementById('facade4') as HTMLElement
     expect(headerText(el)).toBe('January 2020')
     api.destroy()

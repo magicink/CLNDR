@@ -36,7 +36,8 @@ export function clndr(
 function selectAdapter(options: ClndrOptions): DateAdapter<any> {
   if (options.dateAdapter) return options.dateAdapter
 
-  if (options.dateLibrary && options.dateLibrary !== 'luxon') {
+  const requested = (options as any).dateLibrary
+  if (requested && requested !== 'luxon') {
     throw new Error(
       'CLNDR: Moment support has been removed. Use the default Luxon adapter or provide a custom dateAdapter.'
     )
