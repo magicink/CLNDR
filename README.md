@@ -1,36 +1,48 @@
-# CLNDR.js
+# @brandontom/luxon-clndr
 
 CLNDR is a jQuery calendar plugin. It was created -- you've heard this before --
 out of frustration with the lack of truly dynamic front-end calendar plugins out
 there.
 
-See a demo: [kylestetz.github.io/CLNDR/](http://kylestetz.github.io/CLNDR/)
+Project repo: https://github.com/magicink/CLNDR
 
 ---
 
-- [Download](https://github.com/kylestetz/CLNDR#download)
-- [Dependencies](https://github.com/kylestetz/CLNDR#dependencies)
-  - [Using Bun](https://github.com/kylestetz/CLNDR#using-bun)
-- [Introduction: You Write The Markup](https://github.com/kylestetz/CLNDR#introduction-you-write-the-markup)
-  - [The 'days' Array](https://github.com/kylestetz/CLNDR#the-days-array)
-  - [Pass in your Events](https://github.com/kylestetz/CLNDR#pass-in-your-events)
-- [Usage](https://github.com/kylestetz/CLNDR#usage)
-  - [Multi-day Events](https://github.com/kylestetz/CLNDR#multi-day-events)
-  - [Custom Classes](https://github.com/kylestetz/CLNDR#custom-classes)
-  - [Constraints & Datepickers](https://github.com/kylestetz/CLNDR#constraints--datepickers)
-  - [Returning the Instance / API](https://github.com/kylestetz/CLNDR#returning-the-instance--public-api)
-  - [Template Requirements](https://github.com/kylestetz/CLNDR#template-requirements)
-- [Configuration](https://github.com/kylestetz/CLNDR#some-configuration)
-  - [Template Rendering Engine](https://github.com/kylestetz/CLNDR#template-rendering-engine)
-  - [Internationalization](https://github.com/kylestetz/CLNDR#internationalization)
-  - [Lodash Template Delimiters](https://github.com/kylestetz/CLNDR#lodash-template-delimiters)
-  - [Internet Explorer Issues](https://github.com/kylestetz/CLNDR#internet-explorer-issues)
-- [Submitting Issues](https://github.com/kylestetz/CLNDR#submitting-issues)
+- [Install](https://github.com/magicink/CLNDR#install)
+- [Dependencies](https://github.com/magicink/CLNDR#dependencies)
+  - [Using Bun](https://github.com/magicink/CLNDR#using-bun)
+- [Introduction: You Write The Markup](https://github.com/magicink/CLNDR#introduction-you-write-the-markup)
+  - [The 'days' Array](https://github.com/magicink/CLNDR#the-days-array)
+  - [Pass in your Events](https://github.com/magicink/CLNDR#pass-in-your-events)
+- [Usage](https://github.com/magicink/CLNDR#usage)
+  - [Multi-day Events](https://github.com/magicink/CLNDR#multi-day-events)
+  - [Custom Classes](https://github.com/magicink/CLNDR#custom-classes)
+  - [Constraints & Datepickers](https://github.com/magicink/CLNDR#constraints--datepickers)
+  - [Returning the Instance / API](https://github.com/magicink/CLNDR#returning-the-instance--public-api)
+  - [Template Requirements](https://github.com/magicink/CLNDR#template-requirements)
+- [Configuration](https://github.com/magicink/CLNDR#some-configuration)
+  - [Template Rendering Engine](https://github.com/magicink/CLNDR#template-rendering-engine)
+  - [Internationalization](https://github.com/magicink/CLNDR#internationalization)
+  - [Lodash Template Delimiters](https://github.com/magicink/CLNDR#lodash-template-delimiters)
+  - [Browser Compatibility](https://github.com/magicink/CLNDR#browser-compatibility)
+- [Submitting Issues](https://github.com/magicink/CLNDR#submitting-issues)
 
-## Download
+## Install
 
-- UMD bundle: [clndr.umd.js](https://raw.github.com/kylestetz/CLNDR/master/dist/clndr.umd.js) (minified in production builds)
-- ESM bundle: [clndr.esm.js](https://raw.github.com/kylestetz/CLNDR/master/dist/clndr.esm.js)
+Install from npm and use with a bundler, or load the UMD via a CDN.
+
+- npm: `npm install @brandontom/luxon-clndr`
+- yarn: `yarn add @brandontom/luxon-clndr`
+- pnpm: `pnpm add @brandontom/luxon-clndr`
+- bun: `bun add @brandontom/luxon-clndr`
+
+CDN (UMD global `clndr`):
+
+```html
+<script src="https://cdn.jsdelivr.net/npm/@brandontom/luxon-clndr/dist/clndr.umd.js"></script>
+<!-- or -->
+<script src="https://unpkg.com/@brandontom/luxon-clndr/dist/clndr.umd.js"></script>
+```
 
 Returning to grab a new version? Have a look at the `CHANGELOG.md` file.
 
@@ -517,7 +529,7 @@ clndr.customClasses = $('#custom-classes').clndr({
 
 To configure the `day`, `empty`, and next/previous/today/etc. button classes,
 use the `targets` option documented in the
-[usage](https://github.com/kylestetz/CLNDR#usage) section.
+[usage](https://github.com/magicink/CLNDR#usage) section.
 
 ### Constraints & Datepickers
 
