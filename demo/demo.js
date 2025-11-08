@@ -33,7 +33,7 @@ $(document).ready( function() {
     // previousYear, nextInterval, previousInterval, or today. Then
     // onMonthChange (if the month changed), inIntervalChange if the interval
     // has changed, and finally onYearChange (if the year changed).
-    calendars.clndr1 = $('.cal1').clndr({
+    calendars.clndr1 = clndr.clndr('.cal1', {
         events: eventArray,
         clickEvents: {
             click: function (target) {
@@ -80,7 +80,7 @@ $(document).ready( function() {
     });
 
     // Calendar 2 uses a custom length of time: 2 weeks paging 7 days
-    calendars.clndr2 = $('.cal2').clndr({
+    calendars.clndr2 = clndr.clndr('.cal2', {
         lengthOfTime: {
             days: 14,
             interval: 7
@@ -109,7 +109,7 @@ $(document).ready( function() {
     });
 
     // Calendar 3 renders two months at a time, paging 1 month
-    calendars.clndr3 = $('.cal3').clndr({
+    calendars.clndr3 = clndr.clndr('.cal3', {
         lengthOfTime: {
             months: 2,
             interval: 1

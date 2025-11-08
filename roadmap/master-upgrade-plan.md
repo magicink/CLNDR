@@ -69,14 +69,15 @@ Establish a modern unit test stack and DOM snapshot testing.
 
 Adopt Rollup for consistent ESM/UMD outputs and type bundles.
 
-- [ ] Add `rollup.config.mjs` producing `dist/clndr.esm.js`, `dist/clndr.umd.js`, and sourcemaps.
-- [ ] Use plugins: `@rollup/plugin-node-resolve`, `@rollup/plugin-commonjs`, `@rollup/plugin-typescript` (or `rollup-plugin-typescript2`), optional `rollup-plugin-terser`.
-- [ ] Mark externals: `jquery`, `moment`, `luxon`; verify peerDependency treatment.
-- [ ] Generate `.d.ts` bundle (via Rollup `dts` or `tsc` emit) and verify type resolution.
-- [ ] Add `build`, `build:prod`, and size-check script; integrate into CI.
-- [ ] Keep Grunt tasks during transition; switch demos/docs to Rollup outputs when stable.
-- [ ] Remove LESS: replace `demo/css/clndr.less` with committed CSS (or small PostCSS pipeline); drop `less`/`grunt-contrib-less` and update demos.
-- [ ] Remove Grunt: migrate uglify/watch to Rollup + Terser; delete `Gruntfile.js` and related devDependencies.
+    - [x] ~~Add `rollup.config.mjs` producing `dist/clndr.esm.js`, `dist/clndr.umd.js`, and sourcemaps.~~
+    - [x] ~~Use plugins: `@rollup/plugin-node-resolve`, `@rollup/plugin-commonjs`, `@rollup/plugin-typescript` (or `rollup-plugin-typescript2`), optional `rollup-plugin-terser`.~~
+    - [x] ~~Mark externals: `jquery`, `moment`, `luxon`; verify peerDependency treatment.~~
+    - [x] ~~Generate `.d.ts` bundle (via Rollup `dts` or `tsc` emit) and verify type resolution.~~
+    - [x] ~~Add `build`, `build:prod`, and size-check script; integrate into CI.~~
+    - [x] ~~Keep Grunt tasks during transition; switch demos/docs to Rollup outputs when stable.~~
+    - [x] ~~Remove LESS: replace `demo/css/clndr.less` with committed CSS (or small PostCSS pipeline); drop `less`/`grunt-contrib-less` and update demos.~~
+    - [x] ~~Remove Grunt: migrate uglify/watch to Rollup + Terser; delete `Gruntfile.js` and related devDependencies.~~
+
 - Deliverable: Reproducible ESM/UMD builds via Rollup with types and sourcemaps.
 
 ## Phase 5 – Distribution (GitHub Actions) (0.5–1 week)

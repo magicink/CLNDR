@@ -12,3 +12,4 @@ coverage/
 **/__snapshots__/
 *.snap
 roadmap/baseline/
+.rollup.cache/
