@@ -62,7 +62,19 @@ Adopt Rollup for consistent ESM/UMD outputs and type bundles.
 - [ ] Keep Grunt tasks during transition; switch demos/docs to Rollup outputs when stable.
 - Deliverable: Reproducible ESM/UMD builds via Rollup with types and sourcemaps.
 
-## Phase 5 – Module Extraction + Adapter Intro (2–3 weeks)
+## Phase 5 – Distribution (GitHub Actions) (0.5–1 week)
+Automate build, test, and release workflows.
+- [ ] Add `.github/workflows/ci.yml` to run on PRs and pushes:
+  - Jobs: lint, build (Rollup), test (Jest) with matrix on Node LTS and `DATE_LIB=moment|luxon`.
+  - Cache dependencies and Jest cache; upload coverage; store build artifacts.
+- [ ] Add `.github/workflows/release.yml` triggered on tags `v*`:
+  - Build and test, generate artifacts, publish to npm (with provenance) and create GitHub Release with changelog.
+  - Mark externals and attach `dist/*`, `*.map`, and `.d.ts` bundle as release assets.
+- [ ] Optional: adopt Changesets or semantic-release for versioning and changelog generation.
+- [ ] Security: use organization secrets for `NPM_TOKEN`; enable branch protection and required checks.
+- Deliverable: Automated distribution pipeline producing versioned releases from tags.
+
+## Phase 6 – Module Extraction + Adapter Intro (2–3 weeks)
 Extract focused TS modules and introduce the `DateAdapter` boundary.
 - [ ] `config.ts`: normalize, default, and validate options.
 - [ ] `state.ts`: current month, events, selection; pure update helpers.
@@ -78,7 +90,7 @@ Extract focused TS modules and introduce the `DateAdapter` boundary.
 - [ ] Refactor core to consume only the adapter; remove direct Moment calls from core modules.
 - Deliverable: `src/clndr.js` delegates to TS modules; Moment works via adapter.
 
-## Phase 6 – Luxon Adapter (1 week)
+## Phase 7 – Luxon Adapter (1 week)
 - [ ] Implement `luxon-adapter.ts` using Luxon `DateTime`.
 - [ ] Add config: `dateLibrary: 'moment' | 'luxon'` (default `'moment'`) and advanced `dateAdapter` injection.
 - [ ] Ensure locale/zone: integrate Luxon `Settings.defaultLocale`/`defaultZone` with user config.
@@ -86,33 +98,33 @@ Extract focused TS modules and introduce the `DateAdapter` boundary.
 - [ ] Parity tests for `YYYY-MM-DD`, day labels, month boundaries, and calendar grid.
 - Deliverable: Opt-in Luxon support with green tests.
 
-## Phase 7 – Dual Runtime & Validation (1–2 weeks)
+## Phase 8 – Dual Runtime & Validation (1–2 weeks)
 - [ ] CI matrix runs full suite with both adapters; snapshots must match.
 - [ ] Demo toggle to switch libraries at runtime for manual testing.
 - [ ] Document migration notes and subtle differences (invalid dates, DST boundaries).
 - [ ] Publish minor release with Luxon opt-in and solicit feedback.
 - Deliverable: Stable opt-in Luxon release.
 
-## Phase 8 – Full TypeScript Source of Record (2 weeks)
+## Phase 9 – Full TypeScript Source of Record (2 weeks)
 - [ ] Implement façade entirely in TS; compile to UMD/ESM.
 - [ ] Delete legacy JS source after parity passes; keep compatibility build artifacts.
 - [ ] Update docs/demos/builds to reference TS entry.
 - Deliverable: Major-version RC built from TypeScript.
 
-## Phase 9 – Default Switch to Luxon (1 week)
+## Phase 10 – Default Switch to Luxon (1 week)
 - [ ] Change default `dateLibrary` to `'luxon'`; keep Moment path temporarily.
 - [ ] Deprecate passing a Moment instance; prefer adapter or `dateLibrary`.
 - [ ] Add deprecation warnings and docs.
 - Deliverable: Minor release with Luxon default and clear deprecation messaging.
 
-## Phase 10 – Remove Moment (major) (0.5 week)
+## Phase 11 – Remove Moment (major) (0.5 week)
 - [ ] Remove Moment adapter and dependency.
 - [ ] Keep `DateAdapter` interface stable for future libraries.
 - [ ] Update README/demos to reference Luxon only.
 - Deliverable: Moment-free major release.
 
 ## Configuration
-- `dateLibrary`: `'moment' | 'luxon'` (default `'moment'` until Phase 9).
+- `dateLibrary`: `'moment' | 'luxon'` (default `'moment'` until Phase 10).
 - `dateAdapter`: custom adapter injection for power users/testing.
 - Respect `locale`, `weekOffset`, and timezone settings via adapter hooks.
 
@@ -124,7 +136,7 @@ Extract focused TS modules and introduce the `DateAdapter` boundary.
 - [ ] Jest coverage thresholds met; smoke and snapshot tests stable.
 - [ ] Demo parity verified across locales and week offsets.
 - [ ] README updated with migration notes and examples.
-- [ ] `package.json`: add `luxon`; remove `moment` at Phase 10.
+- [ ] `package.json`: add `luxon`; remove `moment` at Phase 11.
 
 ## Risks & Mitigations
 - Formatting differences: Centralize formats in adapter; add tests for all template tokens.
@@ -137,4 +149,4 @@ Extract focused TS modules and introduce the `DateAdapter` boundary.
 ## Tracking & Ownership
 - Create GitHub issues per phase/milestone; assign module leads.
 - CI matrix for both adapters until Moment removal.
-- Weekly migration sync until Phase 8 completes.
+- Weekly migration sync until Phase 9 completes.
