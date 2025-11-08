@@ -40,14 +40,13 @@
   "files": [
     "dist",
     "types",
-    "clndr.min.js",
     "README.md",
     "LICENSE.md"
   ],
   "scripts": {
     "baseline:snapshots": "bun scripts/capture-baseline.ts",
     "build": "rimraf dist && cross-env NODE_ENV=development rollup -c",
-    "build:prod": "cross-env NODE_ENV=production rollup -c && node scripts/copy-min.mjs",
+    "build:prod": "cross-env NODE_ENV=production rollup -c",
     "build:ts": "tsc -p tsconfig.json",
     "build:watch": "cross-env NODE_ENV=development rollup -c -w",
     "ci:check": "bun run type-check && bun run build:ts && bun run build && bun run test -- --coverage && bun run smoke",

@@ -36,15 +36,6 @@ export default [
         globals,
         exports: 'named',
         sourcemap: true
-      },
-      // Minified UMD; copied to repo root after build for CDN/back-compat
-      {
-        file: 'dist/clndr.min.js',
-        format: 'umd',
-        name: 'clndr',
-        globals,
-        exports: 'named',
-        sourcemap: true
       }
     ],
     plugins: [

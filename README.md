@@ -29,9 +29,8 @@ See a demo: [kylestetz.github.io/CLNDR/](http://kylestetz.github.io/CLNDR/)
 
 ## Download
 
-- UMD bundle: [clndr.umd.js](https://raw.github.com/kylestetz/CLNDR/master/dist/clndr.umd.js)
-- Legacy alias (for `@brandontom/luxon-clndr/legacy`): [clndr.js](https://raw.github.com/kylestetz/CLNDR/master/dist/clndr.js)
-- Minified legacy build: [clndr.min.js](https://raw.github.com/kylestetz/CLNDR/master/clndr.min.js)
+- UMD bundle: [clndr.umd.js](https://raw.github.com/kylestetz/CLNDR/master/dist/clndr.umd.js) (minified in production builds)
+- ESM bundle: [clndr.esm.js](https://raw.github.com/kylestetz/CLNDR/master/dist/clndr.esm.js)
 
 Returning to grab a new version? Have a look at the `CHANGELOG.md` file.
 

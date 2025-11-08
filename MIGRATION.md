@@ -5,8 +5,7 @@ This guide helps migrate from legacy CLNDR v1.x (e.g., 1.5.1) to the modern Type
 ## Overview of Changes
 
 - Core rewritten in TypeScript with adapter-based date handling (Moment or Luxon)
-- ESM and UMD builds: `dist/clndr.esm.js` and `dist/clndr.umd.js`
-- Minified UMD for CDN/back-compat: `clndr.min.js` (root)
+- ESM and UMD builds: `dist/clndr.esm.js` and `dist/clndr.umd.js` (minified in production builds)
 - Optional template rendering via Underscore/Lodash `_.template()`; minimal internal renderer as fallback
 - jQuery plugin API remains for backward compatibility
 
@@ -26,7 +25,7 @@ This guide helps migrate from legacy CLNDR v1.x (e.g., 1.5.1) to the modern Type
 
 1. Include the new bundle(s)
    - Browser (UMD): `dist/clndr.umd.js` or `clndr.min.js`
-   - ESM: `import { clndr } from '@brandontom/luxon-clndr'`
+   - Browser (UMD): `dist/clndr.umd.js`
 
 2. Choose Date Library
    - Moment (legacy parity): `$('.el').clndr({ dateLibrary: 'moment' })`
@@ -55,8 +54,7 @@ This guide helps migrate from legacy CLNDR v1.x (e.g., 1.5.1) to the modern Type
 
 - ESM: `dist/clndr.esm.js` (module)
 - UMD: `dist/clndr.umd.js` (global `clndr`)
-- Minified UMD: `clndr.min.js` (root)
-- Types: `types/clndr.d.ts` (global jQuery plugin types) and `dist/clndr.d.ts` (bundle)
+- UMD: `dist/clndr.umd.js` (global `clndr`, minified in production builds)
   - Future enhancement: expand `dist/clndr.d.ts` to export the adapter/core surfaces directly
 
 ## Deprecations and Phase 9 Default Switch
