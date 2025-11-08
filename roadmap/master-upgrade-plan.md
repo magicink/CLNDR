@@ -84,13 +84,18 @@ Adopt Rollup for consistent ESM/UMD outputs and type bundles.
 
 Automate build, test, and release workflows.
 
+Note: This phase is deferred and will be executed as the final phase of the project (after Phase 11). See "Phase 12 — Distribution (GitHub Actions)" at the end.
+
 - [ ] Add `.github/workflows/ci.yml` to run on PRs and pushes:
   - Jobs: lint, build (Rollup), test (Jest) with matrix on Node LTS and `DATE_LIB=moment|luxon`.
   - Cache dependencies and Jest cache; upload coverage; store build artifacts.
-- [ ] Add `.github/workflows/release.yml` triggered on tags `v*`:
-  - Build and test, generate artifacts, publish to npm (with provenance) and create GitHub Release with changelog.
-  - Mark externals and attach `dist/*`, `*.map`, and `.d.ts` bundle as release assets.
-- [ ] Optional: adopt Changesets or semantic-release for versioning and changelog generation.
+- [ ] Add release automation via Release Please:
+  - Add `release-please-config.json` and `.release-please-manifest.json` to configure package, changelog sections, and release type.
+  - Add `.github/workflows/release-please.yml` using `google-github-actions/release-please-action` to open release PRs and create GitHub Releases on merge.
+- [ ] Add publish workflow on `release: published` (e.g., `.github/workflows/publish.yml`):
+  - Build with Rollup; publish to npm with provenance (`npm publish --provenance`) using `NPM_TOKEN`.
+  - Upload `dist/*`, source maps, and `dist/clndr.d.ts` as release assets if desired.
+- [ ] Versioning + changelog: use Release Please for managed version bumps and CHANGELOG generation.
 - [ ] Security: use organization secrets for `NPM_TOKEN`; enable branch protection and required checks.
 - Deliverable: Automated distribution pipeline producing versioned releases from tags.
 
@@ -159,6 +164,25 @@ Extract focused TS modules and introduce the `DateAdapter` boundary.
 - [ ] Keep `DateAdapter` interface stable for future libraries.
 - [ ] Update README/demos to reference Luxon only.
 - Deliverable: Moment-free major release.
+
+## Phase 12 – Distribution (GitHub Actions) (0.5–1 week)
+
+Automate build, test, and release workflows (final phase).
+
+- [ ] Add .github/workflows/ci.yml to run on PRs and pushes:
+  - Jobs: lint, build (Rollup), test (Jest) with matrix on Node LTS and DATE_LIB=moment|luxon.
+  - Cache dependencies and Jest cache; upload coverage; store build artifacts.
+- [ ] Add release automation via Release Please:
+  - Add
+    elease-please-config.json and .release-please-manifest.json to configure package, changelog sections, and release type.
+  - Add .github/workflows/release-please.yml using google-github-actions/release-please-action to open release PRs and create GitHub Releases on merge.
+- [ ] Add publish workflow on
+      elease: published (e.g., .github/workflows/publish.yml):
+  - Build with Rollup; publish to npm with provenance (
+    pm publish --provenance) using NPM_TOKEN.
+  - Upload dist/\*, source maps, and dist/clndr.d.ts as release assets if desired.
+- [ ] Versioning + changelog: use Release Please for managed version bumps and CHANGELOG generation.
+- [ ] Security: use organization secrets for NPM_TOKEN; enable branch protection and required checks.
 
 ## Configuration
 
