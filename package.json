@@ -24,6 +24,7 @@
     "Mike Gioia <mike@teachboost.com>"
   ],
   "main": "src/clndr.js",
+  "types": "types/clndr.d.ts",
   "scripts": {
     "baseline:snapshots": "bun scripts/capture-baseline.mjs",
     "build:ts": "tsc -p tsconfig.json",
