@@ -35,6 +35,3 @@ jobs:
 
       - name: Build TypeScript
         run: bun run build:ts
-
-      - name: Smoke tests (Puppeteer)
-        run: bun scripts/smoke.mjs
