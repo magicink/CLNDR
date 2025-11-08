@@ -6,3 +6,4 @@ commit_checklist.md
 .vscode/
 package-lock.json
 yarn.lock
+/dist/

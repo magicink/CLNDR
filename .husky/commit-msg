@@ -1,0 +1,7 @@
+#!/usr/bin/env sh
+# Validate commit message using Conventional Commits
+if command -v bunx >/dev/null 2>&1; then
+  bunx --bun commitlint --edit "$1"
+else
+  npx --no-install commitlint --edit "$1"
+fi

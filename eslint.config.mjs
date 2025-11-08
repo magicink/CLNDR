@@ -1,0 +1,73 @@
+import js from '@eslint/js';
+import globals from 'globals';
+import tsParser from '@typescript-eslint/parser';
+
+export default [
+  {
+    ignores: [
+      'demo/**',
+      'tests/**',
+      'node_modules/**',
+      'dist/**',
+      'coverage/**',
+      'clndr.min.js',
+      'bun.lockb',
+    ],
+  },
+  js.configs.recommended,
+  {
+    files: ['**/*.ts', '**/*.tsx'],
+    languageOptions: {
+      parser: tsParser,
+      ecmaVersion: 2018,
+      sourceType: 'module',
+    },
+    rules: {},
+  },
+  {
+    files: ['**/*.{js,mjs,cjs,ts,tsx}'],
+    languageOptions: {
+      ecmaVersion: 2018,
+      sourceType: 'module',
+      globals: {
+        ...globals.browser,
+        $: 'readonly',
+        _: 'readonly',
+        define: 'readonly',
+        moment: 'readonly',
+      },
+    },
+    rules: {
+      indent: [
+        'error',
+        2,
+        {
+          SwitchCase: 1,
+          VariableDeclarator: 1,
+          outerIIFEBody: 1,
+          MemberExpression: 1,
+          FunctionDeclaration: { parameters: 1, body: 1 },
+          FunctionExpression: { parameters: 1, body: 1 },
+          CallExpression: { arguments: 1 },
+          ArrayExpression: 1,
+          ObjectExpression: 1,
+          ImportDeclaration: 1,
+          flatTernaryExpressions: false,
+          ignoreComments: true,
+        },
+      ],
+      semi: ['error', 'always'],
+      eqeqeq: ['warn', 'smart'],
+      'vars-on-top': 'error',
+      'no-unused-vars': ['error', { varsIgnorePattern: '[iI]nterval' }],
+      'no-else-return': 'error',
+      'no-use-before-define': ['error', { functions: false }],
+      'dot-notation': ['warn', { allowKeywords: true }],
+      'no-useless-return': 'error',
+      'no-unsafe-negation': 'error',
+      'no-negated-condition': 'warn',
+      'quote-props': ['error', 'as-needed'],
+      'one-var-declaration-per-line': ['error', 'always'],
+    },
+  },
+];
