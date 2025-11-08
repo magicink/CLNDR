@@ -50,51 +50,21 @@ Establish a modern unit test stack and DOM snapshot testing.
 
 - Deliverable: Reproducible ESM/UMD builds via Rollup with types and sourcemaps.
 
-## Phase 5 – Module Extraction + Adapter Intro (2–3 weeks)
+## Phase 5 – Module Extraction + Adapter Intro (2–3 weeks) ✅
 
 Extract focused TS modules and introduce the `DateAdapter` boundary.
 
-- [x] `config.ts`: normalize, default, and validate options.
-- [x] `state.ts`: current month, events, selection; pure update helpers.
-- [x] `templates.ts`: template compilation utilities.
-- [x] `render.ts`: DOM rendering and minimal mutation instructions.
-- [x] `events.ts`: DOM event binding/unbinding; typed callbacks.
-- [x] `date-adapter/adapter.ts`: interface with required methods:
-  - `now()`, `fromISO()`, `fromFormat(fmt)`, `toISO()`, `format(fmt)`
-  - `startOf(unit)`, `endOf(unit)`, `plus(delta)`, `minus(delta)`
-  - `weekday()` (1–7), `day()` (1–31), `daysInMonth()`
-  - comparisons: `isBefore()`, `isAfter()`, `hasSame(unit)`
-- [x] Adapter locale surface (i18n):
-  - `withLocale(locale)`, `getLocale()`
-  - `firstDayOfWeek()` (locale-based) and `setWeekday(date, index)`
-  - `weekdayLabels(style: 'narrow' | 'short' | 'long')` for header generation
-  - Centralize token mapping used by CLNDR: `YYYY-MM-DD` → `yyyy-LL-dd`, `dd` (weekday short), `MMMM`, `M/DD` → `L/dd`
-- [x] `moment-adapter.ts`: adapter implemented against current behavior.
-- [x] Refactor core to consume adapter for init; remove direct Moment calls from core modules.
-  - Deliverable: `src/clndr.js` delegates to TS modules when available (UMD global `clndr`), using adapter-backed weekday labels and initial state. Falls back to legacy path when adapter bundle isn’t present.
-
 Status: TS modules and Moment adapter are implemented under `src/ts`. Legacy `src/clndr.js` now consults the adapter (when the UMD bundle is present) for initial state and weekday labels, preserving legacy behavior and enabling progressive adoption.
 
-## Phase 6 – Luxon Adapter (1 week)
+- Deliverable: `src/clndr.js` delegates to TS modules when available (UMD global `clndr`), using adapter-backed weekday labels and initial state. Falls back to legacy path when adapter bundle isn’t present.
 
-- [x] Implement `luxon-adapter.ts` using Luxon `DateTime`.
-- [x] Add config: `dateLibrary: 'moment' | 'luxon'` (default `'moment'`) and advanced `dateAdapter` injection.
-- [x] Ensure locale/zone: integrate Luxon locale/zone via adapter factory and plugin hand-off.
-- [x] Map/normalize formatting tokens inside adapter to preserve existing templates.
-- [x] Parity tests for `YYYY-MM-DD`, day labels, month boundaries, and calendar grid.
-- [x] Weekday labels via `Info.weekdays('short'|'narrow', { locale })`; month names via `toFormat('MMMM')`.
-- [x] Week start parity: `startOf('week')` honors locale using `firstDayOfWeek()` and `weekOffset` rotation in config.
-- [x] Expose `locale` opt-in on CLNDR options that pipes into adapter.
+## Phase 6 – Luxon Adapter (1 week) ✅
+
 - Deliverable: Opt-in Luxon support with green tests.
 
 ## Phase 7 – Dual Runtime & Validation (1–2 weeks)
 
-- [x] CI matrix runs full suite with both adapters; snapshots must match.
-- [x] Demo toggle to switch libraries at runtime for manual testing.
-- [x] Document migration notes and subtle differences (invalid dates, DST boundaries).
 - [ ] Publish minor release with Luxon opt-in and solicit feedback. (pending)
-- [x] Ensure ICU data for Luxon locales on CI (set `NODE_ICU_DATA` to full-icu or use Node image with full-icu).
-- [x] Add i18n tests across locales (e.g., `en`, `fr`, `de`): weekday labels, month names, week start alignment, and `weekOffset` overlay.
 - Deliverable: Stable opt-in Luxon release.
 
 ## Phase 8 – Full TypeScript Source of Record (2 weeks)

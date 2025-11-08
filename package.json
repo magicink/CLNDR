@@ -26,25 +26,22 @@
   "exports": {
     ".": {
       "types": "./types/clndr.d.ts",
-      "import": "./src/clndr.js",
-      "require": "./src/clndr.js"
-    },
-    "./facade": {
-      "types": "./types/clndr.d.ts",
-      "import": "./dist/src/ts/index.js"
+      "import": "./dist/clndr.esm.js",
+      "require": "./dist/clndr.umd.js"
     },
     "./legacy": {
       "import": "./src/clndr.js",
       "require": "./src/clndr.js"
     }
   },
-  "main": "src/clndr.js",
+  "main": "dist/clndr.umd.js",
+  "module": "dist/clndr.esm.js",
   "types": "types/clndr.d.ts",
   "files": [
+    "dist",
+    "types",
     "src/clndr.js",
     "clndr.min.js",
-    "types",
-    "dist/src/ts",
     "README.md",
     "LICENSE.md"
   ],

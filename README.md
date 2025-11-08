@@ -59,28 +59,30 @@ engine you want to. If you want to use the default `template` option with
 Lodash, just install it as a dependency of your project:
 `bun add lodash`.
 
-### TypeScript / ESM Facade
+### TypeScript Entry (ESM/UMD)
 
-CLNDR now provides a small TypeScript/ESM facade that delegates to the legacy jQuery plugin.
+CLNDR's source of record is now TypeScript. The package publishes modern ESM and UMD bundles.
 
-- CJS/UMD usage is unchanged: include `src/clndr.js` and use `$('.el').clndr()`.
+- Legacy jQuery plugin usage remains available: include `@brandontom/luxon-clndr/legacy` (or `src/clndr.js`) and use `$('.el').clndr()`.
 - ESM/TypeScript usage with bundlers:
 
-Option A (script tags): load jQuery + CLNDR UMD as before, then import the facade where you need it.
+Option A (script tags): load jQuery and the UMD bundle, then call the TS entry.
 
 ```ts
-import clndr from '@brandontom/luxon-clndr/facade'
+import { clndr } from '@brandontom/luxon-clndr'
 
 const api = clndr('#calendar', {
   /* ...ClndrOptions */
 })
 ```
 
-Option B (bundler): import the plugin (UMD) to register $.fn.clndr, then import the facade.
+Option B (bundler): import the legacy plugin to register `$.fn.clndr` if you rely on jQuery chaining, otherwise call the TS entry directly.
 
 ```ts
-import '@brandontom/luxon-clndr' // registers the jQuery plugin
-import clndr from '@brandontom/luxon-clndr/facade'
+// Optional: registers the legacy jQuery plugin
+import '@brandontom/luxon-clndr/legacy'
+
+import { clndr } from '@brandontom/luxon-clndr'
 
 const api = clndr('#calendar', {
   /* ...ClndrOptions */
@@ -89,7 +91,7 @@ const api = clndr('#calendar', {
 
 Notes:
 
-- The facade requires jQuery at runtime. The legacy plugin mutates `$.fn` and the facade delegates to it.
+- The TS entry delegates to jQuery's plugin at runtime for now while we finalize full TS parity.
 - Type definitions ship with the package; no extra typings needed.
 
 ## Introduction: You Write The Markup
