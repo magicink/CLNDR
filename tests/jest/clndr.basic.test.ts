@@ -64,7 +64,7 @@ describe('TS facade factory', () => {
   })
 
   test('creates an instance via facade', async () => {
-    const clndr = (await import('../../src/ts/index')).default
+    const { clndr } = await import('../../src/ts/index')
     const api = clndr('#cal2', {
       render: (data: any) => {
         const headers = data.daysOfTheWeek

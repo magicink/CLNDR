@@ -54,24 +54,26 @@ Establish a modern unit test stack and DOM snapshot testing.
 
 Extract focused TS modules and introduce the `DateAdapter` boundary.
 
-- [ ] `config.ts`: normalize, default, and validate options.
-- [ ] `state.ts`: current month, events, selection; pure update helpers.
-- [ ] `templates.ts`: template compilation utilities.
-- [ ] `render.ts`: DOM rendering and minimal mutation instructions.
-- [ ] `events.ts`: DOM event binding/unbinding; typed callbacks.
-- [ ] `date-adapter/adapter.ts`: interface with required methods:
+- [x] `config.ts`: normalize, default, and validate options.
+- [x] `state.ts`: current month, events, selection; pure update helpers.
+- [x] `templates.ts`: template compilation utilities.
+- [x] `render.ts`: DOM rendering and minimal mutation instructions.
+- [x] `events.ts`: DOM event binding/unbinding; typed callbacks.
+- [x] `date-adapter/adapter.ts`: interface with required methods:
   - `now()`, `fromISO()`, `fromFormat(fmt)`, `toISO()`, `format(fmt)`
   - `startOf(unit)`, `endOf(unit)`, `plus(delta)`, `minus(delta)`
   - `weekday()` (1–7), `day()` (1–31), `daysInMonth()`
   - comparisons: `isBefore()`, `isAfter()`, `hasSame(unit)`
-- [ ] Adapter locale surface (i18n):
+- [x] Adapter locale surface (i18n):
   - `withLocale(locale)`, `getLocale()`
   - `firstDayOfWeek()` (locale-based) and `setWeekday(date, index)`
   - `weekdayLabels(style: 'narrow' | 'short' | 'long')` for header generation
   - Centralize token mapping used by CLNDR: `YYYY-MM-DD` → `yyyy-LL-dd`, `dd` (weekday short), `MMMM`, `M/DD` → `L/dd`
-- [ ] `moment-adapter.ts`: adapter implemented against current behavior.
+- [x] `moment-adapter.ts`: adapter implemented against current behavior.
 - [ ] Refactor core to consume only the adapter; remove direct Moment calls from core modules.
-- Deliverable: `src/clndr.js` delegates to TS modules; Moment works via adapter.
+  - Deliverable (pending): `src/clndr.js` delegates to TS modules; Moment works via adapter.
+
+Status: initial module scaffolding and a working Moment adapter are implemented under `src/ts`. The TypeScript facade remains delegated to the legacy jQuery plugin; wiring the legacy core to call into the new modules will be done next.
 
 ## Phase 6 – Luxon Adapter (1 week)
 

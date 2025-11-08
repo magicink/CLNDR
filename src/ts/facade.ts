@@ -16,5 +16,3 @@ export function clndr(element: any, options?: ClndrOptions): Clndr {
   // Defer to the legacy plugin; it will throw if zero/multiple elements.
   return $el.clndr(options)
 }
-
-export default clndr
