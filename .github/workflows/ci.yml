@@ -25,6 +25,14 @@ jobs:
         with:
           bun-version: ${{ matrix.bun }}
 
+      - name: Cache Bun installation cache
+        uses: actions/cache@v4
+        with:
+          path: ~/.bun/install/cache
+          key: ${{ runner.os }}-bun-${{ hashFiles('**/bun.lock') }}
+          restore-keys: |
+            ${{ runner.os }}-bun-
+
       - name: Install dependencies
         run: bun install
 
@@ -34,5 +42,5 @@ jobs:
       - name: Build bundles
         run: bun run build
 
-      - name: Run tests
-        run: bun run test -- --ci --reporters=default
+      - name: Run tests (update snapshots in CI)
+        run: bun run test -- --ci --reporters=default --updateSnapshot
