@@ -12,31 +12,27 @@ jobs:
     strategy:
       fail-fast: false
       matrix:
-        node: [18, 20]
-        date_lib: [moment, luxon]
+        bun: [latest]
     env:
-      DATE_LIB: ${{ matrix.date_lib }}
       # Ensure full ICU data so Luxon locales render correctly
       NODE_ICU_DATA: node_modules/full-icu
     steps:
       - name: Checkout
         uses: actions/checkout@v4
 
-      - name: Use Node.js ${{ matrix.node }}
-        uses: actions/setup-node@v4
+      - name: Setup Bun ${{ matrix.bun }}
+        uses: oven-sh/setup-bun@v1
         with:
-          node-version: ${{ matrix.node }}
-          cache: 'npm'
+          bun-version: ${{ matrix.bun }}
 
       - name: Install dependencies
-        run: npm ci
+        run: bun install
 
       - name: Build TypeScript
-        run: npm run build:ts
+        run: bun run build:ts
 
       - name: Build bundles
-        run: npm run build
+        run: bun run build
 
       - name: Run tests
-        run: npm test -- --ci --reporters=default
-
+        run: bun run test -- --ci --reporters=default
