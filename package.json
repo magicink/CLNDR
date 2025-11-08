@@ -54,7 +54,7 @@
     "ci:check": "npm run type-check && npm run build:ts && npm run test -- --coverage && npm run smoke",
     "format": "prettier --write .",
     "format:check": "prettier --check .",
-    "prepare": "husky",
+    "prepare": "husky || true",
     "smoke": "node scripts/smoke.mjs",
     "test": "jest",
     "test:cov": "jest --coverage",
