@@ -19,6 +19,7 @@
         "@types/jest": "^30.0.0",
         "@types/jquery": "^3.5.33",
         "cross-env": "^10.1.0",
+        "full-icu": "^1.5.0",
         "husky": "^9.1.7",
         "jest": "^30.2.0",
         "jest-environment-jsdom": "^30.2.0",
@@ -605,6 +606,8 @@
     "fs.realpath": ["fs.realpath@1.0.0", "", {}, "sha512-OO0pH2lK6a0hZnAdau5ItzHPI6pUlvI7jMVnxUQRtw4owF2wk8lOSabtGDCTP4Ggrg2MbGnWO9X8K1t4+fGMDw=="],
 
     "fsevents": ["fsevents@2.3.3", "", { "os": "darwin" }, "sha512-5xoDfX+fL7faATnagmWPpbFtwh/R77WmMMqqHGS65C3vvB0YHrgF+B1YmZ3441tMj5n63k0212XNoJwzlhffQw=="],
+
+    "full-icu": ["full-icu@1.5.0", "", { "dependencies": { "yauzl": "^2.10.0" }, "bin": { "full-icu": "node-full-icu.js", "node-full-icu-path": "node-icu-data.js" } }, "sha512-BxB2otKUSFyvENjbI8EtQscpiPOEnhrf5V4MVpa6PjzsrLmdKKUUhulbydsfKS4ve6cGXNVRLlrOjizby/ZfDA=="],
 
     "function-bind": ["function-bind@1.1.2", "", {}, "sha512-7XHNxH7qX9xG5mIwxkhumTox/MIRNcOgDrxWsMt2pAr23WHp6MrRlN7FBSFpCpr+oVO0F744iUgR82nJMfG2SA=="],
 

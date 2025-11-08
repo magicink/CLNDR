@@ -8,6 +8,18 @@ import moment from 'moment'
 import 'moment/locale/fr'
 import 'moment/locale/de'
 
+// Cross-adapter weekday formatter used in tests: accepts either a Moment
+// instance or a Luxon DateTime (from the TS adapter path) and returns
+// a two-letter weekday label consistent with Moment's `dd` token.
+function fmtWeekdayHeader(d: any): string {
+  if (d && typeof d.format === 'function') return d.format('dd')
+  if (d && typeof d.toISO === 'function') {
+    const m = require('moment')
+    return m(d.toISO()).format('dd')
+  }
+  return ''
+}
+
 describe('CLNDR localization: weekday headers', () => {
   beforeEach(() => {
     document.body.innerHTML = '<div id="cal-loc"></div>'
@@ -28,7 +40,7 @@ describe('CLNDR localization: weekday headers', () => {
 
     $('#cal-loc').clndr({
       // Ensure CLNDR uses moment-format based labels (not single char)
-      formatWeekdayHeader: (d: any) => d.format('dd'),
+      formatWeekdayHeader: (d: any) => fmtWeekdayHeader(d),
       render: (data: any) => {
         const headers = data.daysOfTheWeek
           .map((d: string) => `<td class="header-day">${d}</td>`) // assertion selector
@@ -57,7 +69,7 @@ describe('CLNDR localization: weekday headers', () => {
     )
 
     $('#cal-loc').clndr({
-      formatWeekdayHeader: (d: any) => d.format('dd'),
+      formatWeekdayHeader: (d: any) => fmtWeekdayHeader(d),
       render: (data: any) => {
         const headers = data.daysOfTheWeek
           .map((d: string) => `<td class="header-day">${d}</td>`) // assertion selector
@@ -83,6 +95,35 @@ describe('CLNDR localization: weekday headers', () => {
     )
     expect(labels).not.toEqual(enExpected)
   })
+
+  test('uses moment locale for weekday headers (de)', () => {
+    moment.locale('de')
+    const $ = (global as any).jQuery
+
+    const expected = Array.from({ length: 7 }, (_, i) =>
+      moment().weekday(i).format('dd')
+    )
+
+    $('#cal-loc').clndr({
+      formatWeekdayHeader: (d: any) => fmtWeekdayHeader(d),
+      render: (data: any) => {
+        const headers = data.daysOfTheWeek
+          .map((d: string) => `<td class="header-day">${d}</td>`) // assertion selector
+          .join('')
+        return `
+          <div class="clndr-controls"></div>
+          <table class="clndr-table"><thead><tr class="header-days">${headers}</tr></thead></table>
+        `
+      }
+    })
+
+    const labels = Array.from(
+      document.querySelectorAll('.header-day'),
+      n => n.textContent?.trim() || ''
+    )
+
+    expect(labels).toEqual(expected)
+  })
 })
 
 describe('CLNDR localization: weekOffset on localized labels', () => {
@@ -100,7 +141,7 @@ describe('CLNDR localization: weekOffset on localized labels', () => {
 
     $('#cal-loc-wo').clndr({
       weekOffset: 1,
-      formatWeekdayHeader: (d: any) => d.format('dd'),
+      formatWeekdayHeader: (d: any) => fmtWeekdayHeader(d),
       render: (data: any) => {
         const headers = data.daysOfTheWeek
           .map((d: string) => `<span class="header-day">${d}</span>`) // assertion selector

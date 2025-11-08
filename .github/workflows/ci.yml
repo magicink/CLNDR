@@ -2,42 +2,41 @@ name: CI
 
 on:
   push:
-    branches: [main, master, develop, "release/*"]
+    branches: [ main, master ]
   pull_request:
-    branches: [main, master, develop, "release/*"]
+    branches: [ main, master ]
 
 jobs:
-  build-and-smoke:
+  build-and-test:
     runs-on: ubuntu-latest
-
+    strategy:
+      fail-fast: false
+      matrix:
+        node: [18, 20]
+        date_lib: [moment, luxon]
+    env:
+      DATE_LIB: ${{ matrix.date_lib }}
+      # Ensure full ICU data so Luxon locales render correctly
+      NODE_ICU_DATA: node_modules/full-icu
     steps:
       - name: Checkout
         uses: actions/checkout@v4
 
-      - name: Setup Bun
-        uses: oven-sh/setup-bun@v1
+      - name: Use Node.js ${{ matrix.node }}
+        uses: actions/setup-node@v4
         with:
-          bun-version: latest
-
-      - name: Cache Bun dependencies
-        uses: actions/cache@v4
-        with:
-          path: ~/.bun/install/cache
-          key: ${{ runner.os }}-bun-${{ hashFiles('**/bun.lockb') }}
-          restore-keys: |
-            ${{ runner.os }}-bun-
+          node-version: ${{ matrix.node }}
+          cache: 'npm'
 
       - name: Install dependencies
-        run: bun install
-
-      - name: Type check
-        run: bun run type-check
+        run: npm ci
 
       - name: Build TypeScript
-        run: bun run build:ts
+        run: npm run build:ts
 
-      - name: Run unit tests (Jest)
-        run: bun run test -- --coverage
+      - name: Build bundles
+        run: npm run build
 
-      - name: Smoke tests
-        run: bun run smoke
+      - name: Run tests
+        run: npm test -- --ci --reporters=default
+

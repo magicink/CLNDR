@@ -89,12 +89,12 @@ Status: TS modules and Moment adapter are implemented under `src/ts`. Legacy `sr
 
 ## Phase 7 – Dual Runtime & Validation (1–2 weeks)
 
-- [ ] CI matrix runs full suite with both adapters; snapshots must match.
-- [ ] Demo toggle to switch libraries at runtime for manual testing.
-- [ ] Document migration notes and subtle differences (invalid dates, DST boundaries).
-- [ ] Publish minor release with Luxon opt-in and solicit feedback.
-- [ ] Ensure ICU data for Luxon locales on CI (set `NODE_ICU_DATA` to full-icu or use Node image with full-icu).
-- [ ] Add i18n tests across locales (e.g., `en`, `fr`, `de`): weekday labels, month names, week start alignment, and `weekOffset` overlay.
+- [x] CI matrix runs full suite with both adapters; snapshots must match.
+- [x] Demo toggle to switch libraries at runtime for manual testing.
+- [x] Document migration notes and subtle differences (invalid dates, DST boundaries).
+- [ ] Publish minor release with Luxon opt-in and solicit feedback. (pending)
+- [x] Ensure ICU data for Luxon locales on CI (set `NODE_ICU_DATA` to full-icu or use Node image with full-icu).
+- [x] Add i18n tests across locales (e.g., `en`, `fr`, `de`): weekday labels, month names, week start alignment, and `weekOffset` overlay.
 - Deliverable: Stable opt-in Luxon release.
 
 ## Phase 8 – Full TypeScript Source of Record (2 weeks)

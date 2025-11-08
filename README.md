@@ -673,6 +673,15 @@ seen above.
 
 ## Configuration
 
+### Date Library (Moment vs Luxon)
+
+CLNDR now supports running with either Moment (default) or Luxon via a DateAdapter boundary.
+
+- Use the `dateLibrary` option on init: `$('.el').clndr({ dateLibrary: 'luxon', locale: 'fr' })`.
+- You may also pass `locale` and `zone` when using Luxon; locale is respected by Moment as well.
+- In test/CI environments you can set `DATE_LIB=moment|luxon` to control the default when `dateLibrary` is not provided.
+- The demo includes a toggle to switch between libraries at runtime.
+
 ### Template Rendering Engine
 
 You can pass in a `render` function as an option, for example:

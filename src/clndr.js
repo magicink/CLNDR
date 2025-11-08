@@ -182,7 +182,15 @@
         if (this.options && this.options.dateAdapter) {
           adapter = this.options.dateAdapter
         } else {
-          var pref = (this.options && this.options.dateLibrary) || 'moment'
+          // Allow test/CI to control the default via DATE_LIB when not explicitly set
+          var envPref =
+            typeof process !== 'undefined' &&
+            process.env &&
+            process.env.DATE_LIB
+              ? process.env.DATE_LIB
+              : null
+          var pref =
+            (this.options && this.options.dateLibrary) || envPref || 'moment'
           if (pref === 'luxon' && tsClndr.createLuxonAdapter) {
             adapter = tsClndr.createLuxonAdapter(
               this.options.locale || moment.locale(),

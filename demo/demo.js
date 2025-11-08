@@ -1,14 +1,20 @@
 // Call this from the developer console and you can control both instances
 var calendars = {};
+var TPL_CAL = null;
+var TPL_CAL_MONTHS = null;
 
-$(document).ready( function() {
-    console.info(
-        'Welcome to the CLNDR demo. Click around on the calendars and' +
-        'the console will log different events that fire.');
+function destroyAll() {
+    try { calendars.clndr1 && calendars.clndr1.destroy && calendars.clndr1.destroy(); } catch (e) {}
+    try { calendars.clndr2 && calendars.clndr2.destroy && calendars.clndr2.destroy(); } catch (e) {}
+    try { calendars.clndr3 && calendars.clndr3.destroy && calendars.clndr3.destroy(); } catch (e) {}
+}
 
-    // Assuming you've got the appropriate language files,
-    // clndr will respect whatever moment's language is set to.
-    // moment.locale('ru');
+function initCalendars(opts) {
+    var dateLibrary = (opts && opts.dateLibrary) || 'moment';
+    var locale = (opts && opts.locale) || 'en';
+
+    // Keep moment locale in sync for demo templates that call moment().
+    if (window.moment) { window.moment.locale(locale); }
 
     // Here's some magic to make sure the dates are happening this month.
     var thisMonth = moment().format('YYYY-MM');
@@ -28,12 +34,9 @@ $(document).ready( function() {
         }
     ];
 
-    // The order of the click handlers is predictable. Direct click action
-    // callbacks come first: click, nextMonth, previousMonth, nextYear,
-    // previousYear, nextInterval, previousInterval, or today. Then
-    // onMonthChange (if the month changed), inIntervalChange if the interval
-    // has changed, and finally onYearChange (if the year changed).
     calendars.clndr1 = clndr.clndr('.cal1', {
+        dateLibrary: dateLibrary,
+        locale: locale,
         events: eventArray,
         clickEvents: {
             click: function (target) {
@@ -81,6 +84,8 @@ $(document).ready( function() {
 
     // Calendar 2 uses a custom length of time: 2 weeks paging 7 days
     calendars.clndr2 = clndr.clndr('.cal2', {
+        dateLibrary: dateLibrary,
+        locale: locale,
         lengthOfTime: {
             days: 14,
             interval: 7
@@ -91,7 +96,7 @@ $(document).ready( function() {
             endDate: 'endDate',
             startDate: 'startDate'
         },
-        template: $('#template-calendar').html(),
+        template: TPL_CAL,
         clickEvents: {
             click: function (target) {
                 console.log('Cal-2 clicked: ', target);
@@ -110,6 +115,8 @@ $(document).ready( function() {
 
     // Calendar 3 renders two months at a time, paging 1 month
     calendars.clndr3 = clndr.clndr('.cal3', {
+        dateLibrary: dateLibrary,
+        locale: locale,
         lengthOfTime: {
             months: 2,
             interval: 1
@@ -133,9 +140,45 @@ $(document).ready( function() {
                 console.log('Cal-3 interval changed');
             }
         },
-        template: $('#template-calendar-months').html()
+        template: TPL_CAL_MONTHS
+    });
+}
+
+$(document).ready( function() {
+    console.info(
+        'Welcome to the CLNDR demo. Click around on the calendars and' +
+        'the console will log different events that fire.');
+
+    // Assuming you've got the appropriate language files,
+    // clndr will respect whatever moment's language is set to.
+    // moment.locale('ru');
+
+    // Cache templates once; templates are placed outside calendar containers
+    TPL_CAL = $('#template-calendar').html();
+    TPL_CAL_MONTHS = $('#template-calendar-months').html();
+
+    // Initialize calendars with defaults
+    initCalendars({ dateLibrary: 'moment', locale: 'en' });
+
+    // Hook up UI toggles
+    $('#date-lib').on('change', function () {
+        var lib = $(this).val();
+        var loc = $('#locale').val();
+        destroyAll();
+        initCalendars({ dateLibrary: lib, locale: loc });
+    });
+    $('#locale').on('change', function () {
+        var lib = $('#date-lib').val();
+        var loc = $(this).val();
+        destroyAll();
+        initCalendars({ dateLibrary: lib, locale: loc });
     });
 
+    // The order of the click handlers is predictable. Direct click action
+    // callbacks come first: click, nextMonth, previousMonth, nextYear,
+    // previousYear, nextInterval, previousInterval, or today. Then
+    // onMonthChange (if the month changed), inIntervalChange if the interval
+    // has changed, and finally onYearChange (if the year changed).
     // Bind all clndrs to the left and right arrow keys
     $(document).keydown( function(e) {
         // Left arrow
