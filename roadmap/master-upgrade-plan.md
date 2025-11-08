@@ -71,8 +71,12 @@ Status: TS modules and Moment adapter are implemented under `src/ts`. Legacy `sr
 
 - [ ] Implement façade entirely in TS; compile to UMD/ESM.
 - [ ] Delete legacy JS source after parity passes; keep compatibility build artifacts.
-- [ ] Update docs/demos/builds to reference TS entry.
-- Deliverable: Major-version RC built from TypeScript.
+- [ ] Update docs/demos/tests to reference the TS entry.
+  - Demo/tests load `dist/clndr.umd.js` and, if needed, `dist/clndr.js` (compat); do not load `src/clndr.js`.
+- [ ] Wire package exports and published files.
+  - Set `exports["./legacy"]` to `dist/clndr.js`; remove `src/clndr.js` from published `files`.
+  - Ensure `main`/`module`/`types` point to `dist/clndr.umd.js`, `dist/clndr.esm.js`, and `dist/clndr.d.ts`.
+- Deliverable: Major-version RC built from TypeScript with TS-first runtime and a compatible jQuery wrapper.
 
 ## Phase 9 – Default Switch to Luxon (1 week)
 
@@ -128,6 +132,10 @@ Automate build, test, and release workflows (final phase).
 - [ ] CI configured with full ICU so Luxon locales render correctly.
 - [ ] README updated with migration notes and examples.
 - [ ] `package.json`: add `luxon`; remove `moment` at Phase 10.
+
+- [ ] No runtime/docs/demo/tests reference to `src/clndr.js`; only `dist/*` artifacts are loaded.
+- [ ] `exports["./legacy"]` points to `dist/clndr.js`; `src/clndr.js` not included in published files.
+- [ ] TS facade no longer delegates to the jQuery plugin; chaining available via the compatibility wrapper.
 
 ## Risks & Mitigations
 
