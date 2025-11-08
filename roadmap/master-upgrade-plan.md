@@ -48,9 +48,9 @@
 
 ## Phase 2 – Type Definitions & Facade (1–2 weeks)
 
-- [ ] Author `.d.ts` for public CLNDR API based on README and tests.
-- [ ] Add `src/ts/facade.ts` exporting the same factory/API, delegating to legacy JS initially.
-- [ ] Publish types so consumers benefit immediately without behavior changes.
+- [x] ~~Author `.d.ts` for public CLNDR API based on README and tests.~~
+- [x] ~~Add `src/ts/facade.ts` exporting the same factory/API, delegating to legacy JS initially.~~
+- [x] ~~Publish types so consumers benefit immediately without behavior changes.~~
 - Deliverable: Minor release with official type definitions.
 
 ## Phase 3 – Test Harness (Jest) (0.5–1 week)

@@ -26,8 +26,12 @@
   "exports": {
     ".": {
       "types": "./types/clndr.d.ts",
-      "import": "./dist/src/ts/index.js",
+      "import": "./src/clndr.js",
       "require": "./src/clndr.js"
+    },
+    "./facade": {
+      "types": "./types/clndr.d.ts",
+      "import": "./dist/src/ts/index.js"
     },
     "./legacy": {
       "import": "./src/clndr.js",
@@ -35,8 +39,15 @@
     }
   },
   "main": "src/clndr.js",
-  "module": "dist/src/ts/index.js",
   "types": "types/clndr.d.ts",
+  "files": [
+    "src/clndr.js",
+    "clndr.min.js",
+    "types",
+    "dist/src/ts",
+    "README.md",
+    "LICENSE.md"
+  ],
   "scripts": {
     "baseline:snapshots": "bun scripts/capture-baseline.mjs",
     "build:ts": "tsc -p tsconfig.json",

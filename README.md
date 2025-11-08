@@ -66,16 +66,24 @@ CLNDR now provides a small TypeScript/ESM facade that delegates to the legacy jQ
 - CJS/UMD usage is unchanged: include `src/clndr.js` and use `$('.el').clndr()`.
 - ESM/TypeScript usage with bundlers:
 
+Option A (script tags): load jQuery + CLNDR UMD as before, then import the facade where you need it.
+
 ```ts
-// 1) Ensure the legacy plugin is registered (exports subpath is provided)
-import '@brandontom/luxon-clndr/legacy'
+import clndr from '@brandontom/luxon-clndr/facade'
 
-// 2) Use the typed facade factory
-import clndr from '@brandontom/luxon-clndr'
-
-// 3) Create an instance (same options as README below)
 const api = clndr('#calendar', {
-  // ...ClndrOptions
+  /* ...ClndrOptions */
+})
+```
+
+Option B (bundler): import the plugin (UMD) to register $.fn.clndr, then import the facade.
+
+```ts
+import '@brandontom/luxon-clndr' // registers the jQuery plugin
+import clndr from '@brandontom/luxon-clndr/facade'
+
+const api = clndr('#calendar', {
+  /* ...ClndrOptions */
 })
 ```
 
