@@ -67,15 +67,8 @@ Status: TS modules and Moment adapter are implemented under `src/ts`. Legacy `sr
 - [ ] Publish minor release with Luxon opt-in and solicit feedback. (pending)
 - Deliverable: Stable opt-in Luxon release.
 
-## Phase 8 – Full TypeScript Source of Record (2 weeks)
+## Phase 8 – Full TypeScript Source of Record (2 weeks) ✅
 
-- [ ] Implement façade entirely in TS; compile to UMD/ESM.
-- [ ] Delete legacy JS source after parity passes; keep compatibility build artifacts.
-- [ ] Update docs/demos/tests to reference the TS entry.
-  - Demo/tests load `dist/clndr.umd.js` and, if needed, `dist/clndr.js` (compat); do not load `src/clndr.js`.
-- [ ] Wire package exports and published files.
-  - Set `exports["./legacy"]` to `dist/clndr.js`; remove `src/clndr.js` from published `files`.
-  - Ensure `main`/`module`/`types` point to `dist/clndr.umd.js`, `dist/clndr.esm.js`, and `dist/clndr.d.ts`.
 - Deliverable: Major-version RC built from TypeScript with TS-first runtime and a compatible jQuery wrapper.
 
 ## Phase 9 – Default Switch to Luxon (1 week)

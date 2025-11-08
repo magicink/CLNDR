@@ -46,7 +46,7 @@
   ],
   "scripts": {
     "baseline:snapshots": "bun scripts/capture-baseline.ts",
-    "build": "cross-env NODE_ENV=development rollup -c",
+    "build": "rimraf dist && cross-env NODE_ENV=development rollup -c",
     "build:prod": "cross-env NODE_ENV=production rollup -c && node scripts/copy-min.mjs",
     "build:ts": "tsc -p tsconfig.json",
     "build:watch": "cross-env NODE_ENV=development rollup -c -w",
@@ -86,6 +86,7 @@
     "lint-staged": "^16.2.6",
     "prettier": "^3.6.2",
     "puppeteer": "^24.29.1",
+    "rimraf": "^6.1.0",
     "rollup": "^4.53.1",
     "rollup-plugin-dts": "^6.2.3",
     "sort-package-json": "^3.4.0",
