@@ -28,10 +28,6 @@
       "types": "./types/clndr.d.ts",
       "import": "./dist/clndr.esm.js",
       "require": "./dist/clndr.umd.js"
-    },
-    "./legacy": {
-      "import": "./dist/clndr.umd.js",
-      "require": "./dist/clndr.umd.js"
     }
   },
   "main": "dist/clndr.umd.js",
