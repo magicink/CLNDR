@@ -80,3 +80,101 @@ describe('TS facade factory', () => {
     expect(typeof (api as any).render).toBe('function')
   })
 })
+
+describe('CLNDR config and state', () => {
+  beforeEach(() => {
+    document.body.innerHTML = '<div id="cal3"></div>'
+  })
+
+  test('weekly interval snapshot similar to demo header', () => {
+    const $ = (global as any).jQuery
+    const api = $('#cal3').clndr({
+      lengthOfTime: {
+        days: 14,
+        interval: 7,
+        startDate: (global as any).moment
+          ? (global as any).moment().weekday(0)
+          : undefined
+      },
+      render: (data: any) => {
+        const headers = data.daysOfTheWeek
+          .map((d: string) => `<div class="header-day">${d}</div>`) // assertion selector
+          .join('')
+        const cells = data.days
+          .map((day: any) => `<div class="${day.classes}">${day.day}</div>`)
+          .join('')
+        // Demo-like header with interval range
+        const start = data.intervalStart?.format
+          ? data.intervalStart.format('M/DD')
+          : ''
+        const end = data.intervalEnd?.format
+          ? data.intervalEnd.format('M/DD')
+          : ''
+        return `
+          <div class="clndr">
+            <div class="clndr-controls">
+              <div class="clndr-previous-button">&lsaquo;</div>
+              <div class="month">${start} &mdash; ${end}</div>
+              <div class="clndr-next-button">&rsaquo;</div>
+            </div>
+            <div class="clndr-grid">
+              <div class="days-of-the-week">${headers}<div class="days">${cells}</div></div>
+            </div>
+          </div>
+        `
+      }
+    })
+    expect(api).toBeTruthy()
+    expect(document.getElementById('cal3')!.innerHTML).toMatchSnapshot()
+  })
+
+  test('trackSelectedDate toggles selected class on click', () => {
+    const $ = (global as any).jQuery
+    const api = $('#cal3').clndr({
+      trackSelectedDate: true,
+      render: (data: any) => {
+        const cells = data.days
+          .map((day: any) => `<div class="${day.classes}">${day.day}</div>`)
+          .join('')
+        return `
+          <div class="clndr-controls">
+            <div class="clndr-previous-button"></div>
+            <div class="clndr-next-button"></div>
+          </div>
+          <div class="days">${cells}</div>
+        `
+      }
+    })
+
+    const selectable = document.querySelector(
+      '.day:not(.inactive)'
+    ) as HTMLElement
+    expect(selectable).toBeTruthy()
+
+    selectable.click()
+
+    expect(selectable.className).toMatch(/selected/)
+    expect((api as any).options.selectedDate).toBeTruthy()
+  })
+
+  test('constraints disable navigation buttons', () => {
+    const $ = (global as any).jQuery
+    const moment = (global as any).moment || require('moment')
+    const start = moment().startOf('month').format('YYYY-MM-DD')
+    const end = moment().endOf('month').format('YYYY-MM-DD')
+    $('#cal3').clndr({
+      constraints: { startDate: start, endDate: end },
+      render: (data: any) => `
+        <div class="clndr-controls">
+          <div class="clndr-previous-button"></div>
+          <div class="clndr-next-button"></div>
+        </div>
+      `
+    })
+
+    const prev = document.querySelector('.clndr-previous-button') as HTMLElement
+    const next = document.querySelector('.clndr-next-button') as HTMLElement
+    expect(prev.className).toMatch(/inactive/)
+    expect(next.className).toMatch(/inactive/)
+  })
+})

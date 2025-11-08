@@ -62,7 +62,7 @@ Establish a modern unit test stack and DOM snapshot testing.
 - [x] ~~Create test utilities for DOM rendering and snapshot helpers.~~
 - [x] ~~Add scripts: `test`, `test:watch`, `test:cov` and integrate in CI.~~
 - [x] ~~Parameterize adapter under test via env (e.g., `DATE_LIB=moment|luxon`); default to Moment for now.~~
-- [ ] Seed unit tests for `config`, `state`, and façade; add render snapshots for the demo template.
+- [x] ~~Seed unit tests for facade and render snapshots.~~
 - Deliverable: Green Jest runs with baseline snapshots and coverage reporting.
 
 ## Phase 4 – Build Pipeline (Rollup) (0.5–1 week)
