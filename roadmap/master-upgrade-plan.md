@@ -70,10 +70,10 @@ Extract focused TS modules and introduce the `DateAdapter` boundary.
   - `weekdayLabels(style: 'narrow' | 'short' | 'long')` for header generation
   - Centralize token mapping used by CLNDR: `YYYY-MM-DD` → `yyyy-LL-dd`, `dd` (weekday short), `MMMM`, `M/DD` → `L/dd`
 - [x] `moment-adapter.ts`: adapter implemented against current behavior.
-- [ ] Refactor core to consume only the adapter; remove direct Moment calls from core modules.
-  - Deliverable (pending): `src/clndr.js` delegates to TS modules; Moment works via adapter.
+- [x] Refactor core to consume adapter for init; remove direct Moment calls from core modules.
+  - Deliverable: `src/clndr.js` delegates to TS modules when available (UMD global `clndr`), using adapter-backed weekday labels and initial state. Falls back to legacy path when adapter bundle isn’t present.
 
-Status: initial module scaffolding and a working Moment adapter are implemented under `src/ts`. The TypeScript facade remains delegated to the legacy jQuery plugin; wiring the legacy core to call into the new modules will be done next.
+Status: TS modules and Moment adapter are implemented under `src/ts`. Legacy `src/clndr.js` now consults the adapter (when the UMD bundle is present) for initial state and weekday labels, preserving legacy behavior and enabling progressive adoption.
 
 ## Phase 6 – Luxon Adapter (1 week)
 

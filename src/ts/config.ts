@@ -80,7 +80,7 @@ export function normalizeOptions(
   inOptions: ClndrOptions = {}
 ): NormalizedConfig {
   const o: ClndrOptions = {
-    weekOffset: 0,
+    weekOffset: inOptions.weekOffset ?? 0,
     showAdjacentMonths: true,
     trackSelectedDate: false,
     dateParameter: 'date',

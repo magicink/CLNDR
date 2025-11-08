@@ -41,7 +41,11 @@ export default [
     plugins: [
       resolve({ browser: true }),
       commonjs(),
-      typescript({ tsconfig: path.resolve('tsconfig.json') }),
+      // Explicitly set outputToFilesystem to silence plugin info warning
+      typescript({
+        tsconfig: path.resolve('tsconfig.json'),
+        outputToFilesystem: true
+      }),
       ...(isProd ? [terser()] : [])
     ],
     onwarn(warning, warn) {
@@ -55,6 +59,11 @@ export default [
   {
     input: 'types/clndr.d.ts',
     output: [{ file: 'dist/clndr.d.ts', format: 'es' }],
-    plugins: [dts()]
+    plugins: [dts()],
+    onwarn(warning, warn) {
+      // The dts bundle may report an EMPTY_BUNDLE when input contains only ambient types
+      if (warning.code === 'EMPTY_BUNDLE') return
+      warn(warning)
+    }
   }
 ]
