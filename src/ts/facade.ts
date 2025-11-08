@@ -33,51 +33,16 @@ export function clndr(
   return api
 }
 
-let warnedDefaultSwitch = false
-
 function selectAdapter(options: ClndrOptions): DateAdapter<any> {
   if (options.dateAdapter) return options.dateAdapter
 
-  const envPref =
-    typeof process !== 'undefined' && process.env?.DATE_LIB
-      ? process.env.DATE_LIB
-      : null
-  const preferred = options.dateLibrary || envPref || 'luxon'
-
-  if (!options.dateLibrary && !envPref && !warnedDefaultSwitch) {
-    warnedDefaultSwitch = true
-    if (typeof console !== 'undefined' && typeof console.warn === 'function') {
-      console.warn(
-        'CLNDR: The default dateLibrary is now "luxon" (Phase 9). ' +
-          'Set options.dateLibrary to "moment" or "luxon" explicitly to be explicit. ' +
-          'See MIGRATION.md for details.'
-      )
-    }
+  if (options.dateLibrary && options.dateLibrary !== 'luxon') {
+    throw new Error(
+      'CLNDR: Moment support has been removed. Use the default Luxon adapter or provide a custom dateAdapter.'
+    )
   }
 
-  if (preferred === 'luxon') {
-    let inferredLocale = options.locale
-    if (!inferredLocale) {
-      const g: any = globalThis as any
-      const gm = g?.moment
-      if (gm && typeof gm.locale === 'function') {
-        inferredLocale = gm.locale()
-      } else if (typeof require === 'function') {
-        try {
-          const m = require('moment')
-          if (m && typeof m.locale === 'function') {
-            inferredLocale = m.locale()
-          }
-        } catch {
-          // ignore
-        }
-      }
-    }
-    return createLuxonAdapter(inferredLocale, options.zone)
-  }
-  throw new Error(
-    'CLNDR: Moment support has been removed. Use dateLibrary: "luxon" or provide a custom dateAdapter.'
-  )
+  return createLuxonAdapter(options.locale, options.zone)
 }
 
 function createPublicApi(core: ClndrCore<any>, dom: ClndrDOM<any>): Clndr {

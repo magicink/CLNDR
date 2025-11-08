@@ -103,23 +103,7 @@ export class LuxonDateAdapter implements DateAdapter<DateTime> {
   ) {}
 
   now(): AdapterDate<DateTime> {
-    let dt: DateTime
-    const g: any = globalThis as any
-    const gm = g?.moment
-    if (gm && typeof gm.now === 'function') {
-      try {
-        const ms = gm.now()
-        if (typeof ms === 'number') {
-          dt = (DateTime as any).fromMillis(ms)
-        } else {
-          dt = DateTime.now()
-        }
-      } catch {
-        dt = DateTime.now()
-      }
-    } else {
-      dt = DateTime.now()
-    }
+    let dt: DateTime = DateTime.now()
     dt = dt.set({})
     const localized = dt.setLocale(this.locale)
     const zoned = this.zone ? localized.setZone(this.zone) : localized
