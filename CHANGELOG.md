@@ -133,9 +133,7 @@ instances of CLNDR on the same page.
 Added CommonJS/AMD wrapper to the plugin.
 
 `v1.2.0 ~ 2014-01-22`
-> BC break for Bower users! Underscore is no longer listed as a dependency in
-the Bower plugin, allowing you the flexibility of choosing the templating
-language you prefer. Also added a day of the week class to all clndr days in
+> Added a day of the week class to all clndr days in
 the format `calendar-dow-<0-6>`, allowing you to style weekends/specific days
 of the week differently.
 
@@ -153,8 +151,7 @@ of jQuery's `$.data` has been corrected such that calling
 `v1.1.1 ~ 2013-12-02`
 > You can now only call clndr on one element at a time. If you attempt to call
 it on more than one element, an error is thrown. This should have no effect on
-previous code as long as your selectors were only returning one element. There
-is now a `bower.json` file.
+previous code as long as your selectors were only returning one element.
 
 `v1.1.0 ~ 2013-11-04`
 > New features! In list form:

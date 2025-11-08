@@ -1,6 +1,6 @@
 {
-  "name": "clndr",
-  "version": "1.5.1",
+  "name": "@brandontom/luxon-clndr",
+  "version": "0.0.1",
   "description": "A jQuery calendar plugin that uses HTML templates.",
   "author": "Kyle Stetz",
   "contributors": [
@@ -12,8 +12,8 @@
     "url": "https://github.com/kylestetz/CLNDR"
   },
   "scripts": {
-    "lint": "./node_modules/.bin/eslint --fix-dry-run src || exit 0",
-    "fix": "./node_modules/.bin/eslint --fix src || exit 0"
+    "lint": "eslint --fix-dry-run src || exit 0",
+    "fix": "eslint --fix src || exit 0"
   },
   "keywords": [
     "clndr",
