@@ -1,5 +1,4 @@
-CLNDR.js
-========
+# CLNDR.js
 
 CLNDR is a jQuery calendar plugin. It was created -- you've heard this before --
 out of frustration with the lack of truly dynamic front-end calendar plugins out
@@ -7,13 +6,11 @@ there.
 
 See a demo: [kylestetz.github.io/CLNDR/](http://kylestetz.github.io/CLNDR/)
 
---------
+---
 
 - [Download](https://github.com/kylestetz/CLNDR#download)
 - [Dependencies](https://github.com/kylestetz/CLNDR#dependencies)
   - [Using Bun](https://github.com/kylestetz/CLNDR#using-bun)
-  - [CLNDR using Angular.js](https://github.com/kylestetz/CLNDR#clndr-using-angular)
-  - [CLNDR using Rails](https://github.com/kylestetz/CLNDR#clndr-using-rails)
 - [Introduction: You Write The Markup](https://github.com/kylestetz/CLNDR#introduction-you-write-the-markup)
   - [The 'days' Array](https://github.com/kylestetz/CLNDR#the-days-array)
   - [Pass in your Events](https://github.com/kylestetz/CLNDR#pass-in-your-events)
@@ -26,12 +23,11 @@ See a demo: [kylestetz.github.io/CLNDR/](http://kylestetz.github.io/CLNDR/)
 - [Configuration](https://github.com/kylestetz/CLNDR#some-configuration)
   - [Template Rendering Engine](https://github.com/kylestetz/CLNDR#template-rendering-engine)
   - [Internationalization](https://github.com/kylestetz/CLNDR#internationalization)
-  - [Underscore Template Delimiters](https://github.com/kylestetz/CLNDR#underscore-template-delimiters)
+  - [Lodash Template Delimiters](https://github.com/kylestetz/CLNDR#lodash-template-delimiters)
   - [Internet Explorer Issues](https://github.com/kylestetz/CLNDR#internet-explorer-issues)
 - [Submitting Issues](https://github.com/kylestetz/CLNDR#submitting-issues)
 
-Download
---------
+## Download
 
 - Development: [clndr.js](https://raw.github.com/kylestetz/CLNDR/master/src/clndr.js)
 - Production: [clndr.min.js](https://raw.github.com/kylestetz/CLNDR/master/clndr.min.js)
@@ -43,17 +39,12 @@ If you'd like to run some tests in a particular browser or environment,
 contributing, please run these (and add to them when appropriate) before
 submitting a pull request or issue!
 
-Dependencies
-------------
+## Dependencies
 
 [jQuery](http://jquery.com/download/) and [Moment.js](http://momentjs.com/) are
-depended upon. By default CLNDR tries to use
-[Underscore.js](http://underscorejs.org/)'s `_.template()` function, however if
-you specify a custom rendering function (see documentation below) Underscore
-will not be used at all.
-
-Because their APIs are the same, [Lo-Dash](http://lodash.com/)'s `_.template()`
-function will work as well! Just include Lo-Dash instead of Underscore.
+depended upon. By default CLNDR can use [Lodash](http://lodash.com/)'s
+`_.template()` function; however, if you specify a custom rendering function
+(see documentation below) Lodash is not required.
 
 ### Using Bun
 
@@ -63,25 +54,37 @@ You can install CLNDR via [Bun](https://bun.sh):
 bun add @brandontom/luxon-clndr
 ```
 
-Underscore is not installed by default. This allows you to use whichever
-templating engine you want to. If you want to use the default `template` option
-with Underscore, just install it as a dependency of your project:
-`bun add underscore` or `bun add lodash`.
+Lodash is not installed by default. This allows you to use whichever templating
+engine you want to. If you want to use the default `template` option with
+Lodash, just install it as a dependency of your project:
+`bun add lodash`.
 
-### CLNDR Using Angular
+### TypeScript / ESM Facade
 
-If you want to integrate clndr into an [angular.js](http://angularjs.org/) site,
-get started with this directive:
-[angular-clndr](https://github.com/10KB/angular-clndr).
+CLNDR now provides a small TypeScript/ESM facade that delegates to the legacy jQuery plugin.
 
-### CLNDR Using Rails
+- CJS/UMD usage is unchanged: include `src/clndr.js` and use `$('.el').clndr()`.
+- ESM/TypeScript usage with bundlers:
 
-If you're building a rails application you may be interested in this gem by
-[@sedx](https://github.com/sedx):
-[clndr-rails](https://github.com/sedx/clndr-rails).
+```ts
+// 1) Ensure the legacy plugin is registered (exports subpath is provided)
+import '@brandontom/luxon-clndr/legacy'
 
-Introduction: You Write The Markup
-----------------------------------
+// 2) Use the typed facade factory
+import clndr from '@brandontom/luxon-clndr'
+
+// 3) Create an instance (same options as README below)
+const api = clndr('#calendar', {
+  // ...ClndrOptions
+})
+```
+
+Notes:
+
+- The facade requires jQuery at runtime. The legacy plugin mutates `$.fn` and the facade delegates to it.
+- Type definitions ship with the package; no extra typings needed.
+
+## Introduction: You Write The Markup
 
 There are wonderful and feature-rich calendar modules out there and they all
 suffer the same problem: they give you markup (and often a good heap of JS)
@@ -106,13 +109,13 @@ section.
 </div>
 <div class="clndr-grid">
   <div class="days-of-the-week">
-  <% _.each(daysOfTheWeek, function (day) { %>
+    <% _.each(daysOfTheWeek, function (day) { %>
     <div class="header-day"><%= day %></div>
-  <% }) %>
-    <div class="days">
-    <% _.each(days, function (day) { %>
-      <div class="<%= day.classes %>"><%= day.day %></div>
     <% }) %>
+    <div class="days">
+      <% _.each(days, function (day) { %>
+      <div class="<%= day.classes %>"><%= day.day %></div>
+      <% }) %>
     </div>
   </div>
 </div>
@@ -141,8 +144,8 @@ CLNDR accepts events as an array of objects:
 ```javascript
 events = [
   {
-    date: "YYYY-MM-DD or some other ISO Date format",
-    and: "anything else"
+    date: 'YYYY-MM-DD or some other ISO Date format',
+    and: 'anything else'
   }
 ]
 ```
@@ -152,18 +155,17 @@ you specify otherwise using the `dateParameter` option. In your template the
 `days` array will auto-magically contain these event objects in their entirety.
 See the examples for a demonstration of how events populate the `days` array.
 
-Usage
------
+## Usage
 
-CLNDR leans on the awesome work done in Underscore and moment. These are
+CLNDR leans on the awesome work done in Lodash and moment. These are
 requirements unless you are using a different rendering engine, in which case
-Underscore is not a requirement). Do be sure to include them in your `<head>`
+Lodash is not a requirement. Do be sure to include them in your `<head>`
 before clndr.js. It is a jQuery plugin, so naturally you'll need that as well.
 
 The bare minimum (CLNDR includes a default template):
 
 ```javascript
-$('.parent-element').clndr();
+$('.parent-element').clndr()
 ```
 
 With all of the available options:
@@ -389,7 +391,7 @@ $('.parent-element').clndr({
     endDate: '2018-01-09'
   },
 
-  // Optionally, you can pass a Moment instance to use instead of the CLNDR settings. 
+  // Optionally, you can pass a Moment instance to use instead of the CLNDR settings.
   // If you use moment you shouldn't use weekOffset and daysOfTheWeek
   // See https://github.com/kylestetz/CLNDR#internationalization for more information
   moment: null
@@ -447,12 +449,13 @@ var lotsOfEvents = [
     end: '2013-11-08',
     start: '2013-11-04',
     title: 'Monday to Friday Event'
-  }, {
+  },
+  {
     end: '2013-11-20',
     start: '2013-11-15',
     title: 'Another Long Event'
   }
-];
+]
 
 $('#calendar').clndr({
   events: lotsOfEvents,
@@ -460,11 +463,11 @@ $('#calendar').clndr({
     endDate: 'end',
     startDate: 'start'
   }
-});
+})
 ```
 
 When looping through days in my template, 'Monday to Friday Event' will be
-passed to *every single day* between the start and end date. See index.html in
+passed to _every single day_ between the start and end date. See index.html in
 the example folder for a demo of this feature.
 
 #### Mixing Multi- and Single-day Events
@@ -511,15 +514,15 @@ In this example we create a `my-` namespace for all of the classes:
 ```javascript
 clndr.customClasses = $('#custom-classes').clndr({
   classes: {
-    past: "my-past",
-    today: "my-today",
-    event: "my-event",
-    inactive: "my-inactive",
-    lastMonth: "my-last-month",
-    nextMonth: "my-next-month",
-    adjacentMonth: "my-adjacent-month"
+    past: 'my-past',
+    today: 'my-today',
+    event: 'my-event',
+    inactive: 'my-inactive',
+    lastMonth: 'my-last-month',
+    nextMonth: 'my-next-month',
+    adjacentMonth: 'my-adjacent-month'
   }
-});
+})
 ```
 
 To configure the `day`, `empty`, and next/previous/today/etc. button classes,
@@ -538,7 +541,7 @@ $('#calendar').clndr({
     endDate: '2015-07-16',
     startDate: '2015-05-06'
   }
-});
+})
 ```
 
 Now your calendar's next and previous buttons will only work within this date
@@ -558,13 +561,13 @@ $('#calendar').clndr({
   clickEvents: {
     click: function (target) {
       if (!$(target.element).hasClass('inactive')) {
-        console.log('You picked a valid date!');
+        console.log('You picked a valid date!')
       } else {
-        console.log('That date is outside of the range.');
+        console.log('That date is outside of the range.')
       }
     }
   }
-});
+})
 ```
 
 The constraints can be updated at any time via `clndr.options.constraints`. If
@@ -572,8 +575,8 @@ you make a change, call `render()` afterwards so that clndr can update your
 interface with the appropriate classes.
 
 ```javascript
-myCalendar.options.constraints.startDate = '1999-12-31';
-myCalendar.render();
+myCalendar.options.constraints.startDate = '1999-12-31'
+myCalendar.render()
 ```
 
 Make sure the `startDate` comes before the `endDate`!
@@ -586,49 +589,49 @@ events array.
 
 ```javascript
 // Create a CLNDR and save the instance as myCalendar
-var myCalendar = $('#myCalendar').clndr();
+var myCalendar = $('#myCalendar').clndr()
 
 // Go to the next month
-myCalendar.forward();
+myCalendar.forward()
 
 // Go to the previous month
-myCalendar.back();
+myCalendar.back()
 
 // Set the month using a number from 0-11 or a month name
-myCalendar.setMonth(0);
-myCalendar.setMonth('February');
+myCalendar.setMonth(0)
+myCalendar.setMonth('February')
 
 // Go to the next year
-myCalendar.nextYear();
+myCalendar.nextYear()
 
 // Go to the previous year
-myCalendar.previousYear();
+myCalendar.previousYear()
 
 // Set the year
-myCalendar.setYear(1997);
+myCalendar.setYear(1997)
 
 // Go to today:
-myCalendar.today();
+myCalendar.today()
 
 // Overwrite the extras. Note that this triggers a re-render of the calendar.
-myCalendar.setExtras(newExtras);
+myCalendar.setExtras(newExtras)
 
 // Change the events. Note that this triggers a re-render of the calendar.
-myCalendar.setEvents(newEventsArray);
+myCalendar.setEvents(newEventsArray)
 
 // Add events. Note that this triggers a re-render of the calendar.
-myCalendar.addEvents(additionalEventsArray);
+myCalendar.addEvents(additionalEventsArray)
 
 // Remove events.  All events for which the passed in function returns true will
 // be removed from the calendar. Note that this triggers a re-render of the
 // calendar.
 myCalendar.removeEvents(function (event) {
-  return event.id === idToRemove;
-});
+  return event.id === idToRemove
+})
 
 // Destroy the clndr instance. This will empty the DOM node containing the
 // calendar.
-myCalendar.destroy();
+myCalendar.destroy()
 ```
 
 If you are taking advantage of the `onMonthChange` and `onYearChange` callbacks,
@@ -638,11 +641,11 @@ like this:
 
 ```javascript
 // Month will be set to February and then onMonthChange will be fired.
-myCalendar.setMonth("February", { withCallbacks: true });
+myCalendar.setMonth('February', { withCallbacks: true })
 
 // Month will increment and onMonthChange, and possibly onYearChange, will be
 // fired.
-myCalendar.next({ withCallbacks: true });
+myCalendar.next({ withCallbacks: true })
 ```
 
 ### Template Requirements
@@ -660,28 +663,27 @@ it to determine the date when a user clicks on it. Thus, click events will only
 work if `days.classes` is included in your day element's `class` attribute as
 seen above.
 
-Configuration
--------------
+## Configuration
 
 ### Template Rendering Engine
 
 You can pass in a `render` function as an option, for example:
 
 ```javascript
-var precompiledTemplate = myRenderingEngine.template($('#my-template').html());
+var precompiledTemplate = myRenderingEngine.template($('#my-template').html())
 
 $('#my-calendar').clndr({
   render: function (data) {
-    return precompiledTemplate(data);
+    return precompiledTemplate(data)
   }
-});
+})
 ```
 
 Where the function must return the HTML result of the rendering operation. In
 this case you would precompile your template elsewhere in your code, since CLNDR
-only cares about your template if it's going to use Underscore.
+only cares about your template if it's going to use Lodash.
 
-If you are using your own render method, Underscore is NOT a dependency of
+If you are using your own render method, Lodash is NOT a dependency of
 this plugin.
 
 CLNDR has been tested successfully with [doT.js](http://olado.github.io/doT/),
@@ -694,6 +696,7 @@ if you have success with other languages and they will be documented here.
 Here's an example using [doT.js](http://olado.github.io/doT/)...
 
 The markup:
+
 ```html
 <script id="dot-template" type="text/template">
   <div class="clndr-controls">
@@ -717,19 +720,21 @@ The markup:
 ```
 
 The Javascript:
+
 ```javascript
-var clndrTemplate = doT.template($('#dot-template').html());
+var clndrTemplate = doT.template($('#dot-template').html())
 
 $('#calendar').clndr({
   render: function (data) {
-    return clndrTemplate(data);
+    return clndrTemplate(data)
   }
-});
+})
 ```
 
 Here's an example using [Mustache.js](https://github.com/janl/mustache.js/)...
 
 The markup:
+
 ```html
 <script type="x-tmpl-mustache" id="calendar-tmpl">
   <div class="controls">
@@ -754,12 +759,13 @@ The markup:
 ```
 
 The Javascript:
+
 ```javascript
 $('#calendar').clndr({
   render: function (data) {
-    return Mustache.render($('#calendar-tmpl').html(), data);
-  },
-});
+    return Mustache.render($('#calendar-tmpl').html(), data)
+  }
+})
 ```
 
 ### Internationalization
@@ -774,7 +780,7 @@ this by passing it in as the `moment` config option when initializing CLNDR:
 
 ```javascript
 // To change clndr to German use moment.local('de')
-moment.locale('de');
+moment.locale('de')
 
 // Make sure that your locale is Working correctly
 console.log(moment().calendar())
@@ -783,7 +789,7 @@ console.log(moment().calendar())
 $('#calendar').clndr({
   // Pass the moment instance to use your language settings
   moment: moment
-});
+})
 ```
 
 If you are using a moment.js language configuration in which weeks begin on a
@@ -799,10 +805,10 @@ begins on the same day of the week as your current language setting.
 **Warning**: using `daysOfTheWeek` and `weekOffset` in conjunction with
 different language settings is _not_ recommended and may cause you headaches.
 
-### Underscore Template Delimiters
+### Lodash Template Delimiters
 
 If you're not a fan of `<% %>` and `<%= %>` style delimiters you can provide
-Underscore.js with alternatives in the form of regular expressions. There are
+Lodash with alternatives in the form of regular expressions. There are
 three delimiters...
 
 **interpolate**, which outputs a string (this is `<%= %>` by default)
@@ -819,8 +825,8 @@ call this before you instantiate your clndr:
 _.templateSettings = {
   escape: /\{\{\-(.+?)\}\}/g,
   evaluate: /\{\%(.+?)\%\}/g,
-  interpolate: /\{\{(.+?)\}\}/g,
-};
+  interpolate: /\{\{(.+?)\}\}/g
+}
 ```
 
 ### Internet Explorer Issues
@@ -830,8 +836,7 @@ version dependencies. You'll need the jQuery 1.10.x branch for IE support, and
 if you're taking advantage of the `constraints` feature you'll need to use a
 version of moment.js `<=2.1.0` or `>=2.5.1`.
 
-Submitting Issues
------------------
+## Submitting Issues
 
 GitHub issues and support tickets are to be submitted only for bugs. We sadly
 don't have the time or manpower to answer implementation questions, debug your

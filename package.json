@@ -23,7 +23,19 @@
   "contributors": [
     "Mike Gioia <mike@teachboost.com>"
   ],
+  "exports": {
+    ".": {
+      "types": "./types/clndr.d.ts",
+      "import": "./dist/src/ts/index.js",
+      "require": "./src/clndr.js"
+    },
+    "./legacy": {
+      "import": "./src/clndr.js",
+      "require": "./src/clndr.js"
+    }
+  },
   "main": "src/clndr.js",
+  "module": "dist/src/ts/index.js",
   "types": "types/clndr.d.ts",
   "scripts": {
     "baseline:snapshots": "bun scripts/capture-baseline.mjs",

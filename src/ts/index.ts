@@ -1,6 +1,6 @@
 /**
- * TypeScript scaffold for future CLNDR modules.
- * This file exists to enable tsc builds in Phase 1.
+ * Entry for TypeScript consumers. Re-export the facade that delegates
+ * to the legacy jQuery plugin.
  */
 
-export const __scaffold = true;
+export { clndr as default, clndr } from './facade'
