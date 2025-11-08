@@ -4,6 +4,7 @@
     "module": "ESNext",
     "moduleResolution": "Bundler",
     "strict": true,
+    "noImplicitAny": true,
     "esModuleInterop": true,
     "skipLibCheck": true,
     "noEmit": false,
@@ -14,6 +15,11 @@
     "incremental": true,
     "outDir": "dist"
   },
-  "include": ["src/**/*.ts", "scripts/**/*.ts", "types/**/*.d.ts"],
+  "include": [
+    "src/**/*.ts",
+    "scripts/**/*.ts",
+    "types/**/*.d.ts",
+    "tests/jest/**/*.ts"
+  ],
   "exclude": ["node_modules", "dist", "coverage"]
 }
