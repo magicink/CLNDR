@@ -35,3 +35,9 @@ jobs:
 
       - name: Build TypeScript
         run: bun run build:ts
+
+      - name: Run unit tests (Jest)
+        run: bun run test -- --coverage
+
+      - name: Smoke tests
+        run: bun run smoke

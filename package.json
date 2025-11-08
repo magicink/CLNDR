@@ -51,13 +51,16 @@
   "scripts": {
     "baseline:snapshots": "bun scripts/capture-baseline.mjs",
     "build:ts": "tsc -p tsconfig.json",
-    "ci:check": "npm run lint && npm run type-check && npm run build:ts && npm run smoke",
+    "ci:check": "npm run lint && npm run type-check && npm run build:ts && npm run test -- --coverage && npm run smoke",
     "format": "prettier --write .",
     "format:check": "prettier --check .",
     "lint": "eslint . --ext .js,.ts",
     "lint:fix": "eslint . --ext .js,.ts --fix",
     "prepare": "husky",
     "smoke": "node scripts/smoke.mjs",
+    "test": "jest",
+    "test:cov": "jest --coverage",
+    "test:watch": "jest --watch",
     "type-check": "tsc --noEmit"
   },
   "prettier": "@brandontom/prettier",
@@ -69,6 +72,7 @@
     "@brandontom/prettier": "^2.0.2",
     "@commitlint/cli": "^20.1.0",
     "@commitlint/config-conventional": "^20.0.0",
+    "@types/jest": "^29.5.14",
     "@typescript-eslint/eslint-plugin": "^8.46.3",
     "@typescript-eslint/parser": "^8.46.3",
     "eslint": "^9.39.1",
@@ -77,10 +81,14 @@
     "grunt-contrib-uglify": "^5.2.2",
     "grunt-contrib-watch": "^1.1.0",
     "husky": "^9.1.7",
+    "jest": "^29.7.0",
+    "jest-environment-jsdom": "^29.7.0",
     "lint-staged": "^16.2.6",
     "prettier": "^3.6.2",
     "puppeteer": "^24.29.1",
     "sort-package-json": "^3.4.0",
+    "ts-jest": "^29.4.5",
+    "ts-node": "^10.9.2",
     "typescript": "^5.9.3"
   }
 }

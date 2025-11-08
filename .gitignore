@@ -8,3 +8,6 @@ package-lock.json
 yarn.lock
 /dist/
 .eslintcache
+coverage/
+**/__snapshots__/
+*.snap

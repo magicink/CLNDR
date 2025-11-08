@@ -57,11 +57,11 @@
 
 Establish a modern unit test stack and DOM snapshot testing.
 
-- [ ] Add Jest with TypeScript support (`jest`, `ts-jest`, `@types/jest`).
-- [ ] Configure `jest.config.ts` with `jsdom` environment and coverage thresholds.
-- [ ] Create test utilities for DOM rendering and snapshot helpers.
-- [ ] Add scripts: `test`, `test:watch`, `test:cov` and integrate in CI.
-- [ ] Parameterize adapter under test via env (e.g., `DATE_LIB=moment|luxon`); default to Moment for now.
+- [x] ~~Add Jest with TypeScript support (`jest`, `ts-jest`, `@types/jest`).~~
+- [x] ~~Configure `jest.config` with `jsdom` environment and coverage thresholds.~~
+- [x] ~~Create test utilities for DOM rendering and snapshot helpers.~~
+- [x] ~~Add scripts: `test`, `test:watch`, `test:cov` and integrate in CI.~~
+- [x] ~~Parameterize adapter under test via env (e.g., `DATE_LIB=moment|luxon`); default to Moment for now.~~
 - [ ] Seed unit tests for `config`, `state`, and façade; add render snapshots for the demo template.
 - Deliverable: Green Jest runs with baseline snapshots and coverage reporting.
 
