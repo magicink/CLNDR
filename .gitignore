@@ -4,3 +4,5 @@
 commit_checklist.md
 .idea/
 .vscode/
+package-lock.json
+yarn.lock

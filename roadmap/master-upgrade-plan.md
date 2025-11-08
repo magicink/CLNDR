@@ -18,17 +18,18 @@
 3. Prefer small, pure modules with clear ownership and no hidden global state.
 4. All date logic flows through `DateAdapter`; no direct Moment/Luxon calls in core modules.
 5. CI enforces adapter usage and runs both runtimes until Moment is removed.
+6. Tooling preference: use Bun where possible (e.g., `bun install`, `bun run`); fall back to npm/yarn when Bun is unavailable in the environment.
 
 ## Prerequisites
 - Baseline tests and demo snapshots captured.
 - Agreement on `DateAdapter` interface surface and configuration.
 
 ## Phase 0 – Discovery & Baseline (0.5–1 week)
-- [ ] Audit `src/clndr.js` responsibilities (init, config parsing, templating, date math, events, public API).
-- [ ] Inventory Moment usage: parsing, formatting, add/subtract, start/endOf, weekday/day, diff, daysInMonth.
-- [ ] List all date formats used in templates and tests.
-- [ ] Capture DOM snapshots from demos/tests to use as parity baselines.
-- Deliverable: Architecture diagram + usage matrix for date ops.
+- [x] ~~Audit `src/clndr.js` responsibilities (init, config parsing, templating, date math, events, public API).~~
+- [x] ~~Inventory Moment usage: parsing, formatting, add/subtract, start/endOf, weekday/day, diff, daysInMonth.~~
+- [x] ~~List all date formats used in templates and tests.~~
+- [x] ~~Capture DOM snapshots from demos/tests to use as parity baselines.~~
+- Deliverable: Architecture diagram + usage matrix for date ops. See `roadmap/phase-0-findings.md` and `roadmap/baseline/*`.
 
 ## Phase 1 – Tooling Bootstrap (1 week)
 - [ ] Add TypeScript, ESLint + Prettier, and `tsconfig.json` (ES2018 target, incremental).

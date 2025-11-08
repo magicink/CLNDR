@@ -13,7 +13,8 @@
   },
   "scripts": {
     "lint": "eslint --fix-dry-run src || exit 0",
-    "fix": "eslint --fix src || exit 0"
+    "fix": "eslint --fix src || exit 0",
+    "baseline:snapshots": "bun scripts/capture-baseline.mjs"
   },
   "keywords": [
     "clndr",
@@ -39,6 +40,7 @@
     "eslint-plugin-node": "^6.0.1",
     "eslint-plugin-promise": "^3.8.0",
     "eslint-plugin-standard": "^4.0.0",
+    "puppeteer": "^23.7.0",
     "grunt": "*",
     "grunt-contrib-less": "^2.0.0",
     "grunt-contrib-uglify": "^4.0.1",
