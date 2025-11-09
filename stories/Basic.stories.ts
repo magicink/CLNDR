@@ -3,7 +3,8 @@ import { clndr, DEFAULT_TEMPLATE } from '../src/ts'
 import { createContainer } from './utils'
 
 // Grid-based modern markup for the basic (single-month) view
-const BASIC_TEMPLATE_LEGACY = `\n<div class='clndr-controls'>
+const BASIC_TEMPLATE_LEGACY = `
+<div class='clndr-controls'>
   <div class='clndr-control-button'>
     <span class='clndr-previous-button'>previous</span>
   </div>
@@ -32,7 +33,8 @@ const BASIC_TEMPLATE_LEGACY = `\n<div class='clndr-controls'>
       </tr>
     <% } %>
   </tbody>
-</table>\n`.trim()
+</table>
+`.trim()
 
 const meta: Meta = {
   title: 'CLNDR/Basic',

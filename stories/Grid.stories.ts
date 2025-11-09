@@ -31,11 +31,10 @@ const meta: Meta = {
     if (args.theme !== 'modern') {
       el.classList.add('cal2')
     }
-    const api = clndr(el, {
+    ;(el as any).__api = clndr(el, {
       ...args,
       template: GRID_TEMPLATE
     })
-    ;(el as any).__api = api
     return el
   },
   argTypes: {

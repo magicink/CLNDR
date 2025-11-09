@@ -71,12 +71,11 @@ const meta: Meta = {
     if (args.theme !== 'modern') {
       el.classList.add('cal3')
     }
-    const api = clndr(el, {
+    ;(el as any).__api = clndr(el, {
       ...args,
       template:
         args.theme === 'modern' ? MONTHS_TEMPLATE_MODERN : MONTHS_TEMPLATE
     })
-    ;(el as any).__api = api
     return el
   },
   argTypes: {
