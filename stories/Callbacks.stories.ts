@@ -7,18 +7,15 @@ const meta: Meta = {
   render: (args: any) => {
     const el = createContainer(600)
     ;(el as any).__api = clndr(el, {
+      applyThemeClasses: true,
+      theme: 'modern',
       ...args,
       template: DEFAULT_TEMPLATE
     })
     return el
   },
-  argTypes: {
-    applyThemeClasses: { control: false },
-    theme: { control: false }
-  },
+  argTypes: {},
   args: {
-    applyThemeClasses: true,
-    theme: 'modern',
     showAdjacentMonths: true,
     adjacentDaysChangeMonth: false
   }

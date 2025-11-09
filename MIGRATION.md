@@ -72,3 +72,16 @@ This guide helps migrate from legacy CLNDR v1.x (e.g., 1.5.1) to the modern Type
   - Check `multiDayEvents` mapping
 - Locale/Week start differences
   - Set `locale` and/or `zone` (Luxon)
+
+## Legacy CSS Removal and Mapping
+
+The modern stylesheet (`dist/clndr.css`) uses Grid/Flex and CSS variables. Legacy float/table rules and wrapper classes are not shipped. Migrate away from legacy wrappers/selectors to the modern classes:
+
+- `.cal1` (basic month, table layout) → Use `applyThemeClasses: true` and modern defaults (`.clndr--mode-table` + `.clndr--theme-modern`), or provide your own CSS targeting `.clndr`/`.clndr-grid`.
+- `.cal2` (float-based grid) → Use `applyThemeClasses: true` with Grid mode (`lengthOfTime.days`) and `.clndr--theme-modern`.
+- `.cal3` (float-based multi-month) → Use Months mode (`lengthOfTime.months`) with `.clndr--theme-modern`.
+- `.clndr-table` / `.header-days` / float rules / `.clearfix` → Not present in modern CSS. Replace with the modern Grid/Flex classes under `.clndr--theme-modern`.
+
+Notes
+
+- The modern stylesheet uses CSS variables (`--clndr-*`) for theming and Grid/Flex for layout. Prefer logical properties where needed.
