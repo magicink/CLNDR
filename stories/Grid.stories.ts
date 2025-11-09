@@ -30,7 +30,7 @@ const meta: Meta = {
     adjacentDaysChangeMonth: false,
     lengthOfTime: { days: 14, interval: 7 },
     applyThemeClasses: true,
-    theme: 'grid'
+    theme: 'modern'
   }
 }
 

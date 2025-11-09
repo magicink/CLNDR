@@ -61,7 +61,7 @@ const meta: Meta = {
     showAdjacentMonths: true,
     adjacentDaysChangeMonth: false,
     applyThemeClasses: true,
-    theme: 'default'
+    theme: 'modern'
   }
 }
 

@@ -18,6 +18,7 @@ Project repo: https://github.com/magicink/CLNDR
   - [Multi-day Events](https://github.com/magicink/CLNDR#multi-day-events)
   - [Custom Classes](https://github.com/magicink/CLNDR#custom-classes)
   - [Styling (CSS Variables)](#styling-css-variables)
+  - [Tailwind Styling](#tailwind-styling)
   - [Exported Templates](#exported-templates)
   - [Constraints & Datepickers](https://github.com/magicink/CLNDR#constraints--datepickers)
   - [Returning the Instance / API](https://github.com/magicink/CLNDR#returning-the-instance--public-api)
@@ -630,6 +631,111 @@ Notes
 
 - In modern themes, some variables may be overridden per mode (e.g., table mode sets `--clndr-grid-gap: 1px`). You can still override them on the container to force a value.
 - Variables use OKLCH color values by default for better perceptual uniformity; standard CSS color values work as well.
+
+### Tailwind Styling
+
+You can style CLNDR using Tailwind in two complementary ways:
+
+- Override the built‑in CSS variables with Tailwind’s arbitrary properties.
+- Add component/utility layers that map Tailwind tokens to CLNDR selectors.
+
+Quick start (arbitrary properties)
+
+```html
+<div id="cal" class="my-calendar"></div>
+
+<script type="module">
+  import { clndr, DEFAULT_TEMPLATE } from '@brandontom/luxon-clndr'
+  // Apply Tailwind-driven variables on a parent or the .clndr itself
+  const host = document.querySelector('#cal')!
+  host.classList.add(
+    // Sizing
+    '[--clndr-grid-cell-size:2.25rem]',
+    '[--clndr-grid-gap:0.125rem]',
+    // Palette
+    '[--clndr-border:theme(colors.slate.300)]',
+    '[--clndr-accent:theme(colors.slate.800)]',
+    '[--clndr-header-text-contrast:theme(colors.white)]',
+    '[--clndr-selected-bg:theme(colors.pink.500)]',
+    '[--clndr-muted-bg:theme(colors.slate.100)]'
+  )
+  clndr('#cal', { template: DEFAULT_TEMPLATE, applyThemeClasses: true, theme: 'modern' })
+</script>
+```
+
+Because CLNDR reads CSS variables from its `.clndr` root, you can set them on the host element or any ancestor. Tailwind’s arbitrary property syntax (`[--var:value]`) works well here and supports `theme(...)` lookups.
+
+Reusable utilities (@layer)
+
+Add a small utility group that maps Tailwind tokens to CLNDR variables:
+
+```css
+/* globals.css */
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer utilities {
+  .clndr-vars-slate {
+    --clndr-border: theme(colors.slate.300);
+    --clndr-accent: theme(colors.slate.800);
+    --clndr-header-text-contrast: theme(colors.white);
+    --clndr-selected-bg: theme(colors.pink.500);
+    --clndr-muted-bg: theme(colors.slate.100);
+    --clndr-control-hover-bg: theme(colors.slate.100);
+    --clndr-surface-bg: theme(colors.slate.50);
+  }
+  .clndr-size-md {
+    --clndr-grid-cell-size: 2.25rem; /* 36px */
+    --clndr-grid-gap: 0.125rem; /* 2px */
+  }
+}
+```
+
+Then apply to the calendar host:
+
+```html
+<div id="cal" class="clndr-vars-slate clndr-size-md"></div>
+```
+
+Dark mode example
+
+```css
+@layer utilities {
+  .dark .clndr-vars-slate {
+    --clndr-border: theme(colors.slate.700);
+    --clndr-accent: theme(colors.slate.700);
+    --clndr-header-text-contrast: theme(colors.white);
+    --clndr-muted-bg: theme(colors.slate.800);
+    --clndr-day-bg: theme(colors.slate.900);
+  }
+}
+```
+
+Component tweaks with @apply
+
+CLNDR ships sensible defaults. If you want to adjust layout/spacing using Tailwind utilities, target CLNDR’s selectors inside a component layer:
+
+```css
+@layer components {
+  /* Center the grid and space the controls */
+  .clndr.clndr--theme-modern .clndr-controls {
+    @apply mb-2 mx-auto;
+  }
+  .clndr.clndr--theme-modern .clndr-grid {
+    @apply mx-auto rounded-md;
+  }
+  .clndr .clndr-today-button {
+    @apply w-full text-center cursor-pointer hover:bg-slate-100;
+  }
+}
+```
+
+Notes
+
+- Import the library CSS once (e.g., in your app entry) so the structure and variables exist: `import '@brandontom/luxon-clndr/clndr.css'`.
+- Prefer overriding variables for theme/palette/size, and use `@apply` sparingly for layout tweaks.
+- If you use the opt-in classes (`applyThemeClasses: true`), you’ll get mode/theme helpers like `clndr--mode-grid`, `clndr--theme-modern` for targeting.
 
 ### Exported Templates
 
