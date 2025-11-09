@@ -1,2 +1,30 @@
 <!-- Inject CLNDR styles into the Storybook preview iframe -->
 <link rel="stylesheet" href="src/css/clndr.css" />
+
+<!-- Demo-only styles used by stories; keep them out of the library CSS -->
+<style>
+  .clndr-demo h4 {
+    width: 75%;
+    text-align: center;
+    font-family: var(--clndr-font-family, 'Droid Sans Mono');
+    font-weight: normal;
+    color: var(--clndr-heading-text, white);
+    font-size: var(--clndr-heading-font-size, 14px);
+    margin: 0 auto 1em auto;
+    padding: 1em;
+    background: var(--clndr-heading-bg, #b63642);
+  }
+  .clndr-demo h5 {
+    font-size: var(--clndr-subheading-font-size, 1em);
+    font-weight: bold;
+  }
+  .clndr-demo p {
+    text-align: center;
+    font-family: var(--clndr-font-family, 'Droid Sans Mono');
+    margin: 3em auto 1em auto;
+    padding-top: 0.5em;
+    padding-bottom: 0.5em;
+    border-top: 2px solid var(--clndr-rule-color, #414141);
+    background: var(--clndr-surface-bg, #f4f4f4);
+  }
+</style>

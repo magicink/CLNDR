@@ -4,7 +4,7 @@
   font-weight: 400;
   src: local('Droid Sans Mono Regular'), local('DroidSansMono-Regular'), url(http://fonts.gstatic.com/s/droidsansmono/v11/6NUO8FuJNQ2MbkrZ5-J8lKFrp7pRef2u.ttf) format('truetype');
 }
-.clearfix:after {
+.clndr .clearfix:after {
   content: ".";
   display: block;
   clear: both;
@@ -12,16 +12,16 @@
   line-height: 0;
   height: 0;
 }
-.clearfix {
+.clndr .clearfix {
   display: inline-block;
 }
-html[xmlns] .clearfix {
+html[xmlns] .clndr .clearfix {
   display: block;
 }
-* html .clearfix {
+* html .clndr .clearfix {
   height: 1%;
 }
-.noselect {
+.clndr .noselect {
   -webkit-user-select: none;
   user-select: none;
 }
@@ -90,34 +90,10 @@ html[xmlns] .clearfix {
   font-family: var(--clndr-font-family);
   font-size: var(--clndr-font-size);
 }
-h4 {
-  width: 75%;
-  text-align: center;
-  font-family: var(--clndr-font-family);
-  font-weight: normal;
-  color: var(--clndr-heading-text);
-  font-size: var(--clndr-heading-font-size);
-  margin: 0 auto 1em auto;
-  padding: 1em;
-  background: var(--clndr-heading-bg);
-}
-h5 {
-  font-size: var(--clndr-subheading-font-size);
-  font-weight: bold;
-}
-p {
-  text-align: center;
-  font-family: var(--clndr-font-family);
-  margin: 3em auto 1em auto;
-  padding-top: 0.5em;
-  padding-bottom: 0.5em;
-  border-top: 2px solid var(--clndr-rule-color);
-  background: var(--clndr-surface-bg);
-}
-.left-align {
+.clndr .left-align {
   text-align: left;
 }
-.right-align {
+.clndr .right-align {
   text-align: right;
 }
 .cal1 {
