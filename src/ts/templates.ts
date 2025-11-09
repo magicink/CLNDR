@@ -101,3 +101,62 @@ export function createRenderer(options: ClndrOptions): TemplateRenderer {
   }
   return compile(DEFAULT_TEMPLATE)
 }
+
+/**
+ * Modern Grid Interval template (e.g., 14 days with a 7-day interval).
+ */
+export const GRID_INTERVAL_TEMPLATE = `
+<div class="clndr-controls">
+  <div class="clndr-previous-button">&lsaquo;</div>
+  <div class="month"><%= intervalStart.format('M/DD') + ' &mdash; ' + intervalEnd.format('M/DD') %></div>
+  <div class="clndr-next-button">&rsaquo;</div>
+</div>
+<div class="clndr-grid">
+  <div class="days-of-the-week">
+    <% for (var i = 0; i < daysOfTheWeek.length; i++) { %>
+      <div class="header-day"><%= daysOfTheWeek[i] %></div>
+    <% } %>
+    <div class="days">
+      <% for (var di = 0; di < days.length; di++) { var day = days[di]; %>
+        <div class="<%= day.classes %>"><%= day.day %></div>
+      <% } %>
+    </div>
+  </div>
+</div>
+<div class="clndr-today-button">Today</div>
+`.trim()
+
+/**
+ * Modern Months Interval template: arrows + month titles in a single header
+ * and side-by-side month grids.
+ */
+export const MONTHS_INTERVAL_TEMPLATE_MODERN = `
+<div class="clndr-controls months-header">
+  <div class="clndr-previous-button">&lsaquo;</div>
+  <div class="months-titles">
+    <% for (var m = 0; m < months.length; m++) { var cal = months[m]; %>
+      <div class="month"><%= cal.month.format('MMMM') %></div>
+    <% } %>
+  </div>
+  <div class="clndr-next-button">&rsaquo;</div>
+  </div>
+<div class="months-body">
+  <% for (var m = 0; m < months.length; m++) { var cal = months[m]; %>
+    <div class="cal">
+      <div class="clndr-grid">
+        <div class="days-of-the-week">
+          <% for (var i = 0; i < daysOfTheWeek.length; i++) { %>
+            <div class="header-day"><%= daysOfTheWeek[i] %></div>
+          <% } %>
+          <div class="days">
+            <% for (var di = 0; di < cal.days.length; di++) { var day = cal.days[di]; %>
+              <div class="<%= day.classes %>"><%= day.day %></div>
+            <% } %>
+          </div>
+        </div>
+      </div>
+    </div>
+  <% } %>
+</div>
+<div class="clndr-today-button">Today</div>
+`.trim()
