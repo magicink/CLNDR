@@ -17,6 +17,8 @@ Project repo: https://github.com/magicink/CLNDR
 - [Usage](https://github.com/magicink/CLNDR#usage)
   - [Multi-day Events](https://github.com/magicink/CLNDR#multi-day-events)
   - [Custom Classes](https://github.com/magicink/CLNDR#custom-classes)
+  - [Styling (CSS Variables)](#styling-css-variables)
+  - [Exported Templates](#exported-templates)
   - [Constraints & Datepickers](https://github.com/magicink/CLNDR#constraints--datepickers)
   - [Returning the Instance / API](https://github.com/magicink/CLNDR#returning-the-instance--public-api)
   - [Template Requirements](https://github.com/magicink/CLNDR#template-requirements)
@@ -24,7 +26,7 @@ Project repo: https://github.com/magicink/CLNDR
   - [Template Rendering Engine](https://github.com/magicink/CLNDR#template-rendering-engine)
   - [Internationalization](https://github.com/magicink/CLNDR#internationalization)
   - [Lodash Template Delimiters](https://github.com/magicink/CLNDR#lodash-template-delimiters)
-  - [Browser Compatibility](https://github.com/magicink/CLNDR#browser-compatibility)
+- [Browser Compatibility](https://github.com/magicink/CLNDR#browser-compatibility)
 - [Submitting Issues](https://github.com/magicink/CLNDR#submitting-issues)
 
 ## Install
@@ -558,6 +560,137 @@ clndr.customClasses = $('#custom-classes').clndr({
 To configure the `day`, `empty`, and next/previous/today/etc. button classes,
 use the `targets` option documented in the
 [usage](https://github.com/magicink/CLNDR#usage) section.
+
+### Styling (CSS Variables)
+
+CLNDR exposes a set of CSS custom properties you can override to customize spacing, colors, and typography. Define overrides on the calendar root (the element you pass to `clndr(...)`) or cascade them from a parent.
+
+Example:
+
+```css
+.my-calendar .clndr {
+  /* Colors */
+  --clndr-accent: oklch(70% 0.12 240);
+  --clndr-selected-bg: oklch(70% 0.18 330);
+  /* Sizing */
+  --clndr-grid-cell-size: 32px;
+  --clndr-grid-gap: 2px;
+}
+```
+
+Overrideable variables and defaults
+
+| Variable                                | Default                            | Purpose                                          |
+| --------------------------------------- | ---------------------------------- | ------------------------------------------------ |
+| `--clndr-grid-cell-size`                | `25px`                             | Grid cell size (grid/months modes).              |
+| `--clndr-grid-gap`                      | `0px`                              | Gap between grid cells.                          |
+| `--clndr-radius`                        | `4px`                              | Rounding for modern interval grids.              |
+| `--clndr-month-gap`                     | `8px`                              | Gap between whole months (month-interval views). |
+| `--clndr-border`                        | `oklch(66.46% 0.2222 25.65)`       | Grid/frame border color.                         |
+| `--clndr-accent`                        | `oklch(66.46% 0.2222 25.65)`       | Weekday header background (grid).                |
+| `--clndr-event-bg`                      | `oklch(85.93% 0.0987 135.79)`      | Event day background.                            |
+| `--clndr-today-bg`                      | `oklch(83.36% 0.0950 87.16)`       | Today background (grid theme).                   |
+| `--clndr-selected-bg`                   | `oklch(73.43% 0.1627 332.04)`      | Selected day background.                         |
+| `--clndr-muted-bg`                      | `oklch(89.75% 0.0000 0.00)`        | Empty/adjacent/inactive background.              |
+| `--clndr-inactive-text-color`           | `oklch(59.99% 0.0000 0.00)`        | Inactive text color.                             |
+| `--clndr-table-header-bg`               | `oklch(52.12% 0.1175 241.01)`      | Table header background.                         |
+| `--clndr-table-header-text`             | `oklch(100.00% 0.0000 0.00)`       | Table header text color.                         |
+| `--clndr-table-border-color`            | `oklch(0.00% 0.0000 0.00)`         | Table border color.                              |
+| `--clndr-day-hover-bg`                  | `oklch(94.91% 0.0000 0.00)`        | Day hover background (table mode).               |
+| `--clndr-table-today-bg`                | `oklch(83.96% 0.0637 212.57)`      | Today background (table mode).                   |
+| `--clndr-table-today-hover-bg`          | `oklch(77.99% 0.0855 213.06)`      | Today hover background (table mode).             |
+| `--clndr-table-today-event-bg`          | `oklch(84.80% 0.0649 162.94)`      | Today + event background (table mode).           |
+| `--clndr-event-hover-bg`                | `oklch(80.64% 0.1382 136.12)`      | Event hover background.                          |
+| `--clndr-empty-bg`                      | `oklch(94.91% 0.0000 0.00)`        | Empty cell background.                           |
+| `--clndr-inactive-alt-bg`               | `oklch(73.80% 0.0000 0.00)`        | Alternate inactive background.                   |
+| `--clndr-control-hover-bg`              | `oklch(89.75% 0.0000 0.00)`        | Control hover background.                        |
+| `--clndr-control-hover-bg-soft`         | `oklch(96.72% 0.0000 0.00)`        | Soft control hover background.                   |
+| `--clndr-surface-bg`                    | `oklch(96.72% 0.0000 0.00)`        | Surface/background behind sections.              |
+| `--clndr-day-bg`                        | `oklch(100.00% 0.0000 0.00)`       | Default day cell background.                     |
+| `--clndr-rule-color`                    | `oklch(37.53% 0.0000 0.00)`        | Divider/rule color.                              |
+| `--clndr-month-min-width`               | `177px`                            | Min width per month tile (months view).          |
+| `--clndr-months-controls-margin-bottom` | `8px`                              | Gap under month header (months view).            |
+| `--clndr-controls-bottom-margin`        | `3px`                              | Gap below top controls row.                      |
+| `--clndr-nav-padding`                   | `0.1em 0.25em`                     | Nav arrow hit-area padding.                      |
+| `--clndr-table-header-height`           | `30px`                             | Table-mode header cell height.                   |
+| `--clndr-table-day-height`              | `85px`                             | Table-mode day cell height.                      |
+| `--clndr-table-day-padding`             | `8px`                              | Table-mode day cell padding.                     |
+| `--clndr-heading-bg`                    | `oklch(52.65% 0.1637 19.70)`       | Heading/banner background.                       |
+| `--clndr-heading-text`                  | `oklch(100.00% 0.0000 0.00)`       | Heading text color.                              |
+| `--clndr-header-text-contrast`          | `oklch(0.00% 0.0000 0.00)`         | Header text contrast color.                      |
+| `--clndr-font-family`                   | `'Droid Sans Mono'`                | Base font family.                                |
+| `--clndr-font-size`                     | `14px`                             | Base font size.                                  |
+| `--clndr-heading-font-size`             | `14px`                             | Heading font size.                               |
+| `--clndr-subheading-font-size`          | `1em`                              | Subheading font size.                            |
+| `--clndr-weekday-header-font-size`      | `10px`                             | Weekday header font size.                        |
+| `--clndr-day-font-size`                 | `12px`                             | Day number font size.                            |
+| `--clndr-nav-size`                      | `calc(var(--clndr-font-size) * 2)` | Nav arrow size.                                  |
+
+Notes
+
+- In modern themes, some variables may be overridden per mode (e.g., table mode sets `--clndr-grid-gap: 1px`). You can still override them on the container to force a value.
+- Variables use OKLCH color values by default for better perceptual uniformity; standard CSS color values work as well.
+
+### Exported Templates
+
+CLNDR ships a few ready‑to‑use HTML templates you can plug in directly or pre‑compile with your preferred engine. They’re exported from the main entry for ESM and UMD builds.
+
+Exports
+
+- `DEFAULT_TEMPLATE` — Classic single‑month template (month name + weekday headers + 7×N grid + Today button).
+- `GRID_INTERVAL_TEMPLATE` — Rolling grid interval (e.g., 14 days with a 7‑day paging interval).
+- `MONTHS_INTERVAL_TEMPLATE_MODERN` — Modern multi‑month header with side‑by‑side month grids.
+
+Usage (ESM)
+
+```ts
+import {
+  clndr,
+  DEFAULT_TEMPLATE,
+  GRID_INTERVAL_TEMPLATE,
+  MONTHS_INTERVAL_TEMPLATE_MODERN
+} from '@brandontom/luxon-clndr'
+
+// 1) Classic monthly view (uses defaults)
+clndr('#cal-month', {
+  template: DEFAULT_TEMPLATE,
+  applyThemeClasses: true, // optional convenience classes
+  theme: 'default'
+})
+
+// 2) 14‑day rolling interval grid (pages 7 days at a time)
+clndr('#cal-grid', {
+  template: GRID_INTERVAL_TEMPLATE,
+  lengthOfTime: { days: 14, interval: 7 },
+  applyThemeClasses: true,
+  theme: 'grid'
+})
+
+// 3) Three‑month side‑by‑side months view
+clndr('#cal-months', {
+  template: MONTHS_INTERVAL_TEMPLATE_MODERN,
+  lengthOfTime: { months: 3 },
+  applyThemeClasses: true,
+  theme: 'months'
+})
+```
+
+Template compilation
+
+- If you pass `template: <string>`, CLNDR will compile it with `_.template` when a global `_` is available (UMD + Lodash/Underscore). Otherwise it falls back to a minimal internal compiler that supports `<%= ... %>` substitutions only.
+- For ESM projects, prefer pre‑compiling the exported template with Lodash (or your engine of choice) and passing it via `render`:
+
+```ts
+import _ from 'lodash-es'
+import { clndr, DEFAULT_TEMPLATE } from '@brandontom/luxon-clndr'
+
+const render = _.template(DEFAULT_TEMPLATE)
+clndr('#cal', { render })
+```
+
+TypeScript helper
+
+- `TemplateRenderer` is exported if you’d like to type your custom renderer: `(data) => string`.
 
 ### Constraints & Datepickers
 
