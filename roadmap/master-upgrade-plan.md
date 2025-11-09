@@ -85,24 +85,21 @@ Status: TS modules and Moment adapter are implemented under `src/ts`. Legacy `sr
 - [x] Update README/demos to reference Luxon only.
 - Deliverable: Moment-free major release.
 
-## Phase 11 – Distribution (GitHub Actions) (0.5–1 week)
+## Phase 11 – Distribution (GitHub Actions) (0.5–1 week) ✅
 
 Automate build, test, and release workflows (final phase).
 
-- [ ] Add .github/workflows/ci.yml to run on PRs and pushes:
+- [x] Add .github/workflows/ci.yml to run on PRs and pushes:
   - Jobs: lint, build (Rollup), test (Jest) with matrix on Node LTS and DATE_LIB=moment|luxon.
   - Cache dependencies and Jest cache; upload coverage; store build artifacts.
-- [ ] Add release automation via Release Please:
-  - Add
-    elease-please-config.json and .release-please-manifest.json to configure package, changelog sections, and release type.
+- [x] Add release automation via Release Please:
+  - Add release-please-config.json and .release-please-manifest.json to configure package, changelog sections, and release type.
   - Add .github/workflows/release-please.yml using google-github-actions/release-please-action to open release PRs and create GitHub Releases on merge.
-- [ ] Add publish workflow on
-      elease: published (e.g., .github/workflows/publish.yml):
-  - Build with Rollup; publish to npm with provenance (
-    pm publish --provenance) using NPM_TOKEN.
+- [x] Add publish workflow on release: published (e.g., .github/workflows/publish.yml):
+  - Build with Rollup; publish beta pre-releases to npm with provenance (npm publish --provenance --tag next) using NPM_TOKEN.
   - Upload dist/\*, source maps, and dist/clndr.d.ts as release assets if desired.
-- [ ] Versioning + changelog: use Release Please for managed version bumps and CHANGELOG generation.
-- [ ] Security: use organization secrets for NPM_TOKEN; enable branch protection and required checks.
+- [x] Versioning + changelog: use Release Please for managed version bumps and CHANGELOG generation.
+- [x] Security: use organization secrets for NPM_TOKEN; enable branch protection and required checks.
 
 ## Configuration
 
