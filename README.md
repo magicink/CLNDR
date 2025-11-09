@@ -847,9 +847,8 @@ npm run <script>
 - `size`: Print built artifact sizes in `dist/`.
 - `smoke`: Run Puppeteer-based smoke tests against `demo/index.html` and `tests/test.html` (TypeScript runner via Bun).
 - `smoke:node`: Node.js ESM variant of the smoke tests.
-- `baseline:snapshots`: Capture baseline HTML and PNG snapshots of the demo and tests pages to `roadmap/baseline/` (uses Puppeteer).
 - `ci:check`: End-to-end CI validation: type-check, TS compile, build, unit tests with coverage, and smoke tests.
 
 Notes:
 
-- Some scripts (smoke/baseline) use Puppeteer to launch a headless browser; ensure your environment can run Chromium. Bun is used by a few developer scripts, but Node-based variants are also provided.
+- Some scripts (smoke) use Puppeteer to launch a headless browser; ensure your environment can run Chromium. Bun is used by a few developer scripts, but Node-based variants are also provided.

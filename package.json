@@ -40,7 +40,6 @@
     "LICENSE.md"
   ],
   "scripts": {
-    "baseline:snapshots": "bun scripts/capture-baseline.ts",
     "build": "rimraf dist && cross-env NODE_ENV=development rollup -c",
     "build:prod": "cross-env NODE_ENV=production rollup -c",
     "build:ts": "tsc -p tsconfig.json",
@@ -72,6 +71,7 @@
     "@rollup/plugin-typescript": "^12.3.0",
     "@types/jest": "^30.0.0",
     "@types/jquery": "^3.5.33",
+    "@types/luxon": "^3.7.1",
     "cross-env": "^10.1.0",
     "full-icu": "^1.5.0",
     "husky": "^9.1.7",
