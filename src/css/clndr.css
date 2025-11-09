@@ -724,6 +724,16 @@ p {
   /* Uses variables defined on .clndr; consumers can override */
 }
 
+/* Modern Grid/Months: adopt Basic Modern palette (colors only) */
+.clndr.clndr--theme-modern.clndr--mode-grid,
+.clndr.clndr--theme-modern.clndr--mode-months {
+  --clndr-border: var(--clndr-table-border-color);
+  --clndr-accent: var(--clndr-table-header-bg);
+  --clndr-header-text-contrast: var(--clndr-table-header-text);
+  --clndr-today-bg: var(--clndr-table-today-bg);
+  --clndr-muted-bg: var(--clndr-empty-bg);
+}
+
 /* Header controls: prev | month | next */
 .clndr.clndr--theme-modern .clndr-controls {
   display: grid;

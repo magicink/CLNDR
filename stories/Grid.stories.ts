@@ -31,10 +31,12 @@ const meta: Meta = {
     if (args.theme !== 'modern') {
       el.classList.add('cal2')
     }
+    // Align Modern Grid color scheme with Basic Modern (table-mode palette)
     ;(el as any).__api = clndr(el, {
       ...args,
       template: GRID_TEMPLATE
     })
+    // Use standard modern palette without JS overrides
     return el
   },
   argTypes: {
