@@ -90,7 +90,7 @@ Status: TS modules and Moment adapter are implemented under `src/ts`. Legacy `sr
 Automate build, test, and release workflows (final phase).
 
 - [x] Add .github/workflows/ci.yml to run on PRs and pushes:
-  - Jobs: lint, build (Rollup), test (Jest) with matrix on Node LTS and DATE_LIB=moment|luxon.
+  - Jobs: lint, build (Rollup), test (Jest) with matrix on Node LTS and DATE_LIB=luxon.
   - Cache dependencies and Jest cache; upload coverage; store build artifacts.
 - [x] Add release automation via Release Please:
   - Add release-please-config.json and .release-please-manifest.json to configure package, changelog sections, and release type.
