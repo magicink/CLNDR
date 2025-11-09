@@ -920,3 +920,62 @@ p {
 .clndr.clndr--theme-modern.clndr--mode-table .clndr-grid .my-day.adjacent-month {
   background: var(--clndr-empty-bg);
 }
+
+/* Modern table-mode defaults: palette + spacing */
+.clndr.clndr--theme-modern.clndr--mode-table {
+  --clndr-grid-gap: 1px;
+  --clndr-border: var(--clndr-table-border-color);
+  --clndr-accent: var(--clndr-table-header-bg);
+  --clndr-header-text-contrast: var(--clndr-table-header-text);
+  --clndr-today-bg: var(--clndr-table-today-bg);
+  --clndr-muted-bg: var(--clndr-empty-bg);
+}/* Modern table-mode layout: full-width columns + fixed row heights */
+.clndr.clndr--theme-modern.clndr--mode-table .clndr-grid {
+  inline-size: 100%;
+  grid-template-columns: repeat(7, 1fr);
+}
+/* In table mode, let grid columns control width; override square sizing */
+.clndr.clndr--theme-modern.clndr--mode-table .clndr-grid .header-day,
+.clndr.clndr--theme-modern.clndr--mode-table .clndr-grid .day,
+.clndr.clndr--theme-modern.clndr--mode-table .clndr-grid .my-day,
+.clndr.clndr--theme-modern.clndr--mode-table .clndr-grid .empty,
+.clndr.clndr--theme-modern.clndr--mode-table .clndr-grid .adjacent-month {
+  inline-size: auto;
+}
+/* Classic Basic dimensions */
+.clndr.clndr--theme-modern.clndr--mode-table .clndr-grid .header-day { block-size: 30px; }
+.clndr.clndr--theme-modern.clndr--mode-table .clndr-grid .day,
+.clndr.clndr--theme-modern.clndr--mode-table .clndr-grid .my-day,
+.clndr.clndr--theme-modern.clndr--mode-table .clndr-grid .empty,
+.clndr.clndr--theme-modern.clndr--mode-table .clndr-grid .adjacent-month {
+  block-size: 85px;
+}
+/* Modern table-mode: align day number top-right like legacy */
+.clndr.clndr--theme-modern.clndr--mode-table .clndr-grid .day,
+.clndr.clndr--theme-modern.clndr--mode-table .clndr-grid .my-day,
+.clndr.clndr--theme-modern.clndr--mode-table .clndr-grid .empty,
+.clndr.clndr--theme-modern.clndr--mode-table .clndr-grid .adjacent-month {
+  display: flex;
+  align-items: flex-start;   /* top */
+  justify-content: flex-end; /* right */
+  padding: 8px;
+  box-sizing: border-box;
+  font-size: var(--clndr-day-font-size);
+}
+/* Modern table-mode: hover parity with legacy */
+.clndr.clndr--theme-modern.clndr--mode-table .clndr-grid .day:hover,
+.clndr.clndr--theme-modern.clndr--mode-table .clndr-grid .my-day:hover {
+  background: var(--clndr-day-hover-bg);
+}
+.clndr.clndr--theme-modern.clndr--mode-table .clndr-grid .day.today:hover,
+.clndr.clndr--theme-modern.clndr--mode-table .clndr-grid .my-day.today:hover {
+  background: var(--clndr-table-today-hover-bg);
+}
+.clndr.clndr--theme-modern.clndr--mode-table .clndr-grid .day.event:hover,
+.clndr.clndr--theme-modern.clndr--mode-table .clndr-grid .my-day.event:hover {
+  background: var(--clndr-event-hover-bg);
+}
+.clndr.clndr--theme-modern.clndr--mode-table .clndr-grid .empty:hover,
+.clndr.clndr--theme-modern.clndr--mode-table .clndr-grid .adjacent-month:hover {
+  background: var(--clndr-control-hover-bg);
+}

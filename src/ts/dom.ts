@@ -49,7 +49,7 @@ export class ClndrDOM<T = unknown> {
         : lot.months
           ? 'months'
           : 'table'
-      const defaultTheme = mode === 'table' ? 'default' : mode
+      const defaultTheme = mode === 'table' ? 'modern' : mode
       const theme = (this.options as any).theme || defaultTheme
       this.container
         .addClass(`clndr--mode-${mode}`)

@@ -10,38 +10,24 @@ export type TemplateRenderer = (data: any) => string
  * Default CLNDR template borrowed from the legacy plugin. This keeps parity
  * for consumers that relied on the built-in markup.
  */
-export const DEFAULT_TEMPLATE = `
-<div class='clndr-controls'>
-  <div class='clndr-control-button'>
-    <span class='clndr-previous-button'>previous</span>
-  </div>
-  <div class='month'><%= month %> <%= year %></div>
-  <div class='clndr-control-button rightalign'>
-    <span class='clndr-next-button'>next</span>
+export const DEFAULT_TEMPLATE = `\n<div class="clndr-controls">
+  <div class="clndr-previous-button">&lsaquo;</div>
+  <div class="month"><%= month %> <%= year %></div>
+  <div class="clndr-next-button">&rsaquo;</div>
+</div>
+<div class="clndr-grid">
+  <div class="days-of-the-week">
+    <% for (var i = 0; i < daysOfTheWeek.length; i++) { %>
+      <div class="header-day"><%= daysOfTheWeek[i] %></div>
+    <% } %>
+    <div class="days">
+      <% for (var di = 0; di < days.length; di++) { var day = days[di]; %>
+        <div class="<%= day.classes %>"><%= day.day %></div>
+      <% } %>
+    </div>
   </div>
 </div>
-<table class='clndr-table' border='0' cellspacing='0' cellpadding='0'>
-  <thead>
-    <tr class='header-days'>
-      <% for(var i = 0; i < daysOfTheWeek.length; i++) { %>
-        <td class='header-day'><%= daysOfTheWeek[i] %></td>
-      <% } %>
-    </tr>
-  </thead>
-  <tbody>
-    <% for(var i = 0; i < numberOfRows; i++){ %>
-      <tr>
-        <% for(var j = 0; j < 7; j++){ %>
-          <% var d = j + i * 7; %>
-          <td class='<%= days[d].classes %>'>
-            <div class='day-contents'><%= days[d].day %></div>
-          </td>
-        <% } %>
-      </tr>
-    <% } %>
-  </tbody>
-</table>
-`.trim()
+<div class="clndr-today-button">Today</div>\n`.trim()
 
 /**
  * Very small, naive template compiler for internal tests/examples.
