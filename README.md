@@ -29,11 +29,8 @@ Project repo: https://github.com/magicink/CLNDR
 
 ## Install
 
-Install from npm and use with a bundler, or load the UMD via a CDN.
+Install with Bun and use with a bundler, or load the UMD via a CDN.
 
-- npm: `npm install @brandontom/luxon-clndr`
-- yarn: `yarn add @brandontom/luxon-clndr`
-- pnpm: `pnpm add @brandontom/luxon-clndr`
 - bun: `bun add @brandontom/luxon-clndr`
 
 CDN (UMD global `clndr`):
@@ -60,7 +57,7 @@ Luxon is used via the DateAdapter.
 
 ### Using Bun
 
-You can install CLNDR via [Bun](https://bun.sh):
+Install and run scripts with [Bun](https://bun.sh):
 
 ```shell
 bun add @brandontom/luxon-clndr
@@ -68,8 +65,39 @@ bun add @brandontom/luxon-clndr
 
 Lodash is not installed by default. This allows you to use whichever templating
 engine you want to. If you want to use the default `template` option with
-Lodash, just install it as a dependency of your project:
-`bun add lodash`.
+Lodash, install it as a dependency of your project (prefer ESM build):
+`bun add lodash-es` (or `bun add lodash` for CJS-only setups).
+
+### Styles
+
+This package ships a first-class CSS export for the default CLNDR styles. Import it from your app or docs site:
+
+```ts
+// ESM
+import '@brandontom/luxon-clndr/clndr.css'
+```
+
+If you prefer to copy or customize the stylesheet, you can also reference the built file directly from `dist/clndr.css` in the package.
+
+Theme and mode classes (opt-in)
+
+- CLNDR can apply container classes so you don’t need external wrapper elements:
+  - Mode: `clndr--mode-table | clndr--mode-grid | clndr--mode-months`
+  - Theme: `clndr--theme-default | clndr--theme-grid | clndr--theme-months`
+- Enable this by passing `applyThemeClasses: true` when you create CLNDR. Optionally set `theme`:
+
+```ts
+const api = clndr('#cal', {
+  // Use the default month template
+  template: DEFAULT_TEMPLATE,
+  // Opt into container classes for styling
+  applyThemeClasses: true,
+  // Optional override (defaults by mode): 'default' | 'grid' | 'months'
+  theme: 'default'
+})
+```
+
+Backward compatibility: while the CSS is being refactored, CLNDR also adds a legacy wrapper class (`cal1|cal2|cal3`) on the host element when `applyThemeClasses` is true so the existing stylesheet continues to work without manual wrappers. Wrapper usage will be deprecated once the stylesheet targets the new classes directly.
 
 ### TypeScript Entry (ESM/UMD)
 
@@ -827,10 +855,10 @@ There are many wonderful places to seek help, like Stack Overflow.
 
 ### Scripts
 
-Use your preferred package manager to run the scripts below (examples shown with npm; replace with `yarn`, `pnpm`, or `bun` as you like):
+Use Bun to run the scripts below:
 
 ```sh
-npm run <script>
+bun run <script>
 ```
 
 - `build`: Clean `dist` and build development bundles with Rollup.

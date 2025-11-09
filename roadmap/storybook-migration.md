@@ -22,7 +22,7 @@ This plan replaces the standalone demo and manual test pages (`demo/index.html`,
 - Import CLNDR from source for faster iteration: `import { clndr, DEFAULT_TEMPLATE } from '../src/ts'`
   - jQuery is already a dependency; bundler provides it
 - Include demo CSS globally in preview
-- For templates requiring loops, use Underscore templates (install `underscore`) or compile once within stories and pass as `render`
+- For templates requiring loops, prefer Lodash templates (install `lodash-es`) or compile once within stories and pass as `render`
 - Write plain-HTML stories that render a container element and instantiate CLNDR imperatively
 
 ## Setup Steps
@@ -31,7 +31,7 @@ This plan replaces the standalone demo and manual test pages (`demo/index.html`,
 
 - `storybook`, `@storybook/html`, `@storybook/html-vite`
 - `@storybook/addon-essentials`, `@storybook/addon-a11y`, `@storybook/addon-interactions`, `@storybook/test`
-- `underscore` (for story templates parity)
+- `lodash-es` (for story templates parity)
 
 2. Add config
 
@@ -105,7 +105,7 @@ Notes
 - jQuery/UMD vs ESM
   - Use ESM `clndr` import in stories to avoid UMD globals
 - Template engine
-  - Underscore is required only for story templates using loops; internal default template doesn’t need it
+  - Lodash (preferred) or Underscore is required only for story templates using loops; internal default template doesn’t need it
 - CSS parity
   - Import `demo/css/clndr.css` in preview to maintain visual parity; add a11y focus styles as needed
 

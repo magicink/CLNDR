@@ -103,6 +103,10 @@ interface ClndrOptions {
   lengthOfTime?: ClndrLengthOfTime
   extras?: any
   constraints?: ClndrConstraints | null
+  /** Optional visual theme applied to the container. Defaults by mode. */
+  theme?: 'default' | 'grid' | 'months' | (string & {})
+  /** When true, applies `clndr--mode-*` and `clndr--theme-*` classes to the container. */
+  applyThemeClasses?: boolean
   // Adapter selection & i18n surface
   /** Advanced injection: custom adapter implementing the DateAdapter surface */
   dateAdapter?: any

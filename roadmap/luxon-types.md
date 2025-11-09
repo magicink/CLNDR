@@ -3,7 +3,7 @@
 ## Findings
 
 - Installed version: `luxon@3.7.2` (package exports JS only; no bundled `.d.ts`).
-- DefinitelyTyped provides types: `@types/luxon@3.7.1` (current as of `npm view`).
+- DefinitelyTyped provides types: `@types/luxon@3.7.1`.
 - Repo contains a local shim at `types/luxon.d.ts` that declares a minimal subset of Luxon’s API (DateTime, Info) used by the adapter and tests.
 - tsconfig uses `"moduleResolution": "Bundler"` with `ts-jest` for tests. The shim comment notes previous issues resolving Luxon’s types under this resolution strategy.
 
@@ -22,7 +22,7 @@
 
 1. Add types dependency
 
-- `npm i -D @types/luxon` (or yarn/pnpm/bun equivalent)
+- `bun add -d @types/luxon`
 
 2. Remove the local shim
 
@@ -30,8 +30,8 @@
 
 3. Verify builds/tests
 
-- `npm run type-check`
-- `npm test`
+- `bun run type-check`
+- `bun run test`
 
 4. Optional: test-only tsconfig (if needed)
 

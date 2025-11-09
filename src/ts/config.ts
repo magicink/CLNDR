@@ -110,6 +110,10 @@ export function normalizeOptions(
     constraints: inOptions.constraints ?? null
   }
 
+  // Pass-through visual/theming flags without affecting core behavior
+  ;(o as any).applyThemeClasses = (inOptions as any).applyThemeClasses
+  ;(o as any).theme = (inOptions as any).theme
+
   const daysOfTheWeek = computeWeekdayLabels(adapter, o)
 
   return { options: o, daysOfTheWeek }

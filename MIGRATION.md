@@ -6,7 +6,7 @@ This guide helps migrate from legacy CLNDR v1.x (e.g., 1.5.1) to the modern Type
 
 - Core rewritten in TypeScript with adapter-based date handling (Luxon via DateAdapter)
 - ESM and UMD builds: `dist/clndr.esm.js` and `dist/clndr.umd.js` (minified in production builds)
-- Optional template rendering via Underscore/Lodash `_.template()`; minimal internal renderer as fallback
+- Optional template rendering via Lodash (preferred) or Underscore `_.template()`; minimal internal renderer as fallback
 - jQuery plugin API remains for backward compatibility
 
 ## Breaking/Behavioral Changes
@@ -18,9 +18,9 @@ This guide helps migrate from legacy CLNDR v1.x (e.g., 1.5.1) to the modern Type
   - Continue to work temporarily, but a console warning is logged
   - Action: Provide ISO strings (recommended), native `Date`, or set `dateAdapter`
 - Templates
-  - If Underscore/Lodash is present, CLNDR compiles templates with `_.template`
+  - If Lodash/Underscore is present, CLNDR compiles templates with `_.template` (Lodash preferred)
   - Otherwise, a minimal internal renderer supports only `<%= ... %>` (no loops/conditionals)
-  - Action: include Underscore or provide your own `render(data)` function
+  - Action: include Lodash (recommended for ESM: `lodash-es`) or provide your own `render(data)` function
 - Multi-day events mapping is explicit via `multiDayEvents` option
 - Export surface is modernized; ESM consumers can import helpers directly
 
@@ -33,16 +33,22 @@ This guide helps migrate from legacy CLNDR v1.x (e.g., 1.5.1) to the modern Type
    - Provide a custom `dateAdapter` if needed; otherwise the default Luxon adapter is used
 
 3. Templates
-   - Keep using your existing Underscore templates; ensure Underscore is loaded
+   - Keep using your existing Lodash/Underscore templates; ensure Lodash is loaded
    - Or pass a `render(data)` function that returns HTML
 
-4. Multi-day Events
+4. Wrapper-free styling (opt-in)
+   - New (optional) options:
+     - `applyThemeClasses: true` — adds container classes like `clndr--mode-table` and `clndr--theme-default`
+     - `theme?: 'default' | 'grid' | 'months'` — override default theme for the current mode
+   - While CSS is being refactored, CLNDR also adds a legacy wrapper class (`cal1|cal2|cal3`) automatically when `applyThemeClasses` is true. This keeps existing styles working without manual wrappers. Wrapper usage will be deprecated once the stylesheet targets the new classes.
+
+5. Multi-day Events
    - Configure mapping explicitly:
      ```js
      multiDayEvents: { startDate: 'startDate', endDate: 'endDate', singleDay: 'date' }
      ```
 
-5. Selection and Constraints
+6. Selection and Constraints
    - Options are compatible; new options include `trackSelectedDate`, `ignoreInactiveDaysInSelection`
 
 ## jQuery Plugin vs. Programmatic API
@@ -59,7 +65,9 @@ This guide helps migrate from legacy CLNDR v1.x (e.g., 1.5.1) to the modern Type
 ## Troubleshooting
 
 - Template code appears on the page
-  - Ensure Underscore is loaded or provide a `render()` function
+  - Ensure Lodash is loaded or provide a `render()` function
+- Styles not applying without `cal1/cal2/cal3`
+  - Pass `applyThemeClasses: true` so CLNDR adds container theme/mode classes (and a temporary legacy wrapper class) for styling without manual wrappers.
 - Events not spanning days correctly
   - Check `multiDayEvents` mapping
 - Locale/Week start differences

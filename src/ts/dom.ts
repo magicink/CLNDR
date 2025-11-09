@@ -40,6 +40,32 @@ export class ClndrDOM<T = unknown> {
     this.assertSingleElement(this.element)
     this.element.html("<div class='clndr'></div>")
     this.container = this.element.find('.clndr')
+    // Optionally apply mode/theme classes for wrapper-free styling.
+    if ((this.options as any).applyThemeClasses) {
+      // Mode is derived from lengthOfTime (days => grid, months => months, else table).
+      const lot = (this.options.lengthOfTime || {}) as any
+      const mode: 'table' | 'grid' | 'months' = lot.days
+        ? 'grid'
+        : lot.months
+          ? 'months'
+          : 'table'
+      const defaultTheme = mode === 'table' ? 'default' : mode
+      const theme = (this.options as any).theme || defaultTheme
+      this.container
+        .addClass(`clndr--mode-${mode}`)
+        .addClass(`clndr--theme-${theme}`)
+      // Also apply legacy wrapper class on the host element for existing CSS:
+      // default->cal1, grid->cal2, months->cal3
+      const legacy =
+        theme === 'default'
+          ? 'cal1'
+          : theme === 'grid'
+            ? 'cal2'
+            : theme === 'months'
+              ? 'cal3'
+              : null
+      if (legacy) this.element.addClass(legacy)
+    }
     this.eventType = this.options.useTouchEvents ? 'touchstart' : 'click'
     this.eventName = `${this.eventType}.clndr`
     this.bindEvents()

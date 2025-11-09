@@ -79,7 +79,15 @@ class LuxonAdapterDate implements AdapterDate<DateTime> {
   }
 
   daysInMonth(): number {
-    return this.dt.daysInMonth
+    // @types/luxon models this as number | undefined when the DateTime is invalid
+    // Ensure we always return a number per AdapterDate contract.
+    const dim = (this.dt as any).daysInMonth as number | undefined
+    if (typeof dim === 'number') return dim
+    // Fallback: compute by moving to end of month of a safe instance
+    const safe = this.dt.isValid
+      ? this.dt
+      : DateTime.now().set({ year: this.dt.year, month: this.dt.month, day: 1 })
+    return safe.endOf('month').day
   }
 
   isBefore(other: AdapterDate<DateTime>): boolean {
@@ -128,7 +136,7 @@ export class LuxonDateAdapter implements DateAdapter<DateTime> {
     const dt = DateTime.isDateTime(value)
       ? value
       : DateTime.fromJSDate(value as unknown as Date, {
-          locale: this.locale,
+          // locale not accepted in older luxon type defs for fromJSDate
           zone: this.zone
         })
     const localized = dt.setLocale(this.locale)
