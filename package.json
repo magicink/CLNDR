@@ -1,6 +1,6 @@
 {
   "name": "@brandontom/luxon-clndr",
-  "version": "0.0.1",
+  "version": "0.1.0",
   "description": "A jQuery calendar plugin that uses HTML templates.",
   "keywords": [
     "clndr",
