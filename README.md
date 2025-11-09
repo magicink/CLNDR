@@ -46,10 +46,13 @@ CDN (UMD global `clndr`):
 
 Returning to grab a new version? Have a look at the `CHANGELOG.md` file.
 
-If you'd like to run some tests in a particular browser or environment,
-`tests/test.html` contains a list of basic functionality tests. When
-contributing, please run these (and add to them when appropriate) before
-submitting a pull request or issue!
+For manual exploration and visual checks, use Storybook:
+
+```shell
+bun run storybook
+```
+
+The Jest suite covers core behavior; please add tests when contributing.
 
 ## Dependencies
 
@@ -1112,10 +1115,10 @@ bun run <script>
 - `format:check`: Check formatting without writing changes.
 - `prepare`: Install-time hook to set up Husky git hooks (safe no-op outside Git).
 - `size`: Print built artifact sizes in `dist/`.
-- `smoke`: Run Puppeteer-based smoke tests against `demo/index.html` and `tests/test.html` (TypeScript runner via Bun).
-- `smoke:node`: Node.js ESM variant of the smoke tests.
+- `smoke`: Minimal smoke check that verifies built artifacts exist in `dist/`.
+- `smoke:node`: Node.js ESM variant of the smoke check.
 - `ci:check`: End-to-end CI validation: type-check, TS compile, build, unit tests with coverage, and smoke tests.
 
 Notes:
 
-- Some scripts (smoke) use Puppeteer to launch a headless browser; ensure your environment can run Chromium. Bun is used by a few developer scripts, but Node-based variants are also provided.
+- Bun is used by a few developer scripts; Node-based variants are also provided.
