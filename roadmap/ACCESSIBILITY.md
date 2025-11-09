@@ -254,3 +254,59 @@ Notes
 ---
 
 If you want, I can: (a) switch the built-in template to the accessible version, (b) add the keyboard handler scaffold in `src/ts/dom.ts`, and/or (c) add a minimal `jest-axe` suite to prevent future regressions.
+
+## A11y Roadmap
+
+This section tracks the phased plan for delivering the accessibility improvements outlined above. It mirrors the standalone roadmap and is provided here for a single-source reference.
+
+### Phase 1 - Quick Wins (BC-Friendly)
+
+- Replace navigation/today controls with `<button type="button">` and clear `aria-label`s; ensure visible focus styles.
+- Add a heading for the current period and reference it from the calendar container via `aria-labelledby`; announce updates with `aria-live="polite"`.
+- Use `<th scope="col">` for weekday headers; add a visually hidden `<caption>`.
+- Render days as buttons inside cells with `data-date` and localized `aria-label`s; reflect states with `aria-current="date"`, `aria-pressed`/`aria-selected`, and `aria-disabled`.
+- Toggle `disabled`/`aria-disabled` on constrained navigation in `applyConstraintClasses()`.
+- Preserve existing class tokens/selectors for backward compatibility.
+
+Implementation targets: `src/ts/templates.ts`, `src/ts/dom.ts`, `src/css/clndr.css`.
+
+### Phase 2 - Keyboard Navigation & Focus
+
+- Add delegated `keydown` handlers for `.day` supporting Arrow, Home/End, PageUp/PageDown; prevent default scrolling for handled keys.
+- After render, focus the selected day; otherwise focus the first focusable day.
+- Optional: roving tabindex (`tabindex=0` for the focused day, `-1` for others).
+
+Implementation targets: `src/ts/dom.ts`, `src/ts/core.ts`, tests in `tests/jest`.
+
+### Phase 3 - Semantics Options & I18n
+
+- Optional ARIA Grid mode (`role="grid"`/`row`/`gridcell`) as a configuration.
+- Localized labels for navigation and day `aria-label` formatting.
+- Prefer `data-date` for programmatic lookups while keeping `calendar-day-YYYY-MM-DD` for compatibility.
+
+### Non-Goals (For Now)
+
+- Do not remove existing CSS class tokens relied upon by consumers.
+- Do not require ARIA Grid semantics; keep table-based as default.
+
+### Testing & Docs
+
+- DOM event tests for keyboard navigation and disabled navigation.
+- Rendering tests for ARIA attributes, heading, caption.
+- README updates summarizing accessibility features and options.
+
+### Work Items (Checklist)
+
+- [ ] Update default template semantics (`src/ts/templates.ts`).
+- [ ] Add `data-date` and ARIA state reflection on days.
+- [ ] Toggle `disabled`/`aria-disabled` for constrained navigation.
+- [ ] Add keyboard handlers and focus management (`src/ts/dom.ts`).
+- [ ] Add visible focus styles and `.sr-only` helper (`src/css/clndr.css`).
+- [ ] Add Jest tests for keyboard and ARIA rendering.
+- [ ] Update README with accessibility guidance.
+
+### Open Questions
+
+- `aria-selected` vs `aria-pressed` for day selection when using buttons.
+- Focus wrapping across months vs clamping per rendered block.
+- Whether navigating to "Today" should also move focus.
