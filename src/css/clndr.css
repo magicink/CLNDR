@@ -887,3 +887,36 @@ p {
 .clndr.clndr--theme-modern .clndr-controls .clndr-next-year-button:hover {
   background-color: var(--clndr-control-hover-bg);
 }
+
+/* Modern Basic (table-mode grid) tweaks: classic gridlines + header height */
+.clndr.clndr--theme-modern.clndr--mode-table .clndr-grid {
+  background: var(--clndr-table-border-color);
+  position: relative;
+  padding: 0;
+  border: none;
+  outline: none;
+}
+.clndr.clndr--theme-modern.clndr--mode-table .clndr-grid::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  border: 1px solid var(--clndr-table-border-color);
+  border-radius: var(--clndr-radius);
+  pointer-events: none;
+}
+.clndr.clndr--theme-modern.clndr--mode-table .clndr-grid .header-day {
+  block-size: 30px;
+}
+.clndr.clndr--theme-modern.clndr--mode-table .clndr-grid .day,
+.clndr.clndr--theme-modern.clndr--mode-table .clndr-grid .my-day {
+  background: #fff;
+}
+/* Modern Basic: restore state colors for today and adjacent months */
+.clndr.clndr--theme-modern.clndr--mode-table .clndr-grid .day.today,
+.clndr.clndr--theme-modern.clndr--mode-table .clndr-grid .my-day.today {
+  background: var(--clndr-table-today-bg);
+}
+.clndr.clndr--theme-modern.clndr--mode-table .clndr-grid .day.adjacent-month,
+.clndr.clndr--theme-modern.clndr--mode-table .clndr-grid .my-day.adjacent-month {
+  background: var(--clndr-empty-bg);
+}
