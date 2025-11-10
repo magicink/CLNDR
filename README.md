@@ -589,6 +589,7 @@ Overrideable variables and defaults
 | `--clndr-grid-cell-size`                | `25px`                             | Grid cell size (grid/months modes).              |
 | `--clndr-grid-gap`                      | `0px`                              | Gap between grid cells.                          |
 | `--clndr-radius`                        | `4px`                              | Rounding for modern interval grids.              |
+| `--clndr-nav-radius`                    | `4px`                              | Rounding for navigation buttons.                 |
 | `--clndr-month-gap`                     | `8px`                              | Gap between whole months (month-interval views). |
 | `--clndr-border`                        | `oklch(66.46% 0.2222 25.65)`       | Grid/frame border color.                         |
 | `--clndr-accent`                        | `oklch(66.46% 0.2222 25.65)`       | Weekday header background (grid).                |
@@ -612,8 +613,10 @@ Overrideable variables and defaults
 | `--clndr-surface-bg`                    | `oklch(96.72% 0.0000 0.00)`        | Surface/background behind sections.              |
 | `--clndr-day-bg`                        | `oklch(100.00% 0.0000 0.00)`       | Default day cell background.                     |
 | `--clndr-rule-color`                    | `oklch(37.53% 0.0000 0.00)`        | Divider/rule color.                              |
+| `--clndr-button-border`                 | `0`                                | Base border for buttons (set e.g. `1px solid`).  |
 | `--clndr-month-min-width`               | `177px`                            | Min width per month tile (months view).          |
 | `--clndr-months-controls-margin-bottom` | `8px`                              | Gap under month header (months view).            |
+| `--clndr-months-today-gap`              | `8px`                              | Gap above Today button (months view).            |
 | `--clndr-controls-bottom-margin`        | `3px`                              | Gap below top controls row.                      |
 | `--clndr-nav-padding`                   | `0.1em 0.25em`                     | Nav arrow hit-area padding.                      |
 | `--clndr-table-header-height`           | `30px`                             | Table-mode header cell height.                   |
@@ -629,6 +632,12 @@ Overrideable variables and defaults
 | `--clndr-weekday-header-font-size`      | `10px`                             | Weekday header font size.                        |
 | `--clndr-day-font-size`                 | `12px`                             | Day number font size.                            |
 | `--clndr-nav-size`                      | `calc(var(--clndr-font-size) * 2)` | Nav arrow size.                                  |
+| `--clndr-border-width`                  | `1px`                              | Border width for grid frames.                    |
+| `--clndr-table-border-width`            | `1px`                              | Border width for table-mode overlay frame.       |
+| `--clndr-focus-outline-width`           | `2px`                              | Keyboard focus outline width.                    |
+| `--clndr-focus-outline-offset`          | `2px`                              | Keyboard focus outline offset.                   |
+| `--clndr-visually-hidden-size`          | `1px`                              | Size used by visually-hidden utility.            |
+| `--clndr-visually-hidden-margin`        | `-1px`                             | Margin used by visually-hidden utility.          |
 
 Notes
 

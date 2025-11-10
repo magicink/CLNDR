@@ -4,6 +4,16 @@
   --clndr-grid-cell-size: 25px;
   --clndr-grid-gap: 0px;
   --clndr-radius: 4px; /* rounding for modern interval grids */
+  /* Dimensions for visually-hidden utility */
+  --clndr-visually-hidden-size: 1px;
+  --clndr-visually-hidden-margin: -1px;
+  /* Border/outline widths */
+  --clndr-border-width: 1px;
+  --clndr-table-border-width: 1px;
+  --clndr-focus-outline-width: 2px;
+  --clndr-focus-outline-offset: 2px;
+  /* Rounding for navigation controls (prev/next/year/today) */
+  --clndr-nav-radius: var(--clndr-radius);
   /* Gap between whole month calendars in month interval views */
   --clndr-month-gap: 8px;
 
@@ -40,6 +50,7 @@
   /* Modern theme sizing */
   --clndr-month-min-width: 177px;                 /* min width per month tile in months view */
   --clndr-months-controls-margin-bottom: 8px;     /* gap under month header in months view */
+  --clndr-months-today-gap: 8px;                  /* gap above Today button in months view */
   --clndr-controls-bottom-margin: 3px;            /* small gap below controls row */
   --clndr-nav-padding: 0.1em 0.25em;              /* nav arrows padding */
   --clndr-table-header-height: 30px;              /* table-mode header cell height */
@@ -94,13 +105,19 @@
   border: var(--clndr-button-border, 0);
 }
 
+/* Rounded corners for all navigation buttons (overridable via --clndr-nav-radius) */
+.clndr .clndr-controls button,
+.clndr .clndr-today-button {
+  border-radius: var(--clndr-nav-radius);
+}
+
 /* Visually hidden utility for accessible captions/headings */
 .visually-hidden {
   position: absolute !important;
-  width: 1px !important;
-  height: 1px !important;
+  width: var(--clndr-visually-hidden-size) !important;
+  height: var(--clndr-visually-hidden-size) !important;
   padding: 0 !important;
-  margin: -1px !important;
+  margin: var(--clndr-visually-hidden-margin) !important;
   overflow: hidden !important;
   clip: rect(0 0 0 0) !important;
   white-space: nowrap !important;
@@ -109,9 +126,12 @@
 /* Wrapper-free theme aliases for grid view */
 .clndr.clndr--theme-grid .clndr-grid {
   text-align: center;
-  border: 1px solid var(--clndr-border);
+  border: var(--clndr-border-width) solid var(--clndr-border);
   display: inline-block;
-  width: 175px; /* 7 columns x 25px */
+  /* 7 columns x cell size + gaps */
+  inline-size: calc(
+    var(--clndr-grid-cell-size) * 7 + var(--clndr-grid-gap) * 6
+  );
 }
 .clndr.clndr--theme-grid .clndr-grid .header-day {
   float: none;
@@ -242,13 +262,17 @@
   );
   margin-inline: auto;
 }
+/* Ensure the date range text is centered relative to the 5-column header grid */
+.clndr.clndr--theme-modern.clndr--mode-grid .clndr-controls .clndr-previous-button { grid-column: 2; justify-self: start; }
+.clndr.clndr--theme-modern.clndr--mode-grid .clndr-controls .month { grid-column: 3; justify-self: center; }
+.clndr.clndr--theme-modern.clndr--mode-grid .clndr-controls .clndr-next-button { grid-column: 4; justify-self: end; }
 
 /* Core grid internals (7 columns) */
 .clndr.clndr--theme-modern .clndr-grid {
   display: grid;
   grid-template-columns: repeat(7, var(--clndr-grid-cell-size));
   gap: var(--clndr-grid-gap);
-  border: 1px solid var(--clndr-border);
+  border: var(--clndr-border-width) solid var(--clndr-border);
   /* Match legacy width (7 cells) rather than filling container */
   inline-size: calc(
     var(--clndr-grid-cell-size) * 7 + var(--clndr-grid-gap) * 6
@@ -281,6 +305,11 @@
 .clndr.clndr--theme-modern .clndr-grid .my-day.today { background-color: var(--clndr-today-bg); }
 .clndr.clndr--theme-modern .clndr-grid .empty,
 .clndr.clndr--theme-modern .clndr-grid .adjacent-month { background: var(--clndr-muted-bg); }
+/* Fade days from previous/next months in month interval views */
+.clndr.clndr--theme-modern .clndr-grid .day.adjacent-month,
+.clndr.clndr--theme-modern .clndr-grid .my-day.adjacent-month {
+  color: var(--clndr-inactive-text-color);
+}
 
 /* Match legacy state styles */
 .clndr.clndr--theme-modern .clndr-grid .day.selected,
@@ -346,6 +375,8 @@
 /* Today button, parity with legacy */
 .clndr.clndr--theme-modern .clndr-today-button { inline-size: 100%; text-align: center; cursor: pointer; padding-block: var(--clndr-today-padding-block); }
 .clndr.clndr--theme-modern .clndr-today-button:hover { background-color: var(--clndr-control-hover-bg); }
+/* Add configurable gap between months grid and Today button in months view */
+.clndr.clndr--theme-modern.clndr--mode-months .clndr-today-button { margin-top: var(--clndr-months-today-gap); }
 
 /* Small spacing under controls to match cal2 */
 .clndr.clndr--theme-modern .clndr-controls { margin-bottom: var(--clndr-controls-bottom-margin); }
@@ -367,6 +398,7 @@
   height: var(--clndr-nav-size);
   align-self: center;
   background-color: transparent; /* transparent by default */
+  border-radius: var(--clndr-nav-radius);
 }
 .clndr.clndr--theme-modern .clndr-controls .clndr-previous-button:hover,
 .clndr.clndr--theme-modern .clndr-controls .clndr-next-button:hover,
@@ -388,14 +420,14 @@
 .clndr .clndr-controls button:focus-visible,
 .clndr .days .day:focus-visible,
 .clndr .clndr-grid .day:focus-visible {
-  outline: 2px solid var(--clndr-border);
-  outline-offset: 2px;
+  outline: var(--clndr-focus-outline-width) solid var(--clndr-border);
+  outline-offset: var(--clndr-focus-outline-offset);
 }
 .clndr.clndr--theme-modern.clndr--mode-table .clndr-grid::after {
   content: '';
   position: absolute;
   inset: 0;
-  border: 1px solid var(--clndr-table-border-color);
+  border: var(--clndr-table-border-width) solid var(--clndr-table-border-color);
   border-radius: var(--clndr-radius);
   pointer-events: none;
 }
@@ -456,6 +488,16 @@
   padding: var(--clndr-table-day-padding);
   box-sizing: border-box;
   font-size: var(--clndr-day-font-size);
+}
+/* In table-mode, show event background without requiring hover */
+.clndr.clndr--theme-modern.clndr--mode-table .clndr-grid .day.event,
+.clndr.clndr--theme-modern.clndr--mode-table .clndr-grid .my-day.event {
+  background: var(--clndr-event-bg);
+}
+/* When a day is both today and event, use the specific today+event color */
+.clndr.clndr--theme-modern.clndr--mode-table .clndr-grid .day.today.event,
+.clndr.clndr--theme-modern.clndr--mode-table .clndr-grid .my-day.today.event {
+  background: var(--clndr-table-today-event-bg);
 }
 /* Modern table-mode: hover parity with legacy */
 .clndr.clndr--theme-modern.clndr--mode-table .clndr-grid .day:hover,
