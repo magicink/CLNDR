@@ -63,7 +63,7 @@
   --clndr-header-text-contrast: oklch(0.00% 0.0000 0.00);
 
   /* Typography */
-  --clndr-font-family: 'Droid Sans Mono';
+  --clndr-font-family: 'Droid Sans Mono', ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, 'Liberation Mono', 'Courier New', monospace;
   --clndr-font-size: 14px;
   --clndr-heading-font-size: 14px;
   --clndr-subheading-font-size: 1em;

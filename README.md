@@ -32,27 +32,11 @@ Project repo: https://github.com/magicink/CLNDR
 
 ## Install
 
-Install with Bun and use with a bundler, or load the UMD via a CDN.
+Install with Bun and use with a bundler.
 
 - bun: `bun add @brandontom/luxon-clndr`
 
-CDN (UMD global `clndr`):
-
-```html
-<script src="https://cdn.jsdelivr.net/npm/@brandontom/luxon-clndr/dist/clndr.umd.js"></script>
-<!-- or -->
-<script src="https://unpkg.com/@brandontom/luxon-clndr/dist/clndr.umd.js"></script>
-```
-
 Returning to grab a new version? Have a look at the `CHANGELOG.md` file.
-
-For manual exploration and visual checks, use Storybook:
-
-```shell
-bun run storybook
-```
-
-The Jest suite covers core behavior; please add tests when contributing.
 
 ## Dependencies
 
@@ -102,8 +86,6 @@ const api = clndr('#cal', {
   theme: 'default'
 })
 ```
-
-Backward compatibility: while the CSS is being refactored, CLNDR also adds a legacy wrapper class (`cal1|cal2|cal3`) on the host element when `applyThemeClasses` is true so the existing stylesheet continues to work without manual wrappers. Wrapper usage will be deprecated once the stylesheet targets the new classes directly.
 
 ### TypeScript Entry (ESM/UMD)
 
@@ -584,60 +566,60 @@ Example:
 
 Overrideable variables and defaults
 
-| Variable                                | Default                            | Purpose                                          |
-| --------------------------------------- | ---------------------------------- | ------------------------------------------------ |
-| `--clndr-grid-cell-size`                | `25px`                             | Grid cell size (grid/months modes).              |
-| `--clndr-grid-gap`                      | `0px`                              | Gap between grid cells.                          |
-| `--clndr-radius`                        | `4px`                              | Rounding for modern interval grids.              |
-| `--clndr-nav-radius`                    | `4px`                              | Rounding for navigation buttons.                 |
-| `--clndr-month-gap`                     | `8px`                              | Gap between whole months (month-interval views). |
-| `--clndr-border`                        | `oklch(66.46% 0.2222 25.65)`       | Grid/frame border color.                         |
-| `--clndr-accent`                        | `oklch(66.46% 0.2222 25.65)`       | Weekday header background (grid).                |
-| `--clndr-event-bg`                      | `oklch(85.93% 0.0987 135.79)`      | Event day background.                            |
-| `--clndr-today-bg`                      | `oklch(83.36% 0.0950 87.16)`       | Today background (grid theme).                   |
-| `--clndr-selected-bg`                   | `oklch(73.43% 0.1627 332.04)`      | Selected day background.                         |
-| `--clndr-muted-bg`                      | `oklch(89.75% 0.0000 0.00)`        | Empty/adjacent/inactive background.              |
-| `--clndr-inactive-text-color`           | `oklch(59.99% 0.0000 0.00)`        | Inactive text color.                             |
-| `--clndr-table-header-bg`               | `oklch(52.12% 0.1175 241.01)`      | Table header background.                         |
-| `--clndr-table-header-text`             | `oklch(100.00% 0.0000 0.00)`       | Table header text color.                         |
-| `--clndr-table-border-color`            | `oklch(0.00% 0.0000 0.00)`         | Table border color.                              |
-| `--clndr-day-hover-bg`                  | `oklch(94.91% 0.0000 0.00)`        | Day hover background (table mode).               |
-| `--clndr-table-today-bg`                | `oklch(83.96% 0.0637 212.57)`      | Today background (table mode).                   |
-| `--clndr-table-today-hover-bg`          | `oklch(77.99% 0.0855 213.06)`      | Today hover background (table mode).             |
-| `--clndr-table-today-event-bg`          | `oklch(84.80% 0.0649 162.94)`      | Today + event background (table mode).           |
-| `--clndr-event-hover-bg`                | `oklch(80.64% 0.1382 136.12)`      | Event hover background.                          |
-| `--clndr-empty-bg`                      | `oklch(94.91% 0.0000 0.00)`        | Empty cell background.                           |
-| `--clndr-inactive-alt-bg`               | `oklch(73.80% 0.0000 0.00)`        | Alternate inactive background.                   |
-| `--clndr-control-hover-bg`              | `oklch(89.75% 0.0000 0.00)`        | Control hover background.                        |
-| `--clndr-control-hover-bg-soft`         | `oklch(96.72% 0.0000 0.00)`        | Soft control hover background.                   |
-| `--clndr-surface-bg`                    | `oklch(96.72% 0.0000 0.00)`        | Surface/background behind sections.              |
-| `--clndr-day-bg`                        | `oklch(100.00% 0.0000 0.00)`       | Default day cell background.                     |
-| `--clndr-rule-color`                    | `oklch(37.53% 0.0000 0.00)`        | Divider/rule color.                              |
-| `--clndr-button-border`                 | `0`                                | Base border for buttons (set e.g. `1px solid`).  |
-| `--clndr-month-min-width`               | `177px`                            | Min width per month tile (months view).          |
-| `--clndr-months-controls-margin-bottom` | `8px`                              | Gap under month header (months view).            |
-| `--clndr-months-today-gap`              | `8px`                              | Gap above Today button (months view).            |
-| `--clndr-controls-bottom-margin`        | `3px`                              | Gap below top controls row.                      |
-| `--clndr-nav-padding`                   | `0.1em 0.25em`                     | Nav arrow hit-area padding.                      |
-| `--clndr-table-header-height`           | `30px`                             | Table-mode header cell height.                   |
-| `--clndr-table-day-height`              | `85px`                             | Table-mode day cell height.                      |
-| `--clndr-table-day-padding`             | `8px`                              | Table-mode day cell padding.                     |
-| `--clndr-heading-bg`                    | `oklch(52.65% 0.1637 19.70)`       | Heading/banner background.                       |
-| `--clndr-heading-text`                  | `oklch(100.00% 0.0000 0.00)`       | Heading text color.                              |
-| `--clndr-header-text-contrast`          | `oklch(0.00% 0.0000 0.00)`         | Header text contrast color.                      |
-| `--clndr-font-family`                   | `'Droid Sans Mono'`                | Base font family.                                |
-| `--clndr-font-size`                     | `14px`                             | Base font size.                                  |
-| `--clndr-heading-font-size`             | `14px`                             | Heading font size.                               |
-| `--clndr-subheading-font-size`          | `1em`                              | Subheading font size.                            |
-| `--clndr-weekday-header-font-size`      | `10px`                             | Weekday header font size.                        |
-| `--clndr-day-font-size`                 | `12px`                             | Day number font size.                            |
-| `--clndr-nav-size`                      | `calc(var(--clndr-font-size) * 2)` | Nav arrow size.                                  |
-| `--clndr-border-width`                  | `1px`                              | Border width for grid frames.                    |
-| `--clndr-table-border-width`            | `1px`                              | Border width for table-mode overlay frame.       |
-| `--clndr-focus-outline-width`           | `2px`                              | Keyboard focus outline width.                    |
-| `--clndr-focus-outline-offset`          | `2px`                              | Keyboard focus outline offset.                   |
-| `--clndr-visually-hidden-size`          | `1px`                              | Size used by visually-hidden utility.            |
-| `--clndr-visually-hidden-margin`        | `-1px`                             | Margin used by visually-hidden utility.          |
+| Variable                                | Default                                                                                                                 | Purpose                                          |
+| --------------------------------------- | ----------------------------------------------------------------------------------------------------------------------- | ------------------------------------------------ |
+| `--clndr-grid-cell-size`                | `25px`                                                                                                                  | Grid cell size (grid/months modes).              |
+| `--clndr-grid-gap`                      | `0px`                                                                                                                   | Gap between grid cells.                          |
+| `--clndr-radius`                        | `4px`                                                                                                                   | Rounding for modern interval grids.              |
+| `--clndr-nav-radius`                    | `4px`                                                                                                                   | Rounding for navigation buttons.                 |
+| `--clndr-month-gap`                     | `8px`                                                                                                                   | Gap between whole months (month-interval views). |
+| `--clndr-border`                        | `oklch(66.46% 0.2222 25.65)`                                                                                            | Grid/frame border color.                         |
+| `--clndr-accent`                        | `oklch(66.46% 0.2222 25.65)`                                                                                            | Weekday header background (grid).                |
+| `--clndr-event-bg`                      | `oklch(85.93% 0.0987 135.79)`                                                                                           | Event day background.                            |
+| `--clndr-today-bg`                      | `oklch(83.36% 0.0950 87.16)`                                                                                            | Today background (grid theme).                   |
+| `--clndr-selected-bg`                   | `oklch(73.43% 0.1627 332.04)`                                                                                           | Selected day background.                         |
+| `--clndr-muted-bg`                      | `oklch(89.75% 0.0000 0.00)`                                                                                             | Empty/adjacent/inactive background.              |
+| `--clndr-inactive-text-color`           | `oklch(59.99% 0.0000 0.00)`                                                                                             | Inactive text color.                             |
+| `--clndr-table-header-bg`               | `oklch(52.12% 0.1175 241.01)`                                                                                           | Table header background.                         |
+| `--clndr-table-header-text`             | `oklch(100.00% 0.0000 0.00)`                                                                                            | Table header text color.                         |
+| `--clndr-table-border-color`            | `oklch(0.00% 0.0000 0.00)`                                                                                              | Table border color.                              |
+| `--clndr-day-hover-bg`                  | `oklch(94.91% 0.0000 0.00)`                                                                                             | Day hover background (table mode).               |
+| `--clndr-table-today-bg`                | `oklch(83.96% 0.0637 212.57)`                                                                                           | Today background (table mode).                   |
+| `--clndr-table-today-hover-bg`          | `oklch(77.99% 0.0855 213.06)`                                                                                           | Today hover background (table mode).             |
+| `--clndr-table-today-event-bg`          | `oklch(84.80% 0.0649 162.94)`                                                                                           | Today + event background (table mode).           |
+| `--clndr-event-hover-bg`                | `oklch(80.64% 0.1382 136.12)`                                                                                           | Event hover background.                          |
+| `--clndr-empty-bg`                      | `oklch(94.91% 0.0000 0.00)`                                                                                             | Empty cell background.                           |
+| `--clndr-inactive-alt-bg`               | `oklch(73.80% 0.0000 0.00)`                                                                                             | Alternate inactive background.                   |
+| `--clndr-control-hover-bg`              | `oklch(89.75% 0.0000 0.00)`                                                                                             | Control hover background.                        |
+| `--clndr-control-hover-bg-soft`         | `oklch(96.72% 0.0000 0.00)`                                                                                             | Soft control hover background.                   |
+| `--clndr-surface-bg`                    | `oklch(96.72% 0.0000 0.00)`                                                                                             | Surface/background behind sections.              |
+| `--clndr-day-bg`                        | `oklch(100.00% 0.0000 0.00)`                                                                                            | Default day cell background.                     |
+| `--clndr-rule-color`                    | `oklch(37.53% 0.0000 0.00)`                                                                                             | Divider/rule color.                              |
+| `--clndr-button-border`                 | `0`                                                                                                                     | Base border for buttons (set e.g. `1px solid`).  |
+| `--clndr-month-min-width`               | `177px`                                                                                                                 | Min width per month tile (months view).          |
+| `--clndr-months-controls-margin-bottom` | `8px`                                                                                                                   | Gap under month header (months view).            |
+| `--clndr-months-today-gap`              | `8px`                                                                                                                   | Gap above Today button (months view).            |
+| `--clndr-controls-bottom-margin`        | `3px`                                                                                                                   | Gap below top controls row.                      |
+| `--clndr-nav-padding`                   | `0.1em 0.25em`                                                                                                          | Nav arrow hit-area padding.                      |
+| `--clndr-table-header-height`           | `30px`                                                                                                                  | Table-mode header cell height.                   |
+| `--clndr-table-day-height`              | `85px`                                                                                                                  | Table-mode day cell height.                      |
+| `--clndr-table-day-padding`             | `8px`                                                                                                                   | Table-mode day cell padding.                     |
+| `--clndr-heading-bg`                    | `oklch(52.65% 0.1637 19.70)`                                                                                            | Heading/banner background.                       |
+| `--clndr-heading-text`                  | `oklch(100.00% 0.0000 0.00)`                                                                                            | Heading text color.                              |
+| `--clndr-header-text-contrast`          | `oklch(0.00% 0.0000 0.00)`                                                                                              | Header text contrast color.                      |
+| `--clndr-font-family`                   | `'Droid Sans Mono', ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, 'Liberation Mono', 'Courier New', monospace` | Base font family (with fallbacks).               |
+| `--clndr-font-size`                     | `14px`                                                                                                                  | Base font size.                                  |
+| `--clndr-heading-font-size`             | `14px`                                                                                                                  | Heading font size.                               |
+| `--clndr-subheading-font-size`          | `1em`                                                                                                                   | Subheading font size.                            |
+| `--clndr-weekday-header-font-size`      | `10px`                                                                                                                  | Weekday header font size.                        |
+| `--clndr-day-font-size`                 | `12px`                                                                                                                  | Day number font size.                            |
+| `--clndr-nav-size`                      | `calc(var(--clndr-font-size) * 2)`                                                                                      | Nav arrow size.                                  |
+| `--clndr-border-width`                  | `1px`                                                                                                                   | Border width for grid frames.                    |
+| `--clndr-table-border-width`            | `1px`                                                                                                                   | Border width for table-mode overlay frame.       |
+| `--clndr-focus-outline-width`           | `2px`                                                                                                                   | Keyboard focus outline width.                    |
+| `--clndr-focus-outline-offset`          | `2px`                                                                                                                   | Keyboard focus outline offset.                   |
+| `--clndr-visually-hidden-size`          | `1px`                                                                                                                   | Size used by visually-hidden utility.            |
+| `--clndr-visually-hidden-margin`        | `-1px`                                                                                                                  | Margin used by visually-hidden utility.          |
 
 Notes
 
@@ -1126,8 +1108,11 @@ bun run <script>
 - `size`: Print built artifact sizes in `dist/`.
 - `smoke`: Minimal smoke check that verifies built artifacts exist in `dist/`.
 - `smoke:node`: Node.js ESM variant of the smoke check.
+- `storybook`: Launch Storybook for interactive exploration and visual checks.
+- `storybook:build`: Build the static Storybook site.
 - `ci:check`: End-to-end CI validation: type-check, TS compile, build, unit tests with coverage, and smoke tests.
 
 Notes:
 
 - Bun is used by a few developer scripts; Node-based variants are also provided.
+- The Jest suite covers core behavior; please add tests when contributing.
