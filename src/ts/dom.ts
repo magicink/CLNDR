@@ -411,11 +411,22 @@ export class ClndrDOM<T = unknown> {
       .attr('aria-pressed', 'true')
     const $inactiveDays = this.container.find(`${daySel}.${inactiveClass}`)
     $inactiveDays.attr('aria-disabled', 'true')
-    try {
-      ;($inactiveDays as any).prop('disabled', true)
-    } catch {
-      /* ignore */
-    }
+    // Only set the disabled property for natively focusable controls (e.g., buttons)
+    $inactiveDays.each((_, el) => {
+      const tag = (el as HTMLElement).tagName
+      if (
+        tag === 'BUTTON' ||
+        tag === 'INPUT' ||
+        tag === 'SELECT' ||
+        tag === 'TEXTAREA'
+      ) {
+        try {
+          ;($(el) as any).prop('disabled', true)
+        } catch {
+          /* ignore */
+        }
+      }
+    })
   }
 
   private handleDayKeyDown(event: JQuery.KeyDownEvent): void {

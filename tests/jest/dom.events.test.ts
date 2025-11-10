@@ -184,8 +184,9 @@ describe('ClndrDOM interactions', () => {
     })
     const d2 = b.querySelector('.calendar-day-2018-01-15') as HTMLElement
     d2.dispatchEvent(new MouseEvent('click', { bubbles: true }))
-    expect(d2.className.includes('selected')).toBe(true)
-    expect(d2.className.includes('chosen')).toBe(true)
+    const d2Now = b.querySelector('.calendar-day-2018-01-15') as HTMLElement
+    expect(d2Now.className.includes('selected')).toBe(true)
+    expect(d2Now.className.includes('chosen')).toBe(true)
   })
 
   test('applyConstraintClasses toggles inactive on nav controls', () => {

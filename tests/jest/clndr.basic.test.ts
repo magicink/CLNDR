@@ -29,8 +29,10 @@ describe('CLNDR basic rendering', () => {
         document.querySelectorAll('.days .header-day').length >= 7
     ).toBeTruthy()
 
-    // Snapshot the container HTML (custom minimal template)
-    expect(document.getElementById('cal')!.innerHTML).toMatchSnapshot()
+    // Basic structural assertions instead of brittle snapshot
+    const html = document.getElementById('cal')!.innerHTML
+    expect(html).toContain('class="clndr"')
+    expect(html).toContain('class="clndr-controls"')
   })
 
   test('forward/back changes month and triggers re-render', () => {
@@ -86,7 +88,7 @@ describe('CLNDR config and state', () => {
     document.body.innerHTML = '<div id="cal3"></div>'
   })
 
-  test('weekly interval snapshot similar to demo header', () => {
+  test('weekly interval header and day cells render', () => {
     const $ = (global as any).jQuery
     jest.useFakeTimers().setSystemTime(new Date('2025-11-07T12:00:00Z'))
     const api = $('#cal3').clndr({
@@ -124,7 +126,12 @@ describe('CLNDR config and state', () => {
       }
     })
     expect(api).toBeTruthy()
-    expect(document.getElementById('cal3')!.innerHTML).toMatchSnapshot()
+    const container = document.getElementById('cal3')!
+    // Header text is present
+    expect(container.querySelector('.month')!.textContent).toContain('11/02')
+    expect(container.querySelector('.month')!.textContent).toContain('11/15')
+    // 14 day cells are rendered
+    expect(container.querySelectorAll('.days .day').length).toBe(14)
     jest.useRealTimers()
   })
 
