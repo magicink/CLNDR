@@ -8,12 +8,19 @@ export type TemplateRenderer = (data: any) => string
 
 /**
  * Default CLNDR template borrowed from the legacy plugin. This keeps parity
- * for consumers that relied on the built-in markup.
+ * for consumers that relied on the built-in markup. Updated for basic a11y:
+ * - Real buttons for navigation + today
+ * - Live month heading
+ * - Days rendered as buttons with ARIA states
  */
-export const DEFAULT_TEMPLATE = `\n<div class="clndr-controls">
-  <div class="clndr-previous-button">&lsaquo;</div>
-  <div class="month"><%= month %> <%= year %></div>
-  <div class="clndr-next-button">&rsaquo;</div>
+export const DEFAULT_TEMPLATE = `
+<div class="clndr-controls" role="toolbar">
+  <button class="clndr-previous-year-button" type="button" aria-label="Previous year">&laquo;</button>
+  <button class="clndr-previous-button" type="button" aria-label="Previous month">&lsaquo;</button>
+  <h2 class="month" aria-live="polite"><%= month %> <%= year %></h2>
+  <button class="clndr-next-button" type="button" aria-label="Next month">&rsaquo;</button>
+  <button class="clndr-next-year-button" type="button" aria-label="Next year">&raquo;</button>
+  <button class="clndr-today-button" type="button" aria-label="Go to today">Today</button>
 </div>
 <div class="clndr-grid">
   <div class="days-of-the-week">
@@ -22,12 +29,19 @@ export const DEFAULT_TEMPLATE = `\n<div class="clndr-controls">
     <% } %>
     <div class="days">
       <% for (var di = 0; di < days.length; di++) { var day = days[di]; %>
-        <div class="<%= day.classes %>"><%= day.day %></div>
+        <button
+          type="button"
+          class="<%= day.classes %>"
+          <% if (day && day.date && day.date.toISO) { %> data-date="<%= day.date.toISO().slice(0,10) %>" <% } %>
+          <% if (day && day.properties && day.properties.isInactive) { %> disabled aria-disabled="true" <% } %>
+          <% if (day && day.properties && day.properties.isToday) { %> aria-current="date" <% } %>
+          aria-label="<% if (day && day.date && day.date.toISO) { %><%= day.date.toISO().slice(0,10) %><% } else { %><%= day.day %><% } %>"
+        ><%= day.day %></button>
       <% } %>
     </div>
   </div>
 </div>
-<div class="clndr-today-button">Today</div>\n`.trim()
+`.trim()
 
 /**
  * Very small, naive template compiler for internal tests/examples.

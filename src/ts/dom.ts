@@ -25,6 +25,7 @@ export class ClndrDOM<T = unknown> {
   private readonly eventName: string
 
   private apiContext: Clndr | null = null
+  private headingId: string
 
   constructor(
     element: HTMLElement | JQuery | string,
@@ -40,6 +41,10 @@ export class ClndrDOM<T = unknown> {
     this.assertSingleElement(this.element)
     this.element.html("<div class='clndr'></div>")
     this.container = this.element.find('.clndr')
+    // Ensure the container has a valid landmark/widget role so aria-labelledby is meaningful
+    if (!this.container.attr('role')) {
+      this.container.attr('role', 'group')
+    }
     // Optionally apply mode/theme classes for wrapper-free styling.
     if ((this.options as any).applyThemeClasses) {
       // Mode is derived from lengthOfTime (days => grid, months => months, else table).
@@ -68,6 +73,7 @@ export class ClndrDOM<T = unknown> {
     }
     this.eventType = this.options.useTouchEvents ? 'touchstart' : 'click'
     this.eventName = `${this.eventType}.clndr`
+    this.headingId = `clndr-heading-${Math.random().toString(36).slice(2)}`
     this.bindEvents()
   }
 
@@ -79,6 +85,13 @@ export class ClndrDOM<T = unknown> {
     const data = this.core.buildTemplateData()
     const html = this.renderer(data)
     this.container.html(html)
+    // Attach aria-labelledby to container and ensure the month heading has an id.
+    const heading = this.container.find('.month').first()
+    if (heading && heading.length) {
+      heading.attr('id', this.headingId)
+      if (!heading.attr('aria-live')) heading.attr('aria-live', 'polite')
+      this.container.attr('aria-labelledby', this.headingId)
+    }
     this.applyConstraintClasses()
     if (typeof this.options.doneRendering === 'function') {
       this.options.doneRendering.apply(this.apiContext ?? this, [])
@@ -375,7 +388,16 @@ export class ClndrDOM<T = unknown> {
 
     for (const [key, selector] of toggles) {
       if (!selector) continue
-      this.element.find(`.${selector}`).toggleClass(inactive, !constraints[key])
+      const disabled = !constraints[key]
+      const $els = this.element.find(`.${selector}`)
+      $els.toggleClass(inactive, disabled)
+      // Propagate disabled state to assistive tech and native buttons when present
+      $els.attr('aria-disabled', disabled ? 'true' : (null as any))
+      try {
+        ;($els as any).prop('disabled', disabled)
+      } catch {
+        // Non-button elements may ignore this; safe to continue
+      }
     }
   }
 

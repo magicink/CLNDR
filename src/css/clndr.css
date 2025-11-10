@@ -34,6 +34,8 @@
   --clndr-surface-bg: oklch(96.72% 0.0000 0.00);
   --clndr-day-bg: oklch(100.00% 0.0000 0.00); /* default day cell background */
   --clndr-rule-color: oklch(37.53% 0.0000 0.00);
+  /* Default border for all buttons inside CLNDR (overridable) */
+  --clndr-button-border: 0; /* use '1px solid currentColor' to re-enable */
 
   /* Modern theme sizing */
   --clndr-month-min-width: 177px;                 /* min width per month tile in months view */
@@ -57,6 +59,7 @@
   --clndr-weekday-header-font-size: 10px;
   --clndr-day-font-size: 12px;
   --clndr-nav-size: calc(var(--clndr-font-size) * 2); /* modern nav arrow size */
+  --clndr-today-padding-block: 0.25em;              /* vertical padding for Today button */
 
   /* Apply base typography so wrapper-free/modern inherit legacy look */
   font-family: var(--clndr-font-family);
@@ -81,6 +84,27 @@
 .clndr-previous-year-button.inactive {
   opacity: 0.5;
   cursor: default;
+}
+
+/* Reset default UA button borders; overridable via --clndr-button-border */
+.clndr button,
+.clndr button:hover,
+.clndr button:focus,
+.clndr button:active {
+  border: var(--clndr-button-border, 0);
+}
+
+/* Visually hidden utility for accessible captions/headings */
+.visually-hidden {
+  position: absolute !important;
+  width: 1px !important;
+  height: 1px !important;
+  padding: 0 !important;
+  margin: -1px !important;
+  overflow: hidden !important;
+  clip: rect(0 0 0 0) !important;
+  white-space: nowrap !important;
+  border: 0 !important;
 }
 /* Wrapper-free theme aliases for grid view */
 .clndr.clndr--theme-grid .clndr-grid {
@@ -177,10 +201,10 @@
   --clndr-muted-bg: var(--clndr-empty-bg);
 }
 
-/* Header controls: prev | month | next */
+/* Header controls: prev-year | prev | month | next | next-year */
 .clndr.clndr--theme-modern .clndr-controls {
   display: grid;
-  grid-template-columns: 1fr auto 1fr;
+  grid-template-columns: auto auto 1fr auto auto;
   align-items: center;
   /* Center the controls block and match grid width in grid interval view */
   min-height: var(--clndr-nav-size);
@@ -191,9 +215,18 @@
   justify-content: center;
   line-height: 1; /* avoid extra vertical space vs bigger arrows */
 }
+.clndr.clndr--theme-modern .clndr-controls .clndr-previous-year-button { justify-self: start; }
 .clndr.clndr--theme-modern .clndr-controls .clndr-previous-button { justify-self: start; }
 .clndr.clndr--theme-modern .clndr-controls .month { justify-self: center; }
 .clndr.clndr--theme-modern .clndr-controls .clndr-next-button { justify-self: end; }
+.clndr.clndr--theme-modern .clndr-controls .clndr-next-year-button { justify-self: end; }
+
+/* Place Today button on a new row and center it */
+.clndr.clndr--theme-modern .clndr-controls .clndr-today-button {
+  grid-column: 1 / -1;
+  justify-self: center;
+  margin-top: var(--clndr-controls-bottom-margin);
+}
 
 /* Top controls in months view have only prev/next */
 .clndr.clndr--theme-modern .clndr-controls.top {
@@ -311,7 +344,7 @@
 [dir='rtl'] .clndr.clndr--theme-modern .clndr-controls .clndr-next-button { justify-self: start; }
 
 /* Today button, parity with legacy */
-.clndr.clndr--theme-modern .clndr-today-button { inline-size: 100%; text-align: center; cursor: pointer; }
+.clndr.clndr--theme-modern .clndr-today-button { inline-size: 100%; text-align: center; cursor: pointer; padding-block: var(--clndr-today-padding-block); }
 .clndr.clndr--theme-modern .clndr-today-button:hover { background-color: var(--clndr-control-hover-bg); }
 
 /* Small spacing under controls to match cal2 */
@@ -333,6 +366,7 @@
   justify-content: center;
   height: var(--clndr-nav-size);
   align-self: center;
+  background-color: transparent; /* transparent by default */
 }
 .clndr.clndr--theme-modern .clndr-controls .clndr-previous-button:hover,
 .clndr.clndr--theme-modern .clndr-controls .clndr-next-button:hover,
@@ -348,6 +382,14 @@
   padding: 0;
   border: none;
   outline: none;
+}
+
+/* Focus styles for keyboard users on interactive elements */
+.clndr .clndr-controls button:focus-visible,
+.clndr .days .day:focus-visible,
+.clndr .clndr-grid .day:focus-visible {
+  outline: 2px solid var(--clndr-border);
+  outline-offset: 2px;
 }
 .clndr.clndr--theme-modern.clndr--mode-table .clndr-grid::after {
   content: '';
