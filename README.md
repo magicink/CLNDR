@@ -73,7 +73,7 @@ Theme and mode classes (opt-in)
 
 - CLNDR can apply container classes so you don’t need external wrapper elements:
   - Mode: `clndr--mode-table | clndr--mode-grid | clndr--mode-months`
-  - Theme: `clndr--theme-default | clndr--theme-grid | clndr--theme-months`
+  - Theme: `clndr--theme-modern | clndr--theme-grid | clndr--theme-months`
 - Enable this by passing `applyThemeClasses: true` when you create CLNDR. Optionally set `theme`:
 
 ```ts
@@ -82,8 +82,8 @@ const api = clndr('#cal', {
   template: DEFAULT_TEMPLATE,
   // Opt into container classes for styling
   applyThemeClasses: true,
-  // Optional override (defaults by mode): 'default' | 'grid' | 'months'
-  theme: 'default'
+  // Optional override (defaults by mode): 'modern' | 'grid' | 'months'
+  theme: 'modern'
 })
 ```
 
@@ -755,7 +755,7 @@ import {
 clndr('#cal-month', {
   template: DEFAULT_TEMPLATE,
   applyThemeClasses: true, // optional convenience classes
-  theme: 'default'
+  theme: 'modern'
 })
 
 // 2) 14‑day rolling interval grid (pages 7 days at a time)
