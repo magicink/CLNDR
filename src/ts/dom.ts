@@ -59,17 +59,6 @@ export class ClndrDOM<T = unknown> {
       this.container
         .addClass(`clndr--mode-${mode}`)
         .addClass(`clndr--theme-${theme}`)
-      // Also apply legacy wrapper class on the host element for existing CSS:
-      // default->cal1, grid->cal2, months->cal3
-      const legacy =
-        theme === 'default'
-          ? 'cal1'
-          : theme === 'grid'
-            ? 'cal2'
-            : theme === 'months'
-              ? 'cal3'
-              : null
-      if (legacy) this.element.addClass(legacy)
     }
     this.eventType = this.options.useTouchEvents ? 'touchstart' : 'click'
     this.eventName = `${this.eventType}.clndr`
@@ -92,6 +81,8 @@ export class ClndrDOM<T = unknown> {
       if (!heading.attr('aria-live')) heading.attr('aria-live', 'polite')
       this.container.attr('aria-labelledby', this.headingId)
     }
+    // Reflect ARIA states for selected/disabled days
+    this.applyAriaStates()
     this.applyConstraintClasses()
     if (typeof this.options.doneRendering === 'function') {
       this.options.doneRendering.apply(this.apiContext ?? this, [])
@@ -155,6 +146,10 @@ export class ClndrDOM<T = unknown> {
       event.preventDefault()
       this.handleNavigation('today')
     })
+    // Keyboard navigation on day buttons
+    this.element.on('keydown.clndr', `.${targets.day}`, event =>
+      this.handleDayKeyDown(event as any)
+    )
   }
 
   private handleDayClick(event: JQuery.TriggeredEvent): void {
@@ -187,6 +182,10 @@ export class ClndrDOM<T = unknown> {
           this.highlightSelectedDay(iso, selectedClass, selectedTokens)
           $target.addClass(selectedClass)
           target.className = `${target.className} ${selectedClass}`.trim()
+          // Keep ARIA pressed state in sync without requiring a full re-render
+          const daySel = `.${this.options.targets?.day || 'day'}`
+          this.container.find(`${daySel}`).attr('aria-pressed', 'false')
+          $target.attr('aria-pressed', 'true')
         }
       }
     }
@@ -397,6 +396,140 @@ export class ClndrDOM<T = unknown> {
         ;($els as any).prop('disabled', disabled)
       } catch {
         // Non-button elements may ignore this; safe to continue
+      }
+    }
+  }
+
+  private applyAriaStates(): void {
+    const selectedClass = this.options.classes?.selected || 'selected'
+    const inactiveClass = this.options.classes?.inactive || 'inactive'
+    const daySel = `.${this.options.targets?.day || 'day'}`
+    const $days = this.container.find(daySel)
+    $days.attr('aria-pressed', 'false')
+    this.container
+      .find(`${daySel}.${selectedClass}`)
+      .attr('aria-pressed', 'true')
+    const $inactiveDays = this.container.find(`${daySel}.${inactiveClass}`)
+    $inactiveDays.attr('aria-disabled', 'true')
+    try {
+      ;($inactiveDays as any).prop('disabled', true)
+    } catch {
+      /* ignore */
+    }
+  }
+
+  private handleDayKeyDown(event: JQuery.KeyDownEvent): void {
+    const target = this.resolveEventElement(
+      event as unknown as JQuery.TriggeredEvent,
+      `.${this.options.targets?.day || 'day'}`
+    )
+    if (!target) return
+    const key = (event as any).key as string | undefined
+    if (!key) return
+    const delta: Record<string, number> = {
+      ArrowLeft: -1,
+      ArrowRight: 1,
+      ArrowUp: -7,
+      ArrowDown: 7
+    }
+    if (key in delta) {
+      event.preventDefault()
+      this.moveFocusByDays(target, delta[key])
+      return
+    }
+    if (key === 'Home') {
+      event.preventDefault()
+      this.moveFocusToWeekEdge(target, 'start')
+      return
+    }
+    if (key === 'End') {
+      event.preventDefault()
+      this.moveFocusToWeekEdge(target, 'end')
+      return
+    }
+    if (key === 'PageUp') {
+      event.preventDefault()
+      const shift = (event as any).shiftKey === true
+      this.moveFocusByMonths(target, shift ? -12 : -1)
+      return
+    }
+    if (key === 'PageDown') {
+      event.preventDefault()
+      const shift = (event as any).shiftKey === true
+      this.moveFocusByMonths(target, shift ? 12 : 1)
+      return
+    }
+    if (key === ' ') {
+      // prevent page scroll; buttons will still fire click
+      event.preventDefault()
+    }
+  }
+
+  private moveFocusByDays(anchorEl: HTMLElement, by: number): void {
+    const iso = this.getTargetDateString(anchorEl)
+    if (!iso) return
+    const date = this.adapter.fromISO(iso)
+    const next = by >= 0 ? date.plus({ days: by }) : date.minus({ days: -by })
+    const nextIso = this.adapter
+      .fromNative(next.value() as any)
+      .format('YYYY-MM-DD')
+    this.focusByISO(nextIso)
+  }
+
+  private moveFocusToWeekEdge(
+    anchorEl: HTMLElement,
+    which: 'start' | 'end'
+  ): void {
+    const iso = this.getTargetDateString(anchorEl)
+    if (!iso) return
+    const date = this.adapter.fromISO(iso)
+    const dowISO = date.weekday() % 7
+    const offset = which === 'start' ? -dowISO : 6 - dowISO
+    this.moveFocusByDays(anchorEl, offset)
+  }
+
+  private moveFocusByMonths(anchorEl: HTMLElement, months: number): void {
+    const iso = this.getTargetDateString(anchorEl)
+    if (!iso) return
+    const date = this.adapter.fromISO(iso)
+    const moved =
+      months >= 0 ? date.plus({ months }) : date.minus({ months: -months })
+    const dom = date.day()
+    const dim = moved.daysInMonth()
+    const clamped = moved
+      .startOf('month')
+      .plus({ days: Math.min(dom, dim) - 1 })
+    const nextIso = clamped.format('YYYY-MM-DD')
+
+    const state = this.core.getState()
+    const target = this.adapter.fromISO(nextIso)
+    let change: StateChange<any> | null = null
+    if (target.isBefore(state.intervalStart)) change = this.core.back()
+    else if (target.isAfter(state.intervalEnd)) change = this.core.forward()
+    if (change) this.applyChange(change, { fireCallbacks: true })
+    this.focusByISO(nextIso)
+  }
+
+  private focusByISO(iso: string): void {
+    const $el = this.container.find(`.calendar-day-${iso}`).first()
+    if ($el && $el.length && !$el.is('[disabled], .inactive')) {
+      try {
+        ;($el.get(0) as HTMLElement).focus()
+        return
+      } catch {}
+    }
+    const state = this.core.getState()
+    const target = this.adapter.fromISO(iso)
+    let change: StateChange<any> | null = null
+    if (target.isBefore(state.intervalStart)) change = this.core.back()
+    else if (target.isAfter(state.intervalEnd)) change = this.core.forward()
+    if (change) {
+      this.applyChange(change, { fireCallbacks: true })
+      const again = this.container.find(`.calendar-day-${iso}`).first()
+      if (again && again.length) {
+        try {
+          ;(again.get(0) as HTMLElement).focus()
+        } catch {}
       }
     }
   }
